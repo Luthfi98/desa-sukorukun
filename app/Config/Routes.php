@@ -9,6 +9,7 @@ $routes->get('/', 'Home::index');
 
 $routes->get('/profil', 'Home::profil');
 $routes->get('/berita', 'Home::berita');
+$routes->get('/berita/(:any)', 'Home::berita/$1');
 $routes->get('/layanan', 'Home::layanan');
 $routes->get('/galeri', 'Home::galeri');
 $routes->get('/kontak', 'Home::kontak');
@@ -345,6 +346,33 @@ $routes->group('heir-request', function($routes) {
         $routes->get('view/(:num)', 'LetterRequest\HeirRequestController::show/$1');
         $routes->get('delete/(:num)', 'LetterRequest\HeirRequestController::delete/$1');
         $routes->get('download/(:num)', 'LetterRequest\HeirRequestController::download/$1');
+
+    });
+});
+
+$routes->group('relocation-request', function($routes) {
+    $routes->get('/', 'LetterRequest\RelocationRequestController::index');
+    $routes->get('create', 'LetterRequest\RelocationRequestController::create');
+    $routes->post('store', 'LetterRequest\RelocationRequestController::store');
+    $routes->get('edit/(:num)', 'LetterRequest\RelocationRequestController::edit/$1');
+    $routes->post('update/(:num)', 'LetterRequest\RelocationRequestController::update/$1');
+    $routes->get('view/(:num)', 'LetterRequest\RelocationRequestController::show/$1');
+    $routes->get('process/(:num)', 'LetterRequest\RelocationRequestController::process/$1');
+    $routes->post('update-status/(:num)', 'LetterRequest\RelocationRequestController::updateStatus/$1');
+    $routes->get('download/(:num)', 'LetterRequest\RelocationRequestController::download/$1');
+    $routes->get('getDataTable', 'LetterRequest\RelocationRequestController::getDataTable');
+
+    $routes->get('delete/(:num)', 'LetterRequest\RelocationRequestController::delete/$1');
+
+    $routes->group('my-request', function($routes) {        
+        $routes->get('/', 'LetterRequest\RelocationRequestController::myRequest');        
+        $routes->get('create', 'LetterRequest\RelocationRequestController::createRequest');
+        $routes->post('store', 'LetterRequest\RelocationRequestController::storeRequest');
+        $routes->get('edit/(:num)', 'LetterRequest\RelocationRequestController::editRequest/$1');
+        $routes->post('update/(:num)', 'LetterRequest\RelocationRequestController::updateRequest/$1');
+        $routes->get('view/(:num)', 'LetterRequest\RelocationRequestController::show/$1');
+        $routes->get('delete/(:num)', 'LetterRequest\RelocationRequestController::delete/$1');
+        $routes->get('download/(:num)', 'LetterRequest\RelocationRequestController::download/$1');
 
     });
 });

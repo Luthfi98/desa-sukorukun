@@ -248,11 +248,16 @@ class SettingController extends BaseController
         $strukturOrganisasi = $this->settingModel->where('category', 'struktur_organisasi')
         ->orderBy('order', 'ASC')
         ->findAll();
+
+        $geografis = $this->settingModel->where('category', 'geografis')
+        ->orderBy('order', 'ASC')
+        ->findAll();
         return view('settings/profile', [
             'title' => 'Informasi Desa',
             'setting' => $setting, 
             'logo' => $logo,
-            'strukturOrganisasi' => $strukturOrganisasi
+            'strukturOrganisasi' => $strukturOrganisasi,
+            'geografis' => $geografis
         ]);
     }
 

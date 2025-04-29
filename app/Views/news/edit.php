@@ -106,7 +106,7 @@
                             <label for="image" class="form-label">Image</label>
                             <?php if ($news['image']): ?>
                                 <div class="mb-2">
-                                    <img src="<?= base_url('uploads/news/' . $news['image']) ?>" alt="Current Image" class="img-thumbnail" style="max-height: 200px;">
+                                    <img src="<?= base_url($news['image']) ?>" alt="Current Image" class="img-thumbnail" style="max-height: 200px;">
                                 </div>
                             <?php endif; ?>
                             <input type="file" class="form-control <?= session('errors.image') ? 'is-invalid' : '' ?>" 

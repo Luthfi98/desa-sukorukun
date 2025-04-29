@@ -133,33 +133,47 @@
                                 <tr>
                                     <th width="30%"><?= $item['label'] ?></th>
                                     <td>
-                                        <?php if ($item['value_type'] === 'image'): ?>
-                                            <div class="mb-3">
-                                                <div class="position-relative" style="max-width: 100%;">
-                                                    <img src="<?= base_url($item['value']) ?>" alt="<?= $item['label'] ?>" class="img-thumbnail w-100">
-                                                    <div class="position-absolute top-0 right-0 p-1">
-                                                        <span class="badge badge-info">Preview</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="value_<?= $item['id'] ?>" name="value_<?= $item['id'] ?>">
-                                                <label class="custom-file-label" for="value_<?= $item['id'] ?>">
-                                                    <i class="fas fa-upload mr-1"></i>Pilih file
-                                                </label>
-                                            </div>
-                                            <small class="form-text text-muted">Format yang didukung: JPG, PNG, GIF. Maksimal 2MB</small>
-                                            <input type="hidden" name="old_value_<?= $item['id'] ?>" value="<?= $item['value'] ?>">
-                                        <?php else: ?>
-                                            <div class="form-group">
-                                                <label for="value_<?= $item['id'] ?>">Nama</label>
-                                                <input type="text" class="form-control" id="value_<?= $item['id'] ?>" name="value_<?= $item['id'] ?>" value="<?= $item['value'] ?>">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="description_<?= $item['id'] ?>">NIP</label>
-                                                <input type="text" class="form-control" id="description_<?= $item['id'] ?>" name="description_<?= $item['id'] ?>" value="<?= $item['description'] ?>">
-                                            </div>
-                                        <?php endif; ?>
+                                        <div class="form-group">
+                                            <label for="value_<?= $item['id'] ?>">Nama</label>
+                                            <input type="text" class="form-control" id="value_<?= $item['id'] ?>" name="value_<?= $item['id'] ?>" value="<?= $item['value'] ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description_<?= $item['id'] ?>">NIP</label>
+                                            <input type="text" class="form-control" id="description_<?= $item['id'] ?>" name="description_<?= $item['id'] ?>" value="<?= $item['description'] ?>">
+                                        </div>
+                                        
+                                        <input type="hidden" name="id_<?= $item['id'] ?>" value="<?= $item['id'] ?>">
+                                        <input type="hidden" name="value_type_<?= $item['id'] ?>" value="<?= $item['value_type'] ?>">
+                                    </td>
+                                </tr>
+                            <?php 
+                            endforeach; 
+                            ?>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Struktur Organisasi -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-sitemap mr-2"></i>Geografis
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <?php 
+                            foreach ($geografis as $item): 
+                            ?>
+                                <tr>
+                                    <th width="30%"><?= $item['label'] ?></th>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="value_<?= $item['id'] ?>"><?= $item['label'] ?></label>
+                                            <input type="text" class="form-control" id="value_<?= $item['id'] ?>" name="value_<?= $item['id'] ?>" value="<?= $item['value'] ?>">
+                                        </div>
                                         
                                         <input type="hidden" name="id_<?= $item['id'] ?>" value="<?= $item['id'] ?>">
                                         <input type="hidden" name="value_type_<?= $item['id'] ?>" value="<?= $item['value_type'] ?>">

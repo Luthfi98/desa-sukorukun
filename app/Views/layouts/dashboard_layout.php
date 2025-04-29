@@ -288,6 +288,13 @@
                         <span class="notification-badge"><?= $pendingSuratCount ?></span>
                     <?php endif; ?>
                 </a>
+
+                <a href="<?= base_url('relocation-request') ?>" class="<?= strpos(uri_string(), 'relocation-request') === 0 ? 'active' : '' ?>">
+                    <i class="fas fa-envelope"></i> <span>Pengajuan SK Pindah</span>
+                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
+                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
+                    <?php endif; ?>
+                </a>
                 
                 <a href="<?= base_url('complaints/admin') ?>" class="<?= strpos(uri_string(), 'complaints/admin') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-bullhorn"></i> <span>Pengaduan Warga</span>
@@ -326,9 +333,17 @@
                     <?php endif; ?>
                 </a>
 
+                <a href="<?= base_url('relocation-request/my-request') ?>" class="<?= strpos(uri_string(), 'relocation-request/my-request') === 0 ? 'active' : '' ?>">
+                    <i class="fas fa-envelope"></i> <span>Pengajuan SK Pindah</span>
+                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
+                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
+                    <?php endif; ?>
+                </a>
+
                 <a href="<?= base_url('letter-requests/my-requests') ?>" class="<?= strpos(uri_string(), 'letter-requests/my-requests') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-file-alt"></i> <span>Pengajuan Surat</span>
                 </a>
+
 
                 
                 

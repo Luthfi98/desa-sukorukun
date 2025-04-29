@@ -132,7 +132,8 @@ class Filters extends BaseFilters
                 'archive/*',
                 'general-request/*',
                 'domicile-request/*',
-                'heir-request/*'
+                'heir-request/*',
+                'relocation-request/*'
             ],
             'except' => [
                 'auth/logout'

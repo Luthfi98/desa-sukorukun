@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 mx-auto text-center">
-                <h1 class="fw-bold">Kontak Desa Sejahtera</h1>
+                <h1 class="fw-bold">Kontak <?= $informasi['name'] ?></h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center">
                         <li class="breadcrumb-item"><a href="<?= base_url('/') ?>">Beranda</a></li>
@@ -31,17 +31,17 @@
                         <div class="mb-3">
                             <i class="fas fa-map-marker-alt me-2"></i>
                             <strong>Alamat:</strong>
-                            <p>Jl. Desa Sejahtera No. 123, Kecamatan Sejahtera, Kabupaten Sejahtera</p>
+                            <p><?= $informasi['address'] ?></p>
                         </div>
                         <div class="mb-3">
                             <i class="fas fa-phone me-2"></i>
                             <strong>Telepon:</strong>
-                            <p>+62 123 4567 890</p>
+                            <p><?=  $informasi['phone'] ?></p>
                         </div>
                         <div class="mb-3">
                             <i class="fas fa-envelope me-2"></i>
                             <strong>Email:</strong>
-                            <p>desasejahtera@example.com</p>
+                            <p><?=  $informasi['email'] ?></p>
                         </div>
                     </div>
                 </div>

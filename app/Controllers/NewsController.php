@@ -28,6 +28,7 @@ class NewsController extends BaseController
         $status = $this->request->getGet('status') ?? 'all';
         
         $data = [
+            'title' => 'Berita & Informasi',
             'type' => $type,
             'status' => $status,
             'types' => ['news', 'information'],
@@ -119,13 +120,28 @@ class NewsController extends BaseController
         // Format data for DataTables
         $data = [];
         foreach ($records as $record) {
+            switch ($record['status']) {
+                case 'draft':
+                    $statusColor = 'warning';
+                    break;
+                    
+                case 'published':
+                    $statusColor = 'info';
+                    break;
+                    
+                case 'active':
+                    $statusColor = 'success';
+                    break;
+                    
+                case 'inactive':
+                    $statusColor = 'danger';
+                    break;
+            }
             $data[] = [
                 'title' => $record['title'],
                 'type' => ucfirst($record['type']),
                 'category' => $record['category'],
-                'status' => $record['status'] === 'published' ? 
-                    '<span class="badge bg-success">Published</span>' : 
-                    '<span class="badge bg-warning">Draft</span>',
+                'status' => '<span class="badge bg-'.$statusColor.'">'.ucfirst($record['status']).'</span>',
                 'author' => $record['name'],
                 'created_at' => date('d M Y H:i', strtotime($record['created_at'])),
                 'actions' => '<div class="btn-group">
@@ -325,6 +341,6 @@ class NewsController extends BaseController
             return redirect()->to('news')->with('error', 'News not found');
         }
         
-        return view('news/view', ['news' => $news]);
+        return view('news/show', ['news' => $news]);
     }
 } 

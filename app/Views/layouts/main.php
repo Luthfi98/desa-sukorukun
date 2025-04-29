@@ -1,9 +1,11 @@
 <?php 
 $namaDesa = get_setting('informasi_desa','nama_desa', false);
 $logo = get_setting('website','logo', false); 
-
-// Pass village name to all views that extend this layout
-$this->setData(['namaDesa' => $namaDesa]);
+$phone = get_setting('kontak','telepon_desa', false);
+$adress = get_setting('kontak','alamat_desa', false);
+$email = get_setting('kontak','email_desa', false);
+$jamKerja = get_setting('layanan','jam_layanan', false);
+$visi = get_setting('informasi_desa','visi_desa', false);
 ?>
 
 <!DOCTYPE html>
@@ -241,10 +243,10 @@ $this->setData(['namaDesa' => $namaDesa]);
                         <a class="nav-link <?= url_is('layanan') ? 'active' : '' ?>" href="<?= base_url('layanan') ?>">Layanan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= url_is('galeri') ? 'active' : '' ?>" href="<?= base_url('galeri') ?>">Galeri</a>
+                        <a class="nav-link <?= url_is('kontak') ? 'active' : '' ?>" href="<?= base_url('kontak') ?>">Kontak</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= url_is('kontak') ? 'active' : '' ?>" href="<?= base_url('kontak') ?>">Kontak</a>
+                        <a class="nav-link <?= url_is('auth/login') ? 'active' : '' ?>" href="<?= base_url('auth/login') ?>">Login</a>
                     </li>
                 </ul>
             </div>
@@ -261,7 +263,7 @@ $this->setData(['namaDesa' => $namaDesa]);
                 <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                     <div class="footer-widget">
                         <h5>Tentang Desa</h5>
-                        <p>Mewujudkan desa yang maju, mandiri, dan sejahtera dengan pelayanan terbaik untuk masyarakat.</p>
+                        <p><?= $visi ?></p>
                         <div class="social-icons">
                             <a href="#"><i class="fab fa-facebook-f"></i></a>
                             <a href="#"><i class="fab fa-twitter"></i></a>
@@ -274,10 +276,10 @@ $this->setData(['namaDesa' => $namaDesa]);
                     <div class="footer-widget">
                         <h5>Link Terkait</h5>
                         <ul class="footer-links">
-                            <li><a href="#">Pemerintah Daerah</a></li>
-                            <li><a href="#">Kementerian Desa</a></li>
-                            <li><a href="#">E-Government</a></li>
-                            <li><a href="#">Transparansi Anggaran</a></li>
+                            <li><a href="<?= base_url('profil') ?>">Profil</a></li>
+                            <li><a href="<?= base_url('berita') ?>">Berita & Informasi Desa</a></li>
+                            <li><a href="<?= base_url('layanan') ?>">Layanan</a></li>
+                            <li><a href="<?= base_url('kontak') ?>">Kontak</a></li>
                         </ul>
                     </div>
                 </div>
@@ -285,10 +287,10 @@ $this->setData(['namaDesa' => $namaDesa]);
                     <div class="footer-widget">
                         <h5>Kontak Kami</h5>
                         <ul class="footer-links">
-                            <li><i class="fas fa-map-marker-alt me-2"></i> Jl. Desa No. 123, Kecamatan Sejahtera</li>
-                            <li><i class="fas fa-phone me-2"></i> (021) 1234-5678</li>
-                            <li><i class="fas fa-envelope me-2"></i> info@desasejahtera.desa.id</li>
-                            <li><i class="fas fa-clock me-2"></i> Senin - Jumat: 08.00 - 16.00</li>
+                            <li><i class="fas fa-map-marker-alt me-2"></i> <?= $adress ?></li>
+                            <li><i class="fas fa-phone me-2"></i> <?= $phone ?></li>
+                            <li><i class="fas fa-envelope me-2"></i> <?= $email ?></li>
+                            <li><i class="fas fa-clock me-2"></i> <?= $jamKerja ?></li>
                         </ul>
                     </div>
                 </div>

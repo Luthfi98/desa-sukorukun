@@ -268,8 +268,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="ratio ratio-16x9 h-100 min-vh-50">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126748.6091241931!2d107.5455627864489!3d-6.903273916152727!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e6398252477f%3A0x146a1f93d3e815b2!2sBandung%2C%20Bandung%20City%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1623232741708!5m2!1sen!2sid" 
-                            style="border:0;" allowfullscreen="" loading="lazy" class="rounded shadow"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15848.179364947933!2d111.2081315!3d-6.7643873!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e772e17aa6aa63b%3A0x5027a76e3560360!2sSukorukun%2C%20Kec.%20Jaken%2C%20Kabupaten%20Pati%2C%20Jawa%20Tengah!5e0!3m2!1sid!2sid!4v1745918380731!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>
