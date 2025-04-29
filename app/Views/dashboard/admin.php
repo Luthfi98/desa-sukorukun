@@ -70,108 +70,78 @@
         </div>
     </div>
 
-    <!-- Admin Functionality Cards -->
-    <div class="row">
-        <!-- Program Pemerintah Desa -->
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="dashboard-card h-100">
-                <div class="text-center">
-                    <div class="icon mb-3">
-                        <i class="fas fa-clipboard-list"></i>
+    <!-- Request Type Overview -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="dashboard-card">
+                <h5 class="card-title mb-3">Ringkasan Jenis Surat</h5>
+                <div class="row">
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-primary">
+                                <i class="fas fa-file-medical fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Surat Kematian</h6>
+                                <h4 class="mb-0"><?= $deathCertificateCount ?? 0 ?></h4>
+                            </div>
+                        </div>
                     </div>
-                    <h4>Program Pemerintah Desa</h4>
-                    <p>Kelola informasi program pemerintah desa untuk transparansi publik</p>
-                    <a href="<?= base_url('program-desa') ?>" class="btn btn-action">
-                        <i class="fas fa-plus-circle me-1"></i> Kelola Program
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Informasi APBD -->
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="dashboard-card h-100">
-                <div class="text-center">
-                    <div class="icon mb-3">
-                        <i class="fas fa-money-bill-wave"></i>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-success">
+                                <i class="fas fa-home fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Surat Domisili</h6>
+                                <h4 class="mb-0"><?= $domicileRequestCount ?? 0 ?></h4>
+                            </div>
+                        </div>
                     </div>
-                    <h4>Informasi APBD</h4>
-                    <p>Kelola informasi Anggaran Pendapatan dan Belanja Desa</p>
-                    <a href="<?= base_url('informasi-apbd') ?>" class="btn btn-action">
-                        <i class="fas fa-plus-circle me-1"></i> Kelola APBD
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pengajuan Surat -->
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="dashboard-card h-100">
-                <div class="text-center">
-                    <div class="icon mb-3">
-                        <i class="fas fa-envelope"></i>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-warning">
+                                <i class="fas fa-file-alt fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Surat Umum</h6>
+                                <h4 class="mb-0"><?= $generalRequestCount ?? 0 ?></h4>
+                            </div>
+                        </div>
                     </div>
-                    <h4>Pengajuan Surat</h4>
-                    <p>Respon pengajuan surat pengantar dari masyarakat</p>
-                    <a href="<?= base_url('pengajuan-surat') ?>" class="btn btn-action">
-                        <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                            <i class="fas fa-bell me-1"></i> <?= $pendingSuratCount ?> Menunggu
-                        <?php else: ?>
-                            <i class="fas fa-list me-1"></i> Lihat Daftar
-                        <?php endif; ?>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pengaduan Masyarakat -->
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="dashboard-card h-100">
-                <div class="text-center">
-                    <div class="icon mb-3">
-                        <i class="fas fa-bullhorn"></i>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-info">
+                                <i class="fas fa-user-friends fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Surat Ahli Waris</h6>
+                                <h4 class="mb-0"><?= $heirRequestCount ?? 0 ?></h4>
+                            </div>
+                        </div>
                     </div>
-                    <h4>Pengaduan Masyarakat</h4>
-                    <p>Respon pengaduan keresahan dan saran dari masyarakat</p>
-                    <a href="<?= base_url('pengaduan') ?>" class="btn btn-action">
-                        <?php if(isset($pendingPengaduanCount) && $pendingPengaduanCount > 0): ?>
-                            <i class="fas fa-bell me-1"></i> <?= $pendingPengaduanCount ?> Menunggu
-                        <?php else: ?>
-                            <i class="fas fa-list me-1"></i> Lihat Daftar
-                        <?php endif; ?>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Arsip Data -->
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="dashboard-card h-100">
-                <div class="text-center">
-                    <div class="icon mb-3">
-                        <i class="fas fa-archive"></i>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-secondary">
+                                <i class="fas fa-newspaper fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Berita</h6>
+                                <h4 class="mb-0"><?= $newsCount ?? 0 ?></h4>
+                            </div>
+                        </div>
                     </div>
-                    <h4>Arsip Data</h4>
-                    <p>Kelola penyimpanan dan tampilan data arsip desa</p>
-                    <a href="<?= base_url('arsip-data') ?>" class="btn btn-action">
-                        <i class="fas fa-folder-open me-1"></i> Kelola Arsip
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Kelola Pengguna -->
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="dashboard-card h-100">
-                <div class="text-center">
-                    <div class="icon mb-3">
-                        <i class="fas fa-users-cog"></i>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-danger">
+                                <i class="fas fa-truck-moving fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Pindah Alamat</h6>
+                                <h4 class="mb-0"><?= $relocationCount ?? 0 ?></h4>
+                            </div>
+                        </div>
                     </div>
-                    <h4>Kelola Pengguna</h4>
-                    <p>Kelola akun pengguna sistem dan pengaturan hak akses</p>
-                    <a href="<?= base_url('pengguna') ?>" class="btn btn-action">
-                        <i class="fas fa-user-edit me-1"></i> Kelola Pengguna
-                    </a>
                 </div>
             </div>
         </div>
@@ -195,33 +165,24 @@
                             </thead>
                             <tbody>
                                 <?php foreach($recentRequests as $request): ?>
-                                <tr>
-                                    <td><?= $request['resident_name'] ?></td>
-                                    <td><?= $request['letter_type_name'] ?></td>
-                                    <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
-                                    <td>
-                                        <?php if($request['status'] == 'pending'): ?>
-                                            <span class="badge bg-warning">Menunggu</span>
-                                        <?php elseif($request['status'] == 'processing'): ?>
-                                            <span class="badge bg-info">Diproses</span>
-                                        <?php elseif($request['status'] == 'completed'): ?>
-                                            <span class="badge bg-success">Selesai</span>
-                                        <?php elseif($request['status'] == 'rejected'): ?>
-                                            <span class="badge bg-danger">Ditolak</span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td><?= esc($request['resident_name']) ?></td>
+                                        <td><?= esc($request['letter_type']) ?></td>
+                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($request['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
-                    <div class="text-center mt-3">
-                        <a href="<?= base_url('pengajuan-surat') ?>" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
-                    </div>
                 <?php else: ?>
                     <div class="text-center py-4">
-                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                        <p>Belum ada pengajuan surat terbaru</p>
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat</p>
                     </div>
                 <?php endif; ?>
             </div>
@@ -243,33 +204,257 @@
                             </thead>
                             <tbody>
                                 <?php foreach($recentComplaints as $complaint): ?>
-                                <tr>
-                                    <td><?= $complaint['reporter_name'] ?></td>
-                                    <td><?= $complaint['subject'] ?></td>
-                                    <td><?= date('d M Y', strtotime($complaint['created_at'])) ?></td>
-                                    <td>
-                                        <?php if($complaint['status'] == 'pending'): ?>
-                                            <span class="badge bg-warning">Menunggu</span>
-                                        <?php elseif($complaint['status'] == 'processing'): ?>
-                                            <span class="badge bg-info">Diproses</span>
-                                        <?php elseif($complaint['status'] == 'resolved'): ?>
-                                            <span class="badge bg-success">Teratasi</span>
-                                        <?php elseif($complaint['status'] == 'rejected'): ?>
-                                            <span class="badge bg-danger">Ditolak</span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td><?= esc($complaint['resident_name']) ?></td>
+                                        <td><?= esc($complaint['subject']) ?></td>
+                                        <td><?= date('d M Y', strtotime($complaint['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $complaint['status'] == 'pending' ? 'warning' : ($complaint['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($complaint['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
-                    <div class="text-center mt-3">
-                        <a href="<?= base_url('pengaduan') ?>" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-comment-alt fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengaduan</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Requests by Type -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Kematian Terbaru</h5>
+                <?php if(isset($recentDeathCertificates) && count($recentDeathCertificates) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nama Almarhum</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($recentDeathCertificates as $cert): ?>
+                                    <tr>
+                                        <td><?= esc($cert['name']) ?></td>
+                                        <td><?= date('d M Y', strtotime($cert['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $cert['status'] == 'pending' ? 'warning' : ($cert['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($cert['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
                 <?php else: ?>
                     <div class="text-center py-4">
-                        <i class="fas fa-comments fa-3x text-muted mb-3"></i>
-                        <p>Belum ada pengaduan masyarakat terbaru</p>
+                        <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat kematian</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Domisili Terbaru</h5>
+                <?php if(isset($recentDomicileRequests) && count($recentDomicileRequests) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Pemohon</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($recentDomicileRequests as $request): ?>
+                                    <tr>
+                                        <td><?= esc($request['resident_name']) ?></td>
+                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($request['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-home fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat domisili</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Umum Terbaru</h5>
+                <?php if(isset($recentGeneralRequests) && count($recentGeneralRequests) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Pemohon</th>
+                                    <th>Jenis</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($recentGeneralRequests as $request): ?>
+                                    <tr>
+                                        <td><?= esc($request['resident_name']) ?></td>
+                                        <td><?= esc($request['request_type']) ?></td>
+                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($request['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat umum</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Ahli Waris Terbaru</h5>
+                <?php if(isset($recentHeirRequests) && count($recentHeirRequests) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Pemohon</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($recentHeirRequests as $request): ?>
+                                    <tr>
+                                        <td><?= esc($request['resident_name']) ?></td>
+                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($request['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-user-friends fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat ahli waris</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Penduduk Baru Terbaru</h5>
+                <?php if(isset($recentNewResidents) && count($recentNewResidents) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($recentNewResidents as $resident): ?>
+                                    <tr>
+                                        <td><?= esc($resident['name']) ?></td>
+                                        <td><?= date('d M Y', strtotime($resident['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $resident['status'] == 'pending' ? 'warning' : ($resident['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($resident['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-user-plus fa-3x text-muted mb-3"></i>
+                        <p>Belum ada penduduk baru</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Pindah Alamat Terbaru</h5>
+                <?php if(isset($recentRelocations) && count($recentRelocations) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Alamat Baru</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($recentRelocations as $relocation): ?>
+                                    <tr>
+                                        <td><?= esc($relocation['resident_name']) ?></td>
+                                        <td><?= esc($relocation['destination_detail']) ?></td>
+                                        <td><?= date('d M Y', strtotime($relocation['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $relocation['status'] == 'pending' ? 'warning' : ($relocation['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($relocation['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-truck-moving fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan pindah alamat</p>
                     </div>
                 <?php endif; ?>
             </div>

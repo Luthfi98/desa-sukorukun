@@ -48,18 +48,22 @@
             </div>
         </div>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card feature-box shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="mb-4">
-                            <i class="fas fa-id-card fa-3x text-primary"></i>
+            <?php
+            foreach ($layananDesa as $layanan):
+            ?>
+                <div class="col-md-4">
+                    <div class="card feature-box shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-4">
+                                <?= $layanan['description'] ?>
+                            </div>
+                            <h4><?=$layanan['label'] ?></h4>
+                            <p class="text-muted"><?= $layanan['value'] ?></p>
+                            <!-- <a href="#" class="btn btn-sm btn-outline-primary mt-3">Selengkapnya</a> -->
                         </div>
-                        <h4>Administrasi Kependudukan</h4>
-                        <p class="text-muted">Pengurusan KTP, KK, Akta Kelahiran, dan dokumen kependudukan lainnya.</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary mt-3">Selengkapnya</a>
                     </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
             <div class="col-md-4">
                 <div class="card feature-box shadow-sm h-100">
                     <div class="card-body text-center">

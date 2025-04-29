@@ -377,6 +377,33 @@ $routes->group('relocation-request', function($routes) {
     });
 });
 
+$routes->group('death-cetificate-request', function($routes) {
+    $routes->get('/', 'LetterRequest\DeathCertificateRequestController::index');
+    $routes->get('create', 'LetterRequest\DeathCertificateRequestController::create');
+    $routes->post('store', 'LetterRequest\DeathCertificateRequestController::store');
+    $routes->get('edit/(:num)', 'LetterRequest\DeathCertificateRequestController::edit/$1');
+    $routes->post('update/(:num)', 'LetterRequest\DeathCertificateRequestController::update/$1');
+    $routes->get('view/(:num)', 'LetterRequest\DeathCertificateRequestController::show/$1');
+    $routes->get('process/(:num)', 'LetterRequest\DeathCertificateRequestController::process/$1');
+    $routes->post('update-status/(:num)', 'LetterRequest\DeathCertificateRequestController::updateStatus/$1');
+    $routes->get('download/(:num)', 'LetterRequest\DeathCertificateRequestController::download/$1');
+    $routes->get('getDataTable', 'LetterRequest\DeathCertificateRequestController::getDataTable');
+
+    $routes->get('delete/(:num)', 'LetterRequest\DeathCertificateRequestController::delete/$1');
+
+    $routes->group('my-request', function($routes) {        
+        $routes->get('/', 'LetterRequest\DeathCertificateRequestController::myRequest');        
+        $routes->get('create', 'LetterRequest\DeathCertificateRequestController::create');
+        $routes->post('store', 'LetterRequest\DeathCertificateRequestController::store');
+        $routes->get('edit/(:num)', 'LetterRequest\DeathCertificateRequestController::edit/$1');
+        $routes->post('update/(:num)', 'LetterRequest\DeathCertificateRequestController::update/$1');
+        $routes->get('view/(:num)', 'LetterRequest\DeathCertificateRequestController::show/$1');
+        $routes->get('delete/(:num)', 'LetterRequest\DeathCertificateRequestController::delete/$1');
+        $routes->get('download/(:num)', 'LetterRequest\DeathCertificateRequestController::download/$1');
+
+    });
+});
+
 // User Management Routes
 $routes->group('users', function($routes) {
     $routes->get('/', 'UserController::index');

@@ -5,20 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Dashboard' ?> - Sistem Layanan Surat Menyurat Desa</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
     <!-- Moment.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -295,6 +299,13 @@
                         <span class="notification-badge"><?= $pendingSuratCount ?></span>
                     <?php endif; ?>
                 </a>
+
+                <a href="<?= base_url('death-cetificate-request') ?>" class="<?= strpos(uri_string(), 'death-cetificate-request') === 0 ? 'active' : '' ?>">
+                    <i class="fas fa-envelope"></i> <span>Pengajuan SK Kematian</span>
+                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
+                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
+                    <?php endif; ?>
+                </a>
                 
                 <a href="<?= base_url('complaints/admin') ?>" class="<?= strpos(uri_string(), 'complaints/admin') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-bullhorn"></i> <span>Pengaduan Warga</span>
@@ -302,6 +313,7 @@
                         <span class="notification-badge"><?= $pendingPengaduanCount ?></span>
                     <?php endif; ?>
                 </a>
+                
                 
                 <a href="<?= base_url('archives') ?>" class="<?= strpos(uri_string(), 'archives') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-archive"></i> <span>Data Archives</span>
@@ -335,6 +347,13 @@
 
                 <a href="<?= base_url('relocation-request/my-request') ?>" class="<?= strpos(uri_string(), 'relocation-request/my-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan SK Pindah</span>
+                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
+                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
+                    <?php endif; ?>
+                </a>
+
+                <a href="<?= base_url('death-cetificate-request/my-request') ?>" class="<?= strpos(uri_string(), 'death-cetificate-request/my-request') === 0 ? 'active' : '' ?>">
+                    <i class="fas fa-envelope"></i> <span>Pengajuan SK Kematian</span>
                     <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
                         <span class="notification-badge"><?= $pendingSuratCount ?></span>
                     <?php endif; ?>

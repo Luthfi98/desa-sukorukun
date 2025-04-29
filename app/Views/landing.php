@@ -48,42 +48,22 @@
             </div>
         </div>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card feature-box shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="mb-4">
-                            <i class="fas fa-id-card fa-3x text-primary"></i>
+        <?php
+            foreach ($layananDesa as $layanan):
+            ?>
+                <div class="col-md-4">
+                    <div class="card feature-box shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-4">
+                                <?= $layanan['description'] ?>
+                            </div>
+                            <h4><?=$layanan['label'] ?></h4>
+                            <p class="text-muted"><?= $layanan['value'] ?></p>
+                            <!-- <a href="#" class="btn btn-sm btn-outline-primary mt-3">Selengkapnya</a> -->
                         </div>
-                        <h4>Administrasi Kependudukan</h4>
-                        <p class="text-muted">Pengurusan KTP, KK, Akta Kelahiran, dan dokumen kependudukan lainnya.</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary mt-3">Selengkapnya</a>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card feature-box shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="mb-4">
-                            <i class="fas fa-hand-holding-medical fa-3x text-primary"></i>
-                        </div>
-                        <h4>Pelayanan Kesehatan</h4>
-                        <p class="text-muted">Posyandu, Poliklinik Desa, dan informasi kesehatan masyarakat.</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary mt-3">Selengkapnya</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card feature-box shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="mb-4">
-                            <i class="fas fa-tractor fa-3x text-primary"></i>
-                        </div>
-                        <h4>Pemberdayaan Masyarakat</h4>
-                        <p class="text-muted">Program pelatihan, bantuan usaha, dan pemberdayaan ekonomi lokal.</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary mt-3">Selengkapnya</a>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -93,11 +73,11 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="https://source.unsplash.com/random/600x400/?village,rice-field" alt="Desa Sejahtera" class="img-fluid rounded shadow">
+                <img src="<?= base_url('uploads/settings/desa_(10).jpeg') ?>" alt="Desa Sejahtera"  class="img-fluid rounded shadow">
             </div>
             <div class="col-lg-6">
-                <h2 class="fw-bold mb-4">Tentang Desa Sejahtera</h2>
-                <p>Desa Sejahtera merupakan desa yang terletak di kaki gunung dengan pemandangan alam yang indah dan udara yang sejuk. Mayoritas penduduk bermata pencaharian sebagai petani dan peternak.</p>
+                <h2 class="fw-bold mb-4">Tentang <?= $namaDesa ?></h2>
+                <p><?= $namaDesa ?> merupakan desa yang terletak di kaki gunung dengan pemandangan alam yang indah dan udara yang sejuk. Mayoritas penduduk bermata pencaharian sebagai petani dan peternak.</p>
                 <p>Dengan luas wilayah sekitar 500 hektar, desa kami memiliki potensi pertanian, peternakan, dan pariwisata yang menjanjikan.</p>
                 <div class="row mt-4">
                     <div class="col-6">
@@ -106,7 +86,7 @@
                                 <i class="fas fa-users"></i>
                             </div>
                             <div>
-                                <h5 class="mb-0">2,500+</h5>
+                                <h5 class="mb-0"><?= $demografis ?></h5>
                                 <small class="text-muted">Jumlah Penduduk</small>
                             </div>
                         </div>
@@ -117,7 +97,7 @@
                                 <i class="fas fa-home"></i>
                             </div>
                             <div>
-                                <h5 class="mb-0">650+</h5>
+                                <h5 class="mb-0"><?= $kk ?></h5>
                                 <small class="text-muted">Jumlah Rumah Tangga</small>
                             </div>
                         </div>
@@ -128,7 +108,7 @@
                                 <i class="fas fa-mountain"></i>
                             </div>
                             <div>
-                                <h5 class="mb-0">500 Ha</h5>
+                                <h5 class="mb-0"><?= $luasWilayah ?></h5>
                                 <small class="text-muted">Luas Wilayah</small>
                             </div>
                         </div>
@@ -139,8 +119,8 @@
                                 <i class="fas fa-landmark"></i>
                             </div>
                             <div>
-                                <h5 class="mb-0">5</h5>
-                                <small class="text-muted">Jumlah Dusun</small>
+                                <h5 class="mb-0"><?= $ketinggian ?></h5>
+                                <small class="text-muted">Ketinggian</small>
                             </div>
                         </div>
                     </div>
@@ -159,84 +139,26 @@
                 <p class="text-muted">Informasi terkini seputar kegiatan dan program di Desa Sejahtera</p>
             </div>
         </div>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="https://source.unsplash.com/random/600x400/?village,meeting" class="card-img-top" alt="Berita 1">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="text-muted"><i class="far fa-calendar me-1"></i> 12 Juni 2023</small>
-                            <small class="text-primary">Kegiatan</small>
+        <div class="row g-4 d-flex justify-content-center">
+            <?php foreach($news as $new) :?>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="<?= base_url($new['image']) ?>" class="card-img-top" alt="Berita 1">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <small class="text-muted"><i class="far fa-calendar me-1"></i><?= formatDateIndo($new['created_at']) ?></small>
+                                <small class="text-primary"><?=  $new['category'] ?></small>
+                            </div>
+                            <h5 class="card-title"><?= $new['title'] ?></h5>
+                            <p class="card-text"><?= mb_strimwidth($new['content'], 0, 200, '...') ?></p>
+                            <a href="<?= base_url('berita/' . $new['id'].'-'.$new['slug']) ?>" class="btn btn-link p-0">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
-                        <h5 class="card-title">Musyawarah Perencanaan Pembangunan Desa Tahun 2023</h5>
-                        <p class="card-text">Musyawarah Perencanaan Pembangunan (Musrenbang) Desa Sejahtera telah dilaksanakan untuk merencanakan program pembangunan tahun depan.</p>
-                        <a href="#" class="btn btn-link p-0">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="https://source.unsplash.com/random/600x400/?harvest,farm" class="card-img-top" alt="Berita 2">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="text-muted"><i class="far fa-calendar me-1"></i> 5 Juni 2023</small>
-                            <small class="text-primary">Pertanian</small>
-                        </div>
-                        <h5 class="card-title">Panen Raya Padi Organik Meningkat 30% Tahun Ini</h5>
-                        <p class="card-text">Program pertanian organik yang dijalankan oleh kelompok tani desa telah menunjukkan hasil positif dengan peningkatan hasil panen.</p>
-                        <a href="#" class="btn btn-link p-0">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="https://source.unsplash.com/random/600x400/?traditional,dance" class="card-img-top" alt="Berita 3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="text-muted"><i class="far fa-calendar me-1"></i> 28 Mei 2023</small>
-                            <small class="text-primary">Budaya</small>
-                        </div>
-                        <h5 class="card-title">Festival Budaya Desa Menarik Ratusan Pengunjung</h5>
-                        <p class="card-text">Festival budaya tahunan yang menampilkan kesenian tradisional, kuliner khas, dan kerajinan lokal berhasil menarik banyak pengunjung.</p>
-                        <a href="#" class="btn btn-link p-0">Baca selengkapnya <i class="fas fa-arrow-right ms-1"></i></a>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
         <div class="text-center mt-5">
-            <a href="#" class="btn btn-primary px-4 py-2">Lihat Semua Berita</a>
-        </div>
-    </div>
-</section>
-
-<!-- Gallery Section -->
-<section class="section-padding bg-light">
-    <div class="container">
-        <div class="row text-center mb-5">
-            <div class="col-md-8 mx-auto">
-                <h2 class="fw-bold">Galeri Desa</h2>
-                <p class="text-muted">Potret kehidupan dan keindahan Desa Sejahtera</p>
-            </div>
-        </div>
-        <div class="row g-3">
-            <div class="col-md-4">
-                <img src="https://source.unsplash.com/random/600x400/?village,rice-field" alt="Galeri 1" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover">
-            </div>
-            <div class="col-md-4">
-                <img src="https://source.unsplash.com/random/600x400/?village,ceremony" alt="Galeri 2" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover">
-            </div>
-            <div class="col-md-4">
-                <img src="https://source.unsplash.com/random/600x400/?village,harvest" alt="Galeri 3" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover">
-            </div>
-            <div class="col-md-8">
-                <img src="https://source.unsplash.com/random/1200x600/?village,panorama" alt="Galeri 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover">
-            </div>
-            <div class="col-md-4">
-                <img src="https://source.unsplash.com/random/600x600/?village,tradition" alt="Galeri 5" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover">
-            </div>
-        </div>
-        <div class="text-center mt-5">
-            <a href="#" class="btn btn-primary px-4 py-2">Kunjungi Galeri</a>
+            <a href="<?= base_url('berita') ?>" class="btn btn-primary px-4 py-2">Lihat Semua Berita</a>
         </div>
     </div>
 </section>

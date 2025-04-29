@@ -31,6 +31,7 @@ class GeneralRequestModel extends Model
         'village_head_position',
         'village_head_signature',
         'status',
+        'rejection_reason',
         'processed_by'
     ];
 
@@ -226,13 +227,15 @@ class GeneralRequestModel extends Model
     {
         $data = [
             'status' => $status,
-            'processed_by' => $processedBy,
-            'valid_from' => date('Y-m-d'),
+            'processed_by' => $processedBy
         ];
         
-        // if ($status === 'rejected' && $rejectionReason) {
-        //     $data['rejection_reason'] = $rejectionReason;
-        // }
+        if ($status === 'rejected' && $rejectionReason) {
+            $data['rejection_reason'] = $rejectionReason;
+        }
+        if ($status == 'completed' || $status == 'approved') {
+            $data['valid_from'] = date('Y-m-d');
+        }
         
         return $this->update($id, $data);
     }

@@ -17,7 +17,7 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex align-items-center">
                             <div class="me-3 text-success">
                                 <i class="fas fa-file-alt fa-2x"></i>
@@ -29,7 +29,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex align-items-center">
                             <div class="me-3 text-warning">
                                 <i class="fas fa-exclamation-circle fa-2x"></i>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex align-items-center">
                             <div class="me-3 text-danger">
                                 <i class="fas fa-bell fa-2x"></i>
@@ -50,6 +50,68 @@
                                 <h6 class="mb-0">Notifikasi</h6>
                                 <h4 class="mb-0"><?= $unreadCount ?? 0 ?></h4>
                                 <small class="text-muted">Notifikasi belum dibaca</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-info">
+                                <i class="fas fa-file-medical fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Surat Kematian</h6>
+                                <h4 class="mb-0"><?= $myDeathCertificateCount ?? 0 ?></h4>
+                                <small class="text-muted">Total pengajuan Anda</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-primary">
+                                <i class="fas fa-home fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Surat Domisili</h6>
+                                <h4 class="mb-0"><?= $myDomicileRequestCount ?? 0 ?></h4>
+                                <small class="text-muted">Total pengajuan Anda</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-success">
+                                <i class="fas fa-file-alt fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Surat Umum</h6>
+                                <h4 class="mb-0"><?= $myGeneralRequestCount ?? 0 ?></h4>
+                                <small class="text-muted">Total pengajuan Anda</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-warning">
+                                <i class="fas fa-user-friends fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Surat Ahli Waris</h6>
+                                <h4 class="mb-0"><?= $myHeirRequestCount ?? 0 ?></h4>
+                                <small class="text-muted">Total pengajuan Anda</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3 text-danger">
+                                <i class="fas fa-truck-moving fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Pindah Alamat</h6>
+                                <h4 class="mb-0"><?= $myRelocationCount ?? 0 ?></h4>
+                                <small class="text-muted">Total pengajuan Anda</small>
                             </div>
                         </div>
                     </div>
@@ -175,35 +237,28 @@
                             </thead>
                             <tbody>
                                 <?php foreach($mySuratRecent as $surat): ?>
-                                <tr>
-                                    <td><?= $surat['letter_type_name'] ?></td>
-                                    <td><?= date('d M Y', strtotime($surat['created_at'])) ?></td>
-                                    <td>
-                                        <?php if($surat['status'] == 'pending'): ?>
-                                            <span class="badge bg-warning">Menunggu</span>
-                                        <?php elseif($surat['status'] == 'processing'): ?>
-                                            <span class="badge bg-info">Diproses</span>
-                                        <?php elseif($surat['status'] == 'completed'): ?>
-                                            <span class="badge bg-success">Selesai</span>
-                                        <?php elseif($surat['status'] == 'rejected'): ?>
-                                            <span class="badge bg-danger">Ditolak</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td>
-                                        <a href="<?= base_url('surat-pengantar/detail/' . $surat['id']) ?>" class="btn btn-sm btn-outline-primary">Detail</a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td><?= esc($surat['letter_type']) ?></td>
+                                        <td><?= date('d M Y', strtotime($surat['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $surat['status'] == 'pending' ? 'warning' : ($surat['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($surat['status']) ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="<?= base_url('surat-pengantar/view/' . $surat['id']) ?>" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
-                    <div class="text-center mt-3">
-                        <a href="<?= base_url('surat-pengantar/riwayat') ?>" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
-                    </div>
                 <?php else: ?>
                     <div class="text-center py-4">
                         <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
-                        <p>Belum ada pengajuan surat yang Anda kirim</p>
+                        <p>Belum ada pengajuan surat</p>
                     </div>
                 <?php endif; ?>
             </div>
@@ -225,35 +280,220 @@
                             </thead>
                             <tbody>
                                 <?php foreach($myComplaintRecent as $complaint): ?>
-                                <tr>
-                                    <td><?= $complaint['subject'] ?></td>
-                                    <td><?= date('d M Y', strtotime($complaint['created_at'])) ?></td>
-                                    <td>
-                                        <?php if($complaint['status'] == 'pending'): ?>
-                                            <span class="badge bg-warning">Menunggu</span>
-                                        <?php elseif($complaint['status'] == 'processing'): ?>
-                                            <span class="badge bg-info">Diproses</span>
-                                        <?php elseif($complaint['status'] == 'resolved'): ?>
-                                            <span class="badge bg-success">Teratasi</span>
-                                        <?php elseif($complaint['status'] == 'rejected'): ?>
-                                            <span class="badge bg-danger">Ditolak</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td>
-                                        <a href="<?= base_url('pengaduan-masyarakat/detail/' . $complaint['id']) ?>" class="btn btn-sm btn-outline-primary">Detail</a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td><?= esc($complaint['subject']) ?></td>
+                                        <td><?= date('d M Y', strtotime($complaint['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $complaint['status'] == 'pending' ? 'warning' : ($complaint['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($complaint['status']) ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="<?= base_url('complaints/view/' . $complaint['id']) ?>" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
-                    <div class="text-center mt-3">
-                        <a href="<?= base_url('pengaduan-masyarakat/riwayat') ?>" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
-                    </div>
                 <?php else: ?>
                     <div class="text-center py-4">
                         <i class="fas fa-comment-alt fa-3x text-muted mb-3"></i>
-                        <p>Belum ada pengaduan yang Anda kirim</p>
+                        <p>Belum ada pengaduan</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Requests by Type -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Kematian Terbaru</h5>
+                <?php if(isset($myDeathCertificateRecent) && count($myDeathCertificateRecent) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nama Almarhum</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($myDeathCertificateRecent as $cert): ?>
+                                    <tr>
+                                        <td><?= esc($cert['name']) ?></td>
+                                        <td><?= date('d M Y', strtotime($cert['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $cert['status'] == 'pending' ? 'warning' : ($cert['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($cert['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat kematian</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Domisili Terbaru</h5>
+                <?php if(isset($myDomicileRequestRecent) && count($myDomicileRequestRecent) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Alamat</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($myDomicileRequestRecent as $request): ?>
+                                    <tr>
+                                        <td><?= esc($request['address']) ?></td>
+                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($request['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-home fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat domisili</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Umum Terbaru</h5>
+                <?php if(isset($myGeneralRequestRecent) && count($myGeneralRequestRecent) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Jenis</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($myGeneralRequestRecent as $request): ?>
+                                    <tr>
+                                        <td><?= esc($request['request_type']) ?></td>
+                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($request['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat umum</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Ahli Waris Terbaru</h5>
+                <?php if(isset($myHeirRequestRecent) && count($myHeirRequestRecent) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nama Almarhum</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($myHeirRequestRecent as $request): ?>
+                                    <tr>
+                                        <td><?= esc($request['name']) ?></td>
+                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($request['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-user-friends fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat ahli waris</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Pindah Alamat Terbaru</h5>
+                <?php if(isset($myRelocationRecent) && count($myRelocationRecent) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Alamat Baru</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($myRelocationRecent as $relocation): ?>
+                                    <tr>
+                                        <td><?= esc($relocation['new_address']) ?></td>
+                                        <td><?= date('d M Y', strtotime($relocation['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $relocation['status'] == 'pending' ? 'warning' : ($relocation['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($relocation['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-truck-moving fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan pindah alamat</p>
                     </div>
                 <?php endif; ?>
             </div>

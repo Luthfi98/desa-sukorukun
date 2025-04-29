@@ -32,6 +32,7 @@ class DomicileRequestModel extends Model
         'village_head_position',
         'village_head_signature',
         'status',
+        'rejected_reason',
         'processed_by'
     ];
 
@@ -221,11 +222,14 @@ class DomicileRequestModel extends Model
         $data = [
             'status' => $status,
             'processed_by' => $processedBy,
-            'valid_from' => date('Y-m-d'),
         ];
+
+        if ($status == 'completed' || $status == 'approved') {
+            $data['valid_from'] = date('Y-m-d');
+        }
         
         if ($status === 'rejected' && $rejectionReason) {
-            $data['description'] = $rejectionReason;
+            $data['rejected_reason'] = $rejectionReason;
         }
         
         return $this->update($id, $data);

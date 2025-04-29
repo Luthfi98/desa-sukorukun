@@ -31,6 +31,7 @@ class HeirRequestModel extends Model
         'heir_data',
         'processed_by',
         'status',
+        'rejected_reason',
         'village_head_name',
         'village_head_nip',
         'village_head_position',
@@ -265,12 +266,16 @@ class HeirRequestModel extends Model
     /**
      * Process heir certificate request
      */
-    public function processRequest(int $id, int $processedBy, string $status)
+    public function processRequest(int $id, int $processedBy, string $status, string $rejectionReason)
     {
         $data = [
             'status' => $status,
             'processed_by' => $processedBy
         ];
+
+        if ($status == 'rejected' && $rejectionReason) {
+            $data['rejected_reason'] = $rejectionReason;
+        }
         
         return $this->update($id, $data);
     }

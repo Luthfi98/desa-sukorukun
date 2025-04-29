@@ -9,11 +9,27 @@ class Home extends BaseController
     {
         $namaDesa = get_setting('informasi_desa','nama_desa', false);
         $visiDesa = get_setting('informasi_desa','visi_desa', false);
+        $settingModel = new \App\Models\SettingModel();
+        $residentModel = new \App\Models\ResidentModel();
+        $newsModel = new \App\Models\NewsModel();
+        $layananDesa = $settingModel->where('category', 'layanan_desa')->where('is_public', 1)->orderBy('order', 'ASC')->findAll();
+        $demografis = $residentModel->countAll();
+        $kk = $residentModel->select('kk')->distinct()->groupBy('kk')->countAllResults();
+        $luasWilayah = get_setting('geografis', 'luas_wilayah', false);
+        $ketinggian = get_setting('geografis', 'ketinggian', false);
+        $news = $newsModel->where('status', 'published')->orderBy('created_at', 'DESC')->limit(3)->findAll();
+
 
         return view('landing', [
-            'title' => 'Desa Sejahtera - Selamat Datang',
+            'title' => $namaDesa,
             'namaDesa' => $namaDesa,
-            'visiDesa' => $visiDesa
+            'visiDesa' => $visiDesa,
+            'layananDesa' => $layananDesa,
+            'demografis' => $demografis,
+            'kk' => $kk,
+            'luasWilayah' => $luasWilayah,
+            'ketinggian' => $ketinggian,
+            'news' => $news
         ]);
     }
 

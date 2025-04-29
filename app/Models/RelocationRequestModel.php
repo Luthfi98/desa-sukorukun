@@ -30,6 +30,7 @@ class RelocationRequestModel extends Model
         'move_date',
         'processed_by',
         'status',
+        'rejected_reason',
         'village_head_name',
         'village_head_nip',
         'village_head_position',
@@ -182,12 +183,16 @@ class RelocationRequestModel extends Model
     /**
      * Process relocation letter request
      */
-    public function processRequest(int $id, int $processedBy, string $status)
+    public function processRequest(int $id, int $processedBy, string $status, string $rejectionReason)
     {
         $data = [
             'status' => $status,
             'processed_by' => $processedBy
         ];
+
+        if($status == 'rejected' && $rejectionReason) {
+            $data['rejected_reason'] = $rejectionReason;
+        }
         
         return $this->update($id, $data);
     }
