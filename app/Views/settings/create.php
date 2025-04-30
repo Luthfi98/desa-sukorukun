@@ -65,7 +65,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="value_type" class="form-label">Value Type <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="value_type" name="value_type" required>
+                                    <select class="form-control" id="value_type" name="value_type" required>
                                         <option value="text" <?= old('value_type') == 'text' ? 'selected' : '' ?>>Text</option>
                                         <option value="number" <?= old('value_type') == 'number' ? 'selected' : '' ?>>Number</option>
                                         <option value="date" <?= old('value_type') == 'date' ? 'selected' : '' ?>>Date</option>

@@ -14,7 +14,7 @@
                         <div class="col-md-4">
                             <form action="<?= base_url('informasi-apbd-desa') ?>" method="get">
                                 <div class="input-group">
-                                    <select name="tahun" class="form-select">
+                                    <select name="tahun" class="form-control">
                                         <?php foreach($tahun_list as $t): ?>
                                             <option value="<?= $t['tahun'] ?>" <?= $tahun == $t['tahun'] ? 'selected' : '' ?>><?= $t['tahun'] ?></option>
                                         <?php endforeach; ?>

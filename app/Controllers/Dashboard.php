@@ -52,7 +52,6 @@ class Dashboard extends BaseController
     {
         $userId = $this->session->get('id');
         $userRole = $this->session->get('role');
-        
         // Common data for all dashboards
         $data = [
             'title' => 'Dashboard',

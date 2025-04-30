@@ -16,7 +16,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="typeFilter">Type</label>
-                        <select class="form-select" id="typeFilter">
+                        <select class="form-control" id="typeFilter">
                             <option value="all">All Types</option>
                             <?php foreach ($types as $type): ?>
                                 <option value="<?= $type ?>"><?= ucfirst($type) ?></option>
@@ -27,7 +27,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="statusFilter">Status</label>
-                        <select class="form-select" id="statusFilter">
+                        <select class="form-control" id="statusFilter">
                             <option value="all">All Status</option>
                             <?php foreach ($statuses as $status): ?>
                                 <option value="<?= $status ?>"><?= ucfirst($status) ?></option>

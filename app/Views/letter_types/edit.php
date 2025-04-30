@@ -47,7 +47,7 @@
 
                         <div class="mb-3">
                             <label for="status" class="form-label">Status</label>
-                            <select class="form-select <?= ($validation->hasError('status')) ? 'is-invalid' : '' ?>" 
+                            <select class="form-control <?= ($validation->hasError('status')) ? 'is-invalid' : '' ?>" 
                                     id="status" name="status">
                                 <option value="active" <?= (old('status', $letterType['status']) == 'active') ? 'selected' : '' ?>>Aktif</option>
                                 <option value="inactive" <?= (old('status', $letterType['status']) == 'inactive') ? 'selected' : '' ?>>Tidak Aktif</option>

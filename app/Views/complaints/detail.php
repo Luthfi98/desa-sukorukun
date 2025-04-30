@@ -135,7 +135,7 @@
                     <?php if (session()->get('role') == 'admin') : ?>
                         <div class="mb-3">
                             <label for="status" class="form-label">Ubah Status</label>
-                            <select class="form-select" id="status" name="status">
+                            <select class="form-control" id="status" name="status">
                                 <option value="">-- Pilih Status --</option>
                                 <option value="pending" <?= $complaint['status'] == 'pending' ? 'selected' : ''; ?>>Menunggu</option>
                                 <option value="processing" <?= $complaint['status'] == 'processing' ? 'selected' : ''; ?>>Diproses</option>

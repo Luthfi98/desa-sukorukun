@@ -148,7 +148,11 @@
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <?php 
+                                                $settingModel = new \App\Models\SettingModel();
                                             foreach ($strukturOrganisasi as $item): 
+                                                $ttd = $settingModel->where('key', 'ttd_'.$item['key'])->first();
+                                            
+                                                // $ttd = get_setting('etc', 'ttd_'.$item['key'], false);
                                             ?>
                                                 <tr>
                                                     <th width="30%"><?= $item['label'] ?></th>
@@ -161,6 +165,16 @@
                                                             <label for="description_<?= $item['id'] ?>">NIP</label>
                                                             <input type="text" class="form-control" id="description_<?= $item['id'] ?>" name="description_<?= $item['id'] ?>" value="<?= $item['description'] ?>">
                                                         </div>
+                                                        <?php if($ttd):?>
+                                                            <div class="form-group">
+                                                                <label for="ttd_<?= $ttd['id'] ?>">Tanda Tangan</label> <br>
+                                                                <img src="<?= base_url($ttd['value']) ?>" width="200px" alt="Tanda Tangan <?= $item['label'] ?>" width="250px" class="img-thumbnail">
+                                                                <input type="file" class="form-control" id="ttd_<?= $ttd['id'] ?>" name="ttd_<?= $ttd['id'] ?>">
+                                                                <input type="hidden" name="id_<?= $ttd['id'] ?>" value="<?= $ttd['id'] ?>">
+                                                                <input type="hidden" name="value_type_<?= $ttd['id'] ?>" value="<?= $ttd['value_type'] ?>">
+
+                                                            </div>
+                                                        <?php endif; ?>
                                                         
                                                         <input type="hidden" name="id_<?= $item['id'] ?>" value="<?= $item['id'] ?>">
                                                         <input type="hidden" name="value_type_<?= $item['id'] ?>" value="<?= $item['value_type'] ?>">

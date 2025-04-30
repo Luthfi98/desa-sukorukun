@@ -222,22 +222,23 @@ class Residents extends BaseController
                 if (!empty($row[0])) { // Skip empty rows (check NIK column)
                     $data[] = [
                         'nik'           => $row[0],
-                        'name'          => $row[1],
-                        'birth_place'   => $row[2],
-                        'birth_date'    => $row[3],
-                        'gender'        => $row[4],
-                        'address'       => $row[5],
-                        'rt'            => $row[6],
-                        'rw'            => $row[7],
-                        'village'       => $row[8],
-                        'district'      => $row[9],
-                        'religion'      => $row[10],
-                        'marital_status'=> $row[11],
-                        'occupation'    => $row[12],
-                        'nationality'   => $row[13],
-                        'education'     => $row[14],
-                        'father_name'   => $row[15] ?? null,
-                        'mother_name'   => $row[16] ?? null,
+                        'kk'            => $row[1],
+                        'name'          => $row[2],
+                        'birth_place'   => $row[3],
+                        'birth_date'    => $row[4],
+                        'gender'        => $row[5],
+                        'address'       => $row[6],
+                        'rt'            => $row[7],
+                        'rw'            => $row[8],
+                        'village'       => $row[9],
+                        'district'      => $row[10],
+                        'religion'      => $row[11],
+                        'marital_status'=> $row[12],
+                        'occupation'    => $row[13],
+                        'nationality'   => $row[14],
+                        'education'     => $row[15],
+                        'father_name'   => $row[16] ?? null,
+                        'mother_name'   => $row[17] ?? null,
                     ];
                 }
             }
@@ -257,44 +258,46 @@ class Residents extends BaseController
         
         // Set headers
         $sheet->setCellValue('A1', 'NIK');
-        $sheet->setCellValue('B1', 'Nama');
-        $sheet->setCellValue('C1', 'Tempat Lahir');
-        $sheet->setCellValue('D1', 'Tanggal Lahir (YYYY-MM-DD)');
-        $sheet->setCellValue('E1', 'Jenis Kelamin (male/female)');
-        $sheet->setCellValue('F1', 'Alamat');
-        $sheet->setCellValue('G1', 'RT');
-        $sheet->setCellValue('H1', 'RW');
-        $sheet->setCellValue('I1', 'Desa/Kelurahan');
-        $sheet->setCellValue('J1', 'Kecamatan');
-        $sheet->setCellValue('K1', 'Agama');
-        $sheet->setCellValue('L1', 'Status Perkawinan (single/married/divorced/widowed)');
-        $sheet->setCellValue('M1', 'Pekerjaan');
-        $sheet->setCellValue('N1', 'Kewarganegaraan');
-        $sheet->setCellValue('O1', 'Pendidikan');
-        $sheet->setCellValue('P1', 'Nama Ayah');
-        $sheet->setCellValue('Q1', 'Nama Ibu');
+        $sheet->setCellValue('B1', 'KK');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Tempat Lahir');
+        $sheet->setCellValue('E1', 'Tanggal Lahir (YYYY-MM-DD)');
+        $sheet->setCellValue('F1', 'Jenis Kelamin (male/female)');
+        $sheet->setCellValue('G1', 'Alamat');
+        $sheet->setCellValue('H1', 'RT');
+        $sheet->setCellValue('I1', 'RW');
+        $sheet->setCellValue('J1', 'Desa/Kelurahan');
+        $sheet->setCellValue('K1', 'Kecamatan');
+        $sheet->setCellValue('L1', 'Agama');
+        $sheet->setCellValue('M1', 'Status Perkawinan (single/married/divorced/widowed)');
+        $sheet->setCellValue('N1', 'Pekerjaan');
+        $sheet->setCellValue('O1', 'Kewarganegaraan');
+        $sheet->setCellValue('P1', 'Pendidikan');
+        $sheet->setCellValue('Q1', 'Nama Ayah');
+        $sheet->setCellValue('R1', 'Nama Ibu');
         
         // Example row
         $sheet->setCellValue('A2', '1234567890123456');
-        $sheet->setCellValue('B2', 'Nama Lengkap');
-        $sheet->setCellValue('C2', 'Jakarta');
-        $sheet->setCellValue('D2', '1990-01-01');
-        $sheet->setCellValue('E2', 'male');
-        $sheet->setCellValue('F2', 'Jl. Contoh No. 123');
-        $sheet->setCellValue('G2', '001');
-        $sheet->setCellValue('H2', '002');
-        $sheet->setCellValue('I2', 'Desa Contoh');
-        $sheet->setCellValue('J2', 'Kecamatan Contoh');
-        $sheet->setCellValue('K2', 'Islam');
-        $sheet->setCellValue('L2', 'single');
-        $sheet->setCellValue('M2', 'Karyawan Swasta');
-        $sheet->setCellValue('N2', 'WNI');
-        $sheet->setCellValue('O2', 'S1');
-        $sheet->setCellValue('P2', 'Nama Ayah');
-        $sheet->setCellValue('Q2', 'Nama Ibu');
+        $sheet->setCellValue('B2', '9876543210987654');
+        $sheet->setCellValue('C2', 'Nama Lengkap');
+        $sheet->setCellValue('D2', 'Jakarta');
+        $sheet->setCellValue('E2', '1990-01-01');
+        $sheet->setCellValue('F2', 'male');
+        $sheet->setCellValue('G2', 'Jl. Contoh No. 123');
+        $sheet->setCellValue('H2', '001');
+        $sheet->setCellValue('I2', '002');
+        $sheet->setCellValue('J2', 'Desa Contoh');
+        $sheet->setCellValue('K2', 'Kecamatan Contoh');
+        $sheet->setCellValue('L2', 'Islam');
+        $sheet->setCellValue('M2', 'single');
+        $sheet->setCellValue('N2', 'Karyawan Swasta');
+        $sheet->setCellValue('O2', 'WNI');
+        $sheet->setCellValue('P2', 'S1');
+        $sheet->setCellValue('Q2', 'Nama Ayah');
+        $sheet->setCellValue('R2', 'Nama Ibu');
         
         // Auto size columns
-        foreach (range('A', 'Q') as $column) {
+        foreach (range('A', 'R') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
         

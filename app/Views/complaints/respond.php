@@ -74,7 +74,7 @@
                             
                             <div class="mb-3">
                                 <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                                <select class="form-select" id="status" name="status" required>
+                                <select class="form-control" id="status" name="status" required>
                                     <option value="processing" <?= old('status') == 'processing' ? 'selected' : ''; ?>>Diproses</option>
                                     <option value="resolved" <?= old('status') == 'resolved' ? 'selected' : ''; ?>>Selesai</option>
                                     <option value="rejected" <?= old('status') == 'rejected' ? 'selected' : ''; ?>>Ditolak</option>

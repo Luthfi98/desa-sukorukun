@@ -480,7 +480,7 @@ class RelocationRequestController extends BaseController
 
             
             $kades = get_setting('struktur_organisasi','kepala_desa', false);
-            $sigKades = get_setting('etc','ttd_kades', NULL);
+            $sigKades = get_setting('etc','ttd_kepala_desa', NULL);
             $camat = get_setting('struktur_organisasi','kepala_camat', false);
             $sigCamat = get_setting('etc','ttd_camat', NULL);
             
@@ -649,7 +649,7 @@ class RelocationRequestController extends BaseController
 
             
             $kades = get_setting('struktur_organisasi','kepala_desa', false);
-            $sigKades = get_setting('etc','ttd_kades', NULL);
+            $sigKades = get_setting('etc','ttd_kepala_desa', NULL);
             $camat = get_setting('struktur_organisasi','kepala_camat', false);
             $sigCamat = get_setting('etc','ttd_camat', NULL);
             
@@ -841,7 +841,7 @@ class RelocationRequestController extends BaseController
             ];
             
             $kades = get_setting('struktur_organisasi','kepala_desa', false);
-            $sigKades = get_setting('etc','ttd_kades', NULL);
+            $sigKades = get_setting('etc','ttd_kepala_desa', NULL);
             $camat = get_setting('struktur_organisasi','kepala_camat', false);
             $sigCamat = get_setting('etc','ttd_camat', NULL);
             
@@ -1046,7 +1046,7 @@ class RelocationRequestController extends BaseController
             ];
             
             $kades = get_setting('struktur_organisasi','kepala_desa', false);
-            $sigKades = get_setting('etc','ttd_kades', NULL);
+            $sigKades = get_setting('etc','ttd_kepala_desa', NULL);
             $camat = get_setting('struktur_organisasi','kepala_camat', false);
             $sigCamat = get_setting('etc','ttd_camat', NULL);
             

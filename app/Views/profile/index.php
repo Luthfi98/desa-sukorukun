@@ -122,7 +122,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="gender" class="form-label">Jenis Kelamin</label>
-                                <select class="form-select <?= (session('errors.gender')) ? 'is-invalid' : '' ?>" id="gender" name="gender">
+                                <select class="form-control <?= (session('errors.gender')) ? 'is-invalid' : '' ?>" id="gender" name="gender">
                                     <option value="">Pilih Jenis Kelamin</option>
                                     <option value="male" <?= (old('gender', $resident['gender'] ?? '') == 'male') ? 'selected' : '' ?>>Laki-laki</option>
                                     <option value="female" <?= (old('gender', $resident['gender'] ?? '') == 'female') ? 'selected' : '' ?>>Perempuan</option>
@@ -135,7 +135,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="religion" class="form-label">Agama</label>
-                                <select class="form-select <?= (session('errors.religion')) ? 'is-invalid' : '' ?>" id="religion" name="religion">
+                                <select class="form-control <?= (session('errors.religion')) ? 'is-invalid' : '' ?>" id="religion" name="religion">
                                     <option value="">Pilih Agama</option>
                                     <option value="Islam" <?= (old('religion', $resident['religion'] ?? '') == 'Islam') ? 'selected' : '' ?>>Islam</option>
                                     <option value="Kristen" <?= (old('religion', $resident['religion'] ?? '') == 'Kristen') ? 'selected' : '' ?>>Kristen</option>
@@ -204,7 +204,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="marital_status" class="form-label">Status Pernikahan</label>
-                                <select class="form-select <?= (session('errors.marital_status')) ? 'is-invalid' : '' ?>" id="marital_status" name="marital_status">
+                                <select class="form-control <?= (session('errors.marital_status')) ? 'is-invalid' : '' ?>" id="marital_status" name="marital_status">
                                     <option value="">Pilih Status</option>
                                     <option value="single" <?= (old('marital_status', $resident['marital_status'] ?? '') == 'single') ? 'selected' : '' ?>>Belum Menikah</option>
                                     <option value="married" <?= (old('marital_status', $resident['marital_status'] ?? '') == 'married') ? 'selected' : '' ?>>Menikah</option>
@@ -240,7 +240,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="education" class="form-label">Pendidikan Terakhir</label>
-                                <select class="form-select <?= (session('errors.education')) ? 'is-invalid' : '' ?>" id="education" name="education">
+                                <select class="form-control <?= (session('errors.education')) ? 'is-invalid' : '' ?>" id="education" name="education">
                                     <option value="">Pilih Pendidikan</option>
                                     <option value="SD" <?= (old('education', $resident['education'] ?? '') == 'SD') ? 'selected' : '' ?>>SD</option>
                                     <option value="SMP" <?= (old('education', $resident['education'] ?? '') == 'SMP') ? 'selected' : '' ?>>SMP</option>

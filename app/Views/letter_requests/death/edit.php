@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="gender" class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
-                                <select class="form-select" id="gender" name="gender" required>
+                                <select class="form-control" id="gender" name="gender" required>
                                     <option value="">-- Pilih Jenis Kelamin --</option>
                                     <option value="male" <?= old('gender', $request['gender']) == 'male' ? 'selected' : '' ?>>Laki-laki</option>
                                     <option value="female" <?= old('gender', $request['gender']) == 'female' ? 'selected' : '' ?>>Perempuan</option>
@@ -134,7 +134,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                <select name="letter_type_id" id="letter_type_id" class="form-select" required>
+                                <select name="letter_type_id" id="letter_type_id" class="form-control" required>
                                     <option value="<?= old('letter_type_id', $request['letter_type_id']) ?>"><?= old('letter_type_name', $request['letter_type_name']) ?></option>
                                 </select>
                             </div>
@@ -143,7 +143,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                    <select name="letter_type_id" id="letter_type_id" class="form-select" required>
+                                    <select name="letter_type_id" id="letter_type_id" class="form-control" required>
                                         <option value="<?= old('letter_type_id', $request['letter_type_id']) ?>"><?= old('letter_type_name', $request['letter_type_name']) ?></option>
                                     </select>
                                 </div>

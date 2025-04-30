@@ -46,7 +46,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="letter_type_id" class="form-label">Letter Type <span class="text-danger">*</span></label>
-                                <select name="letter_type_id" id="letter_type_id" class="form-select" required>
+                                <select name="letter_type_id" id="letter_type_id" class="form-control" required>
                                     <option value="">-- Select Letter Type --</option>
                                     <?php foreach($letterTypes as $type): ?>
                                     <option value="<?= $type['id'] ?>" <?= ($request['letter_type_id'] == $type['id']) ? 'selected' : '' ?>><?= $type['name'] ?></option>

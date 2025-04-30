@@ -147,7 +147,7 @@
                                     </div>
                                     
                                     <div class="status-options d-none">
-                                        <select class="form-select form-select-sm" name="status" style="width: auto;">
+                                        <select class="form-control form-control-sm" name="status" style="width: auto;">
                                             <option value="processing" <?= $complaint['status'] == 'processing' ? 'selected' : '' ?>>Diproses</option>
                                             <option value="resolved" <?= $complaint['status'] == 'resolved' ? 'selected' : '' ?>>Selesai</option>
                                             <option value="rejected" <?= $complaint['status'] == 'rejected' ? 'selected' : '' ?>>Ditolak</option>
@@ -183,7 +183,7 @@
                                 <?= csrf_field() ?>
                                 <div class="mb-3">
                                     <label for="status" class="form-label">Ubah Status:</label>
-                                    <select class="form-select" id="status" name="status">
+                                    <select class="form-control" id="status" name="status">
                                         <option value="pending" <?= $complaint['status'] == 'pending' ? 'selected' : '' ?>>Menunggu</option>
                                         <option value="processing" <?= $complaint['status'] == 'processing' ? 'selected' : '' ?>>Diproses</option>
                                         <option value="resolved" <?= $complaint['status'] == 'resolved' ? 'selected' : '' ?>>Selesai</option>

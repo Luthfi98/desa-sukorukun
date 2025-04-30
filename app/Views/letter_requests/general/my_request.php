@@ -58,7 +58,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="letter_type_filter">Jenis Surat</label>
-                                <select class="form-select" id="letter_type_filter">
+                                <select class="form-control" id="letter_type_filter">
                                     <option value="">Semua Jenis Surat</option>
                                     <?php foreach($letterTypes as $type): ?>
                                     <option value="<?= $type['id'] ?>"><?= $type['name'] ?></option>

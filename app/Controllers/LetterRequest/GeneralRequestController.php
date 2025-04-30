@@ -2,12 +2,13 @@
 
 namespace App\Controllers\LetterRequest;
 
+use CURLFile;
+use App\Models\SettingModel;
+use App\Models\ResidentModel;
+use App\Models\LetterTypeModel;
+use App\Models\NotificationModel;
 use App\Controllers\BaseController;
 use App\Models\GeneralRequestModel;
-use App\Models\LetterTypeModel;
-use App\Models\ResidentModel;
-use App\Models\NotificationModel;
-use App\Models\SettingModel;
 use App\Models\DocumentAttachmentModel;
 
 class GeneralRequestController extends BaseController
@@ -233,7 +234,6 @@ class GeneralRequestController extends BaseController
             'attachments' => $attachments,
             'url' => $url
         ];
-        
         return view('letter_requests/general/show', $data);
     }
 
@@ -287,27 +287,40 @@ class GeneralRequestController extends BaseController
         $this->GeneralRequestModel->processRequest($id, session()->get('user_id'), $status, $rejectionReason);
         
         // Generate reference number if approved
+        $letterType = $this->letterTypeModel->find($request['letter_type_id']);
         if (($status === 'approved' || $status === 'completed') && empty($request['number'])) {
-            $letterType = $this->letterTypeModel->find($request['letter_type_id']);
             $this->GeneralRequestModel->generateReferenceNumber($id, $letterType['code']);
+
+
         }
         
         // Send notification to resident
-        $resident = $this->residentModel->find($request['resident_id']);
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->find($request['resident_id']);
         // var_dump($resident);die;
         if ($resident && !empty($resident['user_id'])) {
             $letterType = $this->letterTypeModel->find($request['letter_type_id']);
             $notifTitle = 'Pengajuan Surat ' . $letterType['name'];
-            
+            $fileDocument = null;
             if ($status === 'approved') {
+                
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda telah disetujui dan sedang dalam proses pembuatan.';
+                $fileDocument = $this->download($id, true);
             } elseif ($status === 'rejected') {
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda ditolak. Alasan: ' . $rejectionReason;
+               
             } elseif ($status === 'completed') {
+                $fileDocument = $this->download($id, true);
                 $notifMessage = 'Surat ' . $letterType['name'] . ' Anda telah selesai diproses dan siap untuk diambil.';
             } else {
                 $notifMessage = 'Status pengajuan surat ' . $letterType['name'] . ' Anda telah diubah menjadi ' . $status . '.';
             }
+            var_dump($resident['email']);
+            $msg = "
+                    <p>Yth. Bapak/Ibu/Saudara,</p>
+                    <p>".$notifMessage."</p>
+                    <p>Terima kasih atas kesabaran Anda.</p>
+                ";
+            send_email($resident['email'], $letterType['name'], $msg, $fileDocument);
             
             $this->notificationModel->insert([
                 'user_id' => $resident['user_id'],
@@ -320,7 +333,7 @@ class GeneralRequestController extends BaseController
         return redirect()->to(base_url('general-request'))->with('message', 'Status pengajuan surat berhasil diperbarui');
     }
 
-    public function download($id)
+    public function download($id, $save = false)
     {
         
         $request = $this->GeneralRequestModel->select('certificate_letters.*,  residents.nik, residents.gender, residents.occupation, residents.address')
@@ -357,8 +370,6 @@ class GeneralRequestController extends BaseController
             $templateFile = $letterType['template'];
         }
 
-        // var_dump($letterType);die;
-        
         // Render the letter template with data
         $html = view('letter_templates/' . $templateFile, [
             'request' => $request,
@@ -371,8 +382,21 @@ class GeneralRequestController extends BaseController
         // Generate filename
         $filename = 'surat_' . strtolower(str_replace(' ', '_', $letterType['name'])) . '_' . $request['nik'] . '.pdf';
         
+        // Save the file to local
+        
+        if ($save) {
+            $path = ROOTPATH . 'public/pdf/' . $filename;
+    
+            file_put_contents($path, $dompdf->output());
+
+            // var_dump(is_file($path));die;
+
+            return $path;
+        }else{
+        
         // Stream the file
-        return $dompdf->stream($filename, ['Attachment' => true]);
+            return $dompdf->stream($filename, ['Attachment' => true]);
+        }
     }
     public function create()
     {
@@ -416,7 +440,7 @@ class GeneralRequestController extends BaseController
         }
 
         // Get resident data
-        $resident = $this->residentModel->where('nik', $this->request->getPost('nik'))->first();
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->where('nik', $this->request->getPost('nik'))->first();
 
         if (!$resident) {
             return redirect()->back()->withInput()->with('error', 'Data penduduk tidak ditemukan');
@@ -519,6 +543,15 @@ class GeneralRequestController extends BaseController
                     'type' => 'info',
                     'is_read' => 0
                 ]);
+
+                $msg = "
+                    <p>Yth. Bapak/Ibu/Saudara,</p>
+                    <p>Berkas <strong>".$letterType['name']."</strong> telah dibuat, berikut filenya kami lampirkan.</p>
+                    <p>Terima kasih atas kesabaran Anda.</p>
+                ";
+                
+                send_email($resident['email'], $letterType['name'], $msg, $this->download($id, true));
+
             }
 
             // Commit transaction

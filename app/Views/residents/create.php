@@ -67,7 +67,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="gender" class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
-                            <select class="form-select" id="gender" name="gender" required>
+                            <select class="form-control" id="gender" name="gender" required>
                                 <option value="">Pilih Jenis Kelamin</option>
                                 <option value="male" <?= old('gender') == 'male' ? 'selected' : '' ?>>Laki-laki</option>
                                 <option value="female" <?= old('gender') == 'female' ? 'selected' : '' ?>>Perempuan</option>
@@ -77,7 +77,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="religion" class="form-label">Agama <span class="text-danger">*</span></label>
-                            <select class="form-select" id="religion" name="religion" required>
+                            <select class="form-control" id="religion" name="religion" required>
                                 <option value="">Pilih Agama</option>
                                 <option value="Islam" <?= old('religion') == 'Islam' ? 'selected' : '' ?>>Islam</option>
                                 <option value="Kristen" <?= old('religion') == 'Kristen' ? 'selected' : '' ?>>Kristen</option>
@@ -129,7 +129,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="marital_status" class="form-label">Status Perkawinan <span class="text-danger">*</span></label>
-                            <select class="form-select" id="marital_status" name="marital_status" required>
+                            <select class="form-control" id="marital_status" name="marital_status" required>
                                 <option value="">Pilih Status</option>
                                 <option value="single" <?= old('marital_status') == 'single' ? 'selected' : '' ?>>Belum Menikah</option>
                                 <option value="married" <?= old('marital_status') == 'married' ? 'selected' : '' ?>>Menikah</option>
@@ -156,7 +156,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="education" class="form-label">Pendidikan <span class="text-danger">*</span></label>
-                            <select class="form-select" id="education" name="education" required>
+                            <select class="form-control" id="education" name="education" required>
                                 <option value="">Pilih Pendidikan</option>
                                 <option value="Tidak Sekolah" <?= old('education') == 'Tidak Sekolah' ? 'selected' : '' ?>>Tidak Sekolah</option>
                                 <option value="SD" <?= old('education') == 'SD' ? 'selected' : '' ?>>SD</option>

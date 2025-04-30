@@ -33,7 +33,7 @@
                         
                         <div class="col-md-6 mb-3">
                             <label for="jenis" class="form-label">Jenis <span class="text-danger">*</span></label>
-                            <select class="form-select" id="jenis" name="jenis" required>
+                            <select class="form-control" id="jenis" name="jenis" required>
                                 <option value="">-- Pilih Jenis --</option>
                                 <option value="pendapatan" <?= old('jenis', $apbd['jenis']) === 'pendapatan' ? 'selected' : '' ?>>Pendapatan</option>
                                 <option value="belanja" <?= old('jenis', $apbd['jenis']) === 'belanja' ? 'selected' : '' ?>>Belanja</option>
@@ -61,7 +61,7 @@
                         
                         <div class="col-md-6 mb-3">
                             <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                            <select class="form-select" id="status" name="status" required>
+                            <select class="form-control" id="status" name="status" required>
                                 <option value="">-- Pilih Status --</option>
                                 <option value="rencana" <?= old('status', $apbd['status']) === 'rencana' ? 'selected' : '' ?>>Rencana</option>
                                 <option value="realisasi" <?= old('status', $apbd['status']) === 'realisasi' ? 'selected' : '' ?>>Realisasi</option>

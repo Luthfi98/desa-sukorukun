@@ -1,6 +1,6 @@
 <?php
 $namaDesa = get_setting('informasi_desa', 'nama_desa', false);
-$sigKades = get_setting('etc', 'ttd_kades', false);
+$sigKades = get_setting('etc', 'ttd_kepala_desa', false);
 if (file_exists($sigKades)) {
     $sigKades = 'data:image/png;base64,' . base64_encode(file_get_contents($sigKades));
 }

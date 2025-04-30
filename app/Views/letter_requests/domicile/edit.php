@@ -30,7 +30,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                <select name="letter_type_id" id="letter_type_id" class="form-select" required>
+                                <select name="letter_type_id" id="letter_type_id" class="form-control" required>
                                     <option value="<?= $request['letter_type_id'] ?>"><?= $request['letter_type_name'] ?></option>
                                 </select>
                             </div>

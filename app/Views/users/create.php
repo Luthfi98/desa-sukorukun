@@ -85,7 +85,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
-                            <select class="form-select select2 <?= session('errors.role') ? 'is-invalid' : '' ?>" 
+                            <select class="form-control select2 <?= session('errors.role') ? 'is-invalid' : '' ?>" 
                                     id="role" name="role" required>
                                 <option value="">Pilih Role</option>
                                 <option value="admin" <?= old('role') === 'admin' ? 'selected' : '' ?>>Admin</option>
@@ -117,7 +117,7 @@
                     <div class="col-md-6">
                         <div class="mb-3 resident-select" style="display: none;">
                             <label for="resident_id" class="form-label">Pilih Resident <span class="text-danger">*</span></label>
-                            <select class="form-select select2 <?= session('errors.resident_id') ? 'is-invalid' : '' ?>" 
+                            <select class="form-control select2 <?= session('errors.resident_id') ? 'is-invalid' : '' ?>" 
                                     id="resident_id" name="resident_id">
                                 <option value="">Pilih Resident</option>
                                 <?php foreach ($available_residents as $resident) : ?>

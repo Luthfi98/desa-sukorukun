@@ -32,7 +32,7 @@
             </div>
             <div class="col-md-4">
                 <form action="<?= base_url('berita') ?>" method="get">
-                    <select class="form-select" name="category" onchange="this.form.submit()">
+                    <select class="form-control" name="category" onchange="this.form.submit()">
                         <option value="Semua Kategori" <?= ($categoryFilter ?? '') === 'Semua Kategori' ? 'selected' : '' ?>>Semua Kategori</option>
                         <?php foreach ($category as $cat) : ?>
                             <option value="<?= $cat['category'] ?>" <?= ($categoryFilter ?? '') === $cat['category'] ? 'selected' : '' ?>><?= $cat['category'] ?></option>

@@ -168,14 +168,14 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="gender" class="form-label">Jenis Kelamin</label>
-                                <select class="form-select" id="gender" name="gender">
+                                <select class="form-control" id="gender" name="gender">
                                     <option value="male" <?= old('gender') == 'male' ? 'selected' : '' ?>>Laki-laki</option>
                                     <option value="female" <?= old('gender') == 'female' ? 'selected' : '' ?>>Perempuan</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="religion" class="form-label">Agama</label>
-                                <select class="form-select" id="religion" name="religion">
+                                <select class="form-control" id="religion" name="religion">
                                     <option value="Islam" <?= old('religion') == 'Islam' ? 'selected' : '' ?>>Islam</option>
                                     <option value="Kristen" <?= old('religion') == 'Kristen' ? 'selected' : '' ?>>Kristen</option>
                                     <option value="Katolik" <?= old('religion') == 'Katolik' ? 'selected' : '' ?>>Katolik</option>

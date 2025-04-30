@@ -35,6 +35,7 @@ $routes->get('dashboard', 'Dashboard::index');
 // Settings Management
 $routes->group('admin/settings', function($routes) {
     $routes->get('/', 'SettingController::index');
+    $routes->get('getDatatable', 'SettingController::getDataTable');
     $routes->get('create', 'SettingController::create');
     $routes->post('store', 'SettingController::store');
     $routes->get('edit/(:num)', 'SettingController::edit/$1');

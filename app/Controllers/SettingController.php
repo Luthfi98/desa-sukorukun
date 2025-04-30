@@ -332,4 +332,110 @@ class SettingController extends BaseController
         
         return redirect()->to('village-profile')->with('message', 'Pengaturan berhasil diperbarui');
     }
+
+    /**
+     * Get settings data for DataTable
+     *
+     * @return mixed
+     */
+    public function getDatatable()
+    {
+        $request = $this->request;
+        $draw = intval($request->getGet('draw'));
+        $start = intval($request->getGet('start'));
+        $length = intval($request->getGet('length'));
+        $search = $request->getGet('search')['value'] ?? '';
+        $category = $request->getGet('category') ?? 'all';
+        $order = $request->getGet('order');
+
+        // Create base query
+        $db = \Config\Database::connect();
+        $builder = $db->table('setting');
+        $builder->select('setting.*');
+
+        // Apply category filter
+        if ($category !== 'all') {
+            $builder->where('category', $category);
+        }
+
+        // Get total records count
+        $totalRecords = $builder->countAllResults(false);
+
+        // Apply search filter if provided
+        if (!empty($search)) {
+            $builder->groupStart()
+                ->like('category', $search)
+                ->orLike('key', $search)
+                ->orLike('label', $search)
+                ->orLike('value', $search)
+                ->groupEnd();
+        }
+
+        // Get filtered records count
+        $filteredRecords = $builder->countAllResults(false);
+
+        // Apply ordering
+        $orderColumn = 'setting.created_at';
+        $orderDir = 'DESC';
+
+        if (!empty($order)) {
+            $columns = [
+                0 => 'setting.category',
+                1 => 'setting.key',
+                2 => 'setting.label',
+                3 => 'setting.value',
+                4 => 'setting.value_type',
+                5 => 'setting.order',
+                6 => 'setting.is_public',
+                7 => 'setting.status'
+            ];
+
+            if (isset($columns[$order[0]['column']])) {
+                $orderColumn = $columns[$order[0]['column']];
+                $orderDir = $order[0]['dir'];
+            }
+        }
+
+        // Apply ordering and pagination
+        $builder->orderBy($orderColumn, $orderDir);
+        $builder->limit($length, $start);
+
+        // Get records
+        $data = $builder->get()->getResultArray();
+
+        // Format data for DataTables
+        $formattedData = [];
+        foreach ($data as $row) {
+            $formattedData[] = [
+                'id' => $row['id'],
+                'category' => ucwords(str_replace('_', ' ', $row['category'])),
+                'key' => $row['key'],
+                'label' => $row['label'],
+                'value' => $row['value_type'] == 'image' && !empty($row['value']) ? 
+                    '<img src="' . base_url($row['value']) . '" alt="' . $row['label'] . '" height="50">' : 
+                    ($row['value_type'] == 'file' && !empty($row['value']) ? 
+                        '<a href="' . base_url($row['value']) . '" target="_blank">View File</a>' : 
+                        (strlen($row['value']) > 50 ? substr($row['value'], 0, 50) . '...' : $row['value'])),
+                'value_type' => $row['value_type'],
+                'order' => $row['order'],
+                'is_public' => $row['is_public'] == 1 ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>',
+                'status' => $row['status'] == 'active' ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>',
+                'actions' => '<div class="btn-group" role="group">
+                    <a href="' . base_url('admin/settings/edit/' . $row['id']) . '" class="btn btn-sm btn-warning" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="' . base_url('admin/settings/delete/' . $row['id']) . '" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure you want to delete this setting?\')" title="Delete">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>'
+            ];
+        }
+
+        return $this->response->setJSON([
+            'draw' => $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $formattedData
+        ]);
+    }
 } 

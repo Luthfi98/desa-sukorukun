@@ -5,30 +5,31 @@
     <div class="row mb-3">
         <div class="col-md-12">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-primary text-white d-flex justify-content-between">
                     <h5 class="card-title mb-0">Settings Management</h5>
+                    <a href="<?= base_url('admin/settings/create') ?>" class="btn btn-success">
+                                <i class="fas fa-plus-circle"></i> Tambah Pengaturan
+                            </a>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-3">
+                    <div class="row mb-3 d-flex justify-content-between">
                         <div class="col-md-6">
-                            <form action="<?= base_url('admin/settings') ?>" method="get">
+                            <form id="categoryFilter">
                                 <div class="input-group">
-                                    <select name="category" class="form-select">
-                                        <option value="all" <?= $activeCategory == 'all' ? 'selected' : '' ?>>All Categories</option>
+                                    <select name="category" class="form-control form-control" id="categorySelect">
+                                        <option value="all">All Categories</option>
                                         <?php foreach ($categories as $category): ?>
-                                            <option value="<?= $category ?>" <?= $activeCategory == $category ? 'selected' : '' ?>>
+                                            <option value="<?= $category ?>">
                                                 <?= ucwords(str_replace('_', ' ', $category)) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <button type="submit" class="btn btn-outline-primary">Filter</button>
+                                    <button type="button" class="btn btn-outline-primary" id="filterBtn">Filter</button>
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-6 text-end">
-                            <a href="<?= base_url('admin/settings/create') ?>" class="btn btn-success">
-                                <i class="fas fa-plus-circle"></i> Add New Setting
-                            </a>
+                        <div class="col-md-6">
+                            
                         </div>
                     </div>
                     
@@ -47,8 +48,8 @@
                     <?php endif; ?>
                     
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead class="table-dark">
+                        <table class="table table-striped" id="settingsTable">
+                            <thead >
                                 <tr>
                                     <th>ID</th>
                                     <th>Category</th>
@@ -62,61 +63,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php if (empty($settings)): ?>
-                                    <tr>
-                                        <td colspan="10" class="text-center">No settings found</td>
-                                    </tr>
-                                <?php else: ?>
-                                    <?php foreach ($settings as $setting): ?>
-                                        <tr>
-                                            <td><?= $setting['id'] ?></td>
-                                            <td>
-                                                <span class="badge bg-primary">
-                                                    <?= ucwords(str_replace('_', ' ', $setting['category'])) ?>
-                                                </span>
-                                            </td>
-                                            <td><?= $setting['key'] ?></td>
-                                            <td><?= $setting['label'] ?></td>
-                                            <td>
-                                                <?php if ($setting['value_type'] == 'image' && !empty($setting['value'])): ?>
-                                                    <img src="<?= base_url('uploads/' . $setting['value']) ?>" alt="<?= $setting['label'] ?>" height="50">
-                                                <?php elseif ($setting['value_type'] == 'file' && !empty($setting['value'])): ?>
-                                                    <a href="<?= base_url('uploads/' . $setting['value']) ?>" target="_blank">View File</a>
-                                                <?php elseif (strlen($setting['value']) > 50): ?>
-                                                    <?= substr($setting['value'], 0, 50) ?>...
-                                                <?php else: ?>
-                                                    <?= $setting['value'] ?>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td><span class="badge bg-secondary"><?= $setting['value_type'] ?></span></td>
-                                            <td><?= $setting['order'] ?></td>
-                                            <td>
-                                                <?php if ($setting['is_public'] == 1): ?>
-                                                    <span class="badge bg-success">Yes</span>
-                                                <?php else: ?>
-                                                    <span class="badge bg-danger">No</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <?php if ($setting['status'] == 'active'): ?>
-                                                    <span class="badge bg-success">Active</span>
-                                                <?php else: ?>
-                                                    <span class="badge bg-danger">Inactive</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <a href="<?= base_url('admin/settings/edit/' . $setting['id']) ?>" class="btn btn-sm btn-warning">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="<?= base_url('admin/settings/delete/' . $setting['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this setting?')">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -124,4 +71,67 @@
         </div>
     </div>
 </div>
+
+<style>
+.btn-group {
+    display: flex;
+    gap: 0.25rem;
+}
+.btn-group .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+.btn-group .btn i {
+    margin-right: 0;
+}
+</style>
+
+<script>
+$(document).ready(function() {
+    var table = $('#settingsTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '<?= base_url('admin/settings/getDatatable') ?>',
+            type: 'GET',
+            data: function(d) {
+                d.category = $('#categorySelect').val();
+            }
+        },
+        columns: [
+            { data: 'id' },
+            { data: 'category' },
+            { data: 'key' },
+            { data: 'label' },
+            { data: 'value' },
+            { data: 'value_type' },
+            { data: 'order' },
+            { data: 'is_public' },
+            { data: 'status' },
+            { 
+                data: 'actions', 
+                orderable: false, 
+                searchable: false,
+                className: 'text-center'
+            }
+        ],
+        order: [[0, 'asc']],
+        pageLength: 10,
+        language: {
+            search: "Search:",
+            lengthMenu: "Show _MENU_ entries",
+            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+            infoEmpty: "Showing 0 to 0 of 0 entries",
+            infoFiltered: "(filtered from _MAX_ total entries)",
+            zeroRecords: "No matching records found",
+            emptyTable: "No data available in table"
+        }
+    });
+
+    $('#filterBtn').on('click', function() {
+        table.ajax.reload();
+    });
+});
+</script>
+
 <?= $this->endSection() ?> 

@@ -455,7 +455,7 @@ class HeirRequestController extends BaseController
 
             
             $kades = get_setting('struktur_organisasi','kepala_desa', false);
-            $sigKades = get_setting('etc','ttd_kades', NULL);
+            $sigKades = get_setting('etc','ttd_kepala_desa', NULL);
             // var_dump($sigKades);die;
             $camat = get_setting('struktur_organisasi','kepala_camat', false);
             $sigCamat = get_setting('etc','ttd_camat', NULL);
@@ -612,7 +612,7 @@ class HeirRequestController extends BaseController
                 ];
             }
             $kades = get_setting('struktur_organisasi','kepala_desa', false);
-            $sigKades = get_setting('etc','ttd_kades', NULL);
+            $sigKades = get_setting('etc','ttd_kepala_desa', NULL);
             $camat = get_setting('struktur_organisasi','kepala_camat', false);
             $sigCamat = get_setting('etc','ttd_camat', NULL);
             // Save letter request
@@ -764,7 +764,7 @@ class HeirRequestController extends BaseController
         try {
             // Update letter request
             $kades = get_setting('struktur_organisasi','kepala_desa', false);
-            $sigKades = get_setting('etc','ttd_kades', NULL);
+            $sigKades = get_setting('etc','ttd_kepala_desa', NULL);
             $camat = get_setting('struktur_organisasi','kepala_camat', false);
             $sigCamat = get_setting('etc','ttd_camat', NULL);
             $this->HeirRequestModel->update($id, [
@@ -917,7 +917,7 @@ class HeirRequestController extends BaseController
         try {
             // Update letter request
             $kades = get_setting('struktur_organisasi','kepala_desa', false);
-            $sigKades = get_setting('etc','ttd_kades', NULL);
+            $sigKades = get_setting('etc','ttd_kepala_desa', NULL);
             $camat = get_setting('struktur_organisasi','kepala_camat', false);
             $sigCamat = get_setting('etc','ttd_camat', NULL);
             $this->HeirRequestModel->update($id, [

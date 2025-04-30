@@ -30,7 +30,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                <select name="letter_type_id" id="letter_type_id" class="form-select" required>
+                                <select name="letter_type_id" id="letter_type_id" class="form-control" required>
                                     <option value="">-- Pilih Jenis Surat --</option>
                                     <?php foreach($letterTypes as $type): ?>
                                     <option value="<?= $type['id'] ?>" <?= old('letter_type_id') == $type['id'] ? 'selected' : '' ?>><?= $type['name'] ?></option>
@@ -57,7 +57,7 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="gender" class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
-                                <select name="gender" id="gender" class="form-select" readonly required>
+                                <select name="gender" id="gender" class="form-control" readonly required>
                                     <option value="">-- Pilih Jenis Kelamin --</option>
                                     <option readonly value="male" <?= old('gender', $resident['gender']) == 'male' ? 'selected' : '' ?>>Laki-laki</option>
                                     <option readonly value="female" <?= old('gender', $resident['gender']) == 'female' ? 'selected' : '' ?>>Perempuan</option>
@@ -197,7 +197,7 @@
                                                         <input type="text" class="form-control" name="foll_name[]" value="<?= $oldFollowerNames[$i] ?? '' ?>" required>
                                                     </td>
                                                     <td>
-                                                        <select class="form-select" name="foll_gender[]" required>
+                                                        <select class="form-control" name="foll_gender[]" required>
                                                             <option value="">-- Pilih --</option>
                                                             <option value="male" <?= ($oldFollowerGenders[$i] ?? '') == 'male' ? 'selected' : '' ?>>Laki-laki</option>
                                                             <option value="female" <?= ($oldFollowerGenders[$i] ?? '') == 'female' ? 'selected' : '' ?>>Perempuan</option>
@@ -207,7 +207,7 @@
                                                         <input type="number" class="form-control" name="foll_age[]" value="<?= $oldFollowerAges[$i] ?? '' ?>" required min="1">
                                                     </td>
                                                     <td>
-                                                        <select class="form-select" name="foll_marital_status[]" required>
+                                                        <select class="form-control" name="foll_marital_status[]" required>
                                                             <option value="">-- Pilih --</option>
                                                             <option value="single" <?= ($oldFollowerMaritalStatuses[$i] ?? '') == 'single' ? 'selected' : '' ?>>Belum Kawin</option>
                                                             <option value="married" <?= ($oldFollowerMaritalStatuses[$i] ?? '') == 'married' ? 'selected' : '' ?>>Kawin</option>
@@ -216,7 +216,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-select" name="foll_education[]" required>
+                                                        <select class="form-control" name="foll_education[]" required>
                                                             <option value="">-- Pilih --</option>
                                                             <option value="sd" <?= ($oldFollowerEducations[$i] ?? '') == 'sd' ? 'selected' : '' ?>>SD</option>
                                                             <option value="smp" <?= ($oldFollowerEducations[$i] ?? '') == 'smp' ? 'selected' : '' ?>>SMP</option>
@@ -439,7 +439,7 @@ $(document).ready(function() {
                     <input type="text" class="form-control" name="foll_name[]" required>
                 </td>
                 <td>
-                    <select class="form-select" name="foll_gender[]" required>
+                    <select class="form-control" name="foll_gender[]" required>
                         <option value="">-- Pilih --</option>
                         <option value="male">Laki-laki</option>
                         <option value="female">Perempuan</option>
@@ -449,7 +449,7 @@ $(document).ready(function() {
                     <input type="number" class="form-control" name="foll_age[]" required min="1">
                 </td>
                 <td>
-                    <select class="form-select" name="foll_marital_status[]" required>
+                    <select class="form-control" name="foll_marital_status[]" required>
                         <option value="">-- Pilih --</option>
                         <option value="single">Belum Kawin</option>
                         <option value="married">Kawin</option>
@@ -458,7 +458,7 @@ $(document).ready(function() {
                     </select>
                 </td>
                 <td>
-                    <select class="form-select" name="foll_education[]" required>
+                    <select class="form-control" name="foll_education[]" required>
                         <option value="">-- Pilih --</option>
                         <option value="sd">SD</option>
                         <option value="smp">SMP</option>
