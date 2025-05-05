@@ -251,7 +251,8 @@
             <?php if(session()->get('role') === 'admin' || session()->get('role') === 'staff'): ?>
                 <!-- Menu Admin -->
                 <div class="menu-section">ADMIN MENU</div>
-                
+                <?php if(session()->get('role') === 'admin'): ?>
+    
                 <a href="<?= base_url('village-profile') ?>" class="<?= strpos(uri_string(), 'village-profile') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-clipboard-list"></i> <span>Profil Desa</span>
                 </a>
@@ -259,11 +260,7 @@
                 <a href="<?= base_url('news') ?>" class="<?= strpos(uri_string(), 'news') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-newspaper"></i> <span>Berita & Informasi Desa</span>
                 </a>
-                
-                <a href="<?= base_url('budget-info') ?>" class="<?= strpos(uri_string(), 'budget-info') === 0 ? 'active' : '' ?>">
-                    <i class="fas fa-newspaper"></i> <span>Informasi APBD</span>
-                </a>
-
+                <?php endif;?>
                 <a href="<?= base_url('letter-types') ?>" class="<?= strpos(uri_string(), 'letter-types') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-file-alt"></i> <span>Jenis Surat</span>
                 </a>
@@ -274,37 +271,22 @@
                 
                 <a href="<?= base_url('general-request') ?>" class="<?= strpos(uri_string(), 'general-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan Surat Keterangan</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
 
                 <a href="<?= base_url('domicile-request') ?>" class="<?= strpos(uri_string(), 'domicile-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan SK Domisili</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
 
                 <a href="<?= base_url('heir-request') ?>" class="<?= strpos(uri_string(), 'heir-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan SK Ahli Waris</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
 
                 <a href="<?= base_url('relocation-request') ?>" class="<?= strpos(uri_string(), 'relocation-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan SK Pindah</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
 
                 <a href="<?= base_url('death-cetificate-request') ?>" class="<?= strpos(uri_string(), 'death-cetificate-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan SK Kematian</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
                 
                 <a href="<?= base_url('complaints/admin') ?>" class="<?= strpos(uri_string(), 'complaints/admin') === 0 ? 'active' : '' ?>">
@@ -313,12 +295,6 @@
                         <span class="notification-badge"><?= $pendingPengaduanCount ?></span>
                     <?php endif; ?>
                 </a>
-                
-                
-                <a href="<?= base_url('archives') ?>" class="<?= strpos(uri_string(), 'archives') === 0 ? 'active' : '' ?>">
-                    <i class="fas fa-archive"></i> <span>Data Archives</span>
-                </a>
-                
                
                 
             <?php else: ?>
@@ -326,53 +302,38 @@
                 <div class="menu-section">RESIDENT MENU</div>
                 <a href="<?= base_url('general-request/my-request') ?>" class="<?= strpos(uri_string(), 'general-request/my-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan Surat Keterangan</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
 
                 <a href="<?= base_url('domicile-request/my-request') ?>" class="<?= strpos(uri_string(), 'domicile-request/my-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan SK Domisili</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
 
                 <a href="<?= base_url('heir-request/my-request') ?>" class="<?= strpos(uri_string(), 'heir-request/my-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan SK Ahli Waris</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
 
                 <a href="<?= base_url('relocation-request/my-request') ?>" class="<?= strpos(uri_string(), 'relocation-request/my-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan SK Pindah</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
 
                 <a href="<?= base_url('death-cetificate-request/my-request') ?>" class="<?= strpos(uri_string(), 'death-cetificate-request/my-request') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-envelope"></i> <span>Pengajuan SK Kematian</span>
-                    <?php if(isset($pendingSuratCount) && $pendingSuratCount > 0): ?>
-                        <span class="notification-badge"><?= $pendingSuratCount ?></span>
-                    <?php endif; ?>
                 </a>
 
-                <a href="<?= base_url('letter-requests/my-requests') ?>" class="<?= strpos(uri_string(), 'letter-requests/my-requests') === 0 ? 'active' : '' ?>">
+                <!-- <a href="<?= base_url('letter-requests/my-requests') ?>" class="<?= strpos(uri_string(), 'letter-requests/my-requests') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-file-alt"></i> <span>Pengajuan Surat</span>
                 </a>
 
 
-                
+                 -->
                 
                 <a href="<?= base_url('complaints') ?>" class="<?= strpos(uri_string(), 'complaints') === 0 && strpos(uri_string(), 'complaints/admin') !== 0 ? 'active' : '' ?>">
                     <i class="fas fa-exclamation-circle"></i> <span>Pengaduan</span>
                 </a>
                 
-                <a href="<?= base_url('archives/public') ?>" class="<?= strpos(uri_string(), 'archives/public') === 0 ? 'active' : '' ?>">
+                <!-- <a href="<?= base_url('archives/public') ?>" class="<?= strpos(uri_string(), 'archives/public') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-folder-open"></i> <span>Public Archives</span>
-                </a>
+                </a> -->
             <?php endif; ?>
             
             
@@ -395,9 +356,6 @@
             
             <a href="<?= base_url('notifications') ?>" class="<?= uri_string() == 'notifications' ? 'active' : '' ?>">
                 <i class="fas fa-bell"></i> <span>Notifications</span>
-                <?php if(isset($unreadCount) && $unreadCount > 0): ?>
-                    <span class="notification-badge"><?= $unreadCount ?></span>
-                <?php endif; ?>
             </a>
             
             <a href="<?= base_url('auth/logout') ?>">

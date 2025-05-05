@@ -15,7 +15,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <form action="<?= base_url('residents/processImport') ?>" method="post" enctype="multipart/form-data">
+                    <form action="<?= base_url('residents/process-import') ?>" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="file">Pilih File Excel (.xlsx) atau CSV (.csv)</label>
                             <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.csv" required>

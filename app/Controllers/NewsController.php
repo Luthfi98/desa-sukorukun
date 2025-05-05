@@ -177,6 +177,7 @@ class NewsController extends BaseController
     public function create()
     {
         return view('news/create', [
+            'title' => 'Tambah Berita & Informasi',
             'types' => ['news', 'information'],
             'statuses' => ['draft', 'published', 'active', 'inactive']
         ]);

@@ -195,4 +195,45 @@ class Home extends BaseController
             'informasi' => $informasi
         ]);
     }
+
+    public function sendMessage()
+    {
+        // Validate CSRF token
+        if (!$this->validate([
+            'name' => 'required|min_length[3]',
+            'email' => 'required|valid_email',
+            'subject' => 'required|min_length[3]',
+            'message' => 'required|min_length[10]'
+        ])) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Mohon lengkapi semua field dengan benar'
+            ]);
+        }
+
+        // Get form data
+        $data = [
+            'name' => $this->request->getPost('name'),
+            'email' => $this->request->getPost('email'),
+            'subject' => $this->request->getPost('subject'),
+            'message' => $this->request->getPost('message'),
+            'status' => 'unread'
+        ];
+
+        // Load model
+        $contactModel = new \App\Models\ContactModel();
+
+        // Try to save to database
+        if ($contactModel->insert($data)) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'Pesan berhasil dikirim. Kami akan segera menghubungi Anda.'
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Gagal mengirim pesan. Silakan coba lagi nanti.'
+            ]);
+        }
+    }
 }

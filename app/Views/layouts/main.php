@@ -20,7 +20,12 @@ $visi = get_setting('informasi_desa','visi_desa', false);
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+       <!-- jQuery -->
+       <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Popper.js -->
+   
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom CSS -->
     <style>
         :root {
@@ -303,5 +308,64 @@ $visi = get_setting('informasi_desa','visi_desa', false);
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('#contactForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            // Disable submit button
+            $('#submitBtn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengirim...');
+            
+            // Get form data
+            var formData = $(this).serialize();
+            
+            // Send AJAX request
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: response.message,
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                        
+                        // Reset form
+                        $('#contactForm')[0].reset();
+                    } else {
+                        // Show error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: response.message
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Show error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.'
+                    });
+                },
+                complete: function() {
+                    // Re-enable submit button
+                    $('#submitBtn').prop('disabled', false).html('Kirim Pesan');
+                }
+            });
+        });
+    });
+</script>
+    
+    
+    
 </body>
 </html> 

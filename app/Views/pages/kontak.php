@@ -52,7 +52,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title mb-4">Kirim Pesan</h5>
-                        <form action="<?= base_url('kontak/send') ?>" method="post">
+                        <form id="contactForm" action="<?= base_url('kontak/send') ?>" method="post">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nama Lengkap</label>
                                 <input type="text" class="form-control" id="name" name="name" required>
@@ -69,7 +69,7 @@
                                 <label for="message" class="form-label">Pesan</label>
                                 <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">Kirim Pesan</button>
                         </form>
                     </div>
                 </div>
@@ -77,5 +77,6 @@
         </div>
     </div>
 </section>
+
 
 <?= $this->endSection() ?> 

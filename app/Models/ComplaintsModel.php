@@ -34,6 +34,38 @@ class ComplaintsModel extends Model
             ->findAll();
     }
 
+
+    public function getWithRelations()
+    {
+        $complaints = $this->findAll();
+        $residentModel = new ResidentModel();
+        $userModel = new UserModel();
+        
+        foreach ($complaints as &$complaint) {
+            // Get resident information
+            $resident = $residentModel->where('user_id', $complaint['user_id'])->first();
+            if ($resident) {
+                $complaint['resident_name'] = $resident['name'] ?? 'Unknown';
+                $complaint['reporter_name'] = $resident['name'] ?? 'Unknown';
+            } else {
+                $complaint['resident_name'] = 'Unknown';
+                $complaint['reporter_name'] = 'Unknown';
+            }
+            
+            // Get responder information if complaint was responded to
+            if (!empty($complaint['responded_by'])) {
+                $responder = $userModel->find($complaint['responded_by']);
+                if ($responder) {
+                    $complaint['responder_name'] = $responder['name'] ?? 'Unknown';
+                } else {
+                    $complaint['responder_name'] = 'Unknown';
+                }
+            }
+        }
+        
+        return $complaints;
+    }
+
     /**
      * Get complaints by status
      */
@@ -93,5 +125,11 @@ class ComplaintsModel extends Model
             'completed' => $completed,
             'rejected' => $rejected
         ];
+    }
+
+    public function countByStatus(string $status)
+    {
+        return $this->where('status', $status)
+                    ->countAllResults();
     }
 } 

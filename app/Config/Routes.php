@@ -13,6 +13,7 @@ $routes->get('/berita/(:any)', 'Home::berita/$1');
 $routes->get('/layanan', 'Home::layanan');
 $routes->get('/galeri', 'Home::galeri');
 $routes->get('/kontak', 'Home::kontak');
+$routes->post('/kontak/send', 'Home::sendMessage');
 
 // Authentication Routes
 $routes->group('auth', function($routes) {
@@ -68,27 +69,6 @@ $routes->group('letter-types', function($routes) {
     $routes->get('delete/(:num)', 'LetterTypes::delete/$1');
 });
 
-// Letter Requests
-$routes->group('letter-requests', function($routes) {
-    $routes->get('/', 'PengajuanSurat::index');
-    $routes->get('new', 'PengajuanSurat::new');
-    $routes->post('create', 'PengajuanSurat::create');
-    $routes->get('view/(:num)', 'PengajuanSurat::view/$1');
-    $routes->get('process/(:num)', 'PengajuanSurat::process/$1');
-    $routes->post('update-status/(:num)', 'PengajuanSurat::updateStatus/$1');
-    $routes->get('download/(:num)', 'PengajuanSurat::download/$1');
-    $routes->get('my-requests', 'PengajuanSurat::myRequests');
-    $routes->get('getMyRequestsDataTable', 'PengajuanSurat::getMyRequestsDataTable');
-    $routes->get('edit/(:num)', 'PengajuanSurat::edit/$1');
-    $routes->post('update/(:num)', 'PengajuanSurat::update/$1');
-    $routes->get('delete/(:num)', 'PengajuanSurat::delete/$1');
-    $routes->get('view-detail/(:num)', 'PengajuanSurat::viewDetail/$1');
-    $routes->get('download-pdf/(:num)', 'PengajuanSurat::downloadPdf/$1');
-    $routes->get('getDataTable', 'PengajuanSurat::getDataTable');
-    $routes->get('create-for-resident', 'PengajuanSurat::createForResident');
-    $routes->post('process-create-for-resident', 'PengajuanSurat::processCreateForResident');
-});
-
 // Complaints Management
 $routes->group('complaints', function($routes) {
     $routes->get('/', 'Complaints::index');
@@ -122,97 +102,7 @@ $routes->group('notifications', function($routes) {
     $routes->get('mark-all-as-read', 'Notifications::markAllAsRead');
 });
 
-// English Routes - Village Programs (previously Program Desa)
-$routes->group('village-programs', function($routes) {
-    $routes->get('/', 'ProgramDesa::index');
-    $routes->get('new', 'ProgramDesa::new');
-    $routes->post('create', 'ProgramDesa::create');
-    $routes->get('edit/(:num)', 'ProgramDesa::edit/$1');
-    $routes->post('update/(:num)', 'ProgramDesa::update/$1');
-    $routes->get('delete/(:num)', 'ProgramDesa::delete/$1');
-});
 
-// English Routes - Budget Info (previously Informasi APBD)
-$routes->group('budget-info', function($routes) {
-    $routes->get('/', 'InformasiAPBD::index');
-    $routes->get('new', 'InformasiAPBD::new');
-    $routes->post('create', 'InformasiAPBD::create');
-    $routes->get('edit/(:num)', 'InformasiAPBD::edit/$1');
-    $routes->post('update/(:num)', 'InformasiAPBD::update/$1');
-    $routes->get('delete/(:num)', 'InformasiAPBD::delete/$1');
-    $routes->get('public', 'InformasiAPBD::public');
-});
-
-// English Routes - Village Info (previously Informasi Desa)
-$routes->group('village-info', function($routes) {
-    $routes->get('/', 'InformasiDesa::index');
-    $routes->get('detail/(:num)', 'InformasiDesa::detail/$1');
-});
-
-// English Routes - Archives (previously Arsip Data)
-$routes->group('archives', function($routes) {
-    $routes->get('/', 'ArsipData::index');
-    $routes->get('new', 'ArsipData::new');
-    $routes->post('create', 'ArsipData::create');
-    $routes->get('edit/(:num)', 'ArsipData::edit/$1');
-    $routes->post('update/(:num)', 'ArsipData::update/$1');
-    $routes->get('delete/(:num)', 'ArsipData::delete/$1');
-    $routes->get('download/(:num)', 'ArsipData::download/$1');
-    $routes->get('public', 'ArsipDokumen::index');
-    $routes->get('public/download/(:num)', 'ArsipDokumen::download/$1');
-});
-
-// Keep original Indonesian routes for backward compatibility
-// Program Desa Routes (Admin)
-$routes->group('program-desa', function($routes) {
-    $routes->get('/', 'ProgramDesa::index');
-    $routes->get('new', 'ProgramDesa::new');
-    $routes->post('create', 'ProgramDesa::create');
-    $routes->get('edit/(:num)', 'ProgramDesa::edit/$1');
-    $routes->post('update/(:num)', 'ProgramDesa::update/$1');
-    $routes->get('delete/(:num)', 'ProgramDesa::delete/$1');
-});
-
-// Informasi APBD Routes
-$routes->group('informasi-apbd', function($routes) {
-    $routes->get('/', 'InformasiAPBD::index');
-    $routes->get('new', 'InformasiAPBD::new');
-    $routes->post('create', 'InformasiAPBD::create');
-    $routes->get('edit/(:num)', 'InformasiAPBD::edit/$1');
-    $routes->post('update/(:num)', 'InformasiAPBD::update/$1');
-    $routes->get('delete/(:num)', 'InformasiAPBD::delete/$1');
-});
-
-// Public APBD Info
-$routes->get('informasi-apbd-publik', 'InformasiAPBD::public');
-
-// Pengajuan Surat Routes (Admin)
-$routes->group('pengajuan-surat', function($routes) {
-    $routes->get('/', 'PengajuanSurat::index');
-    $routes->get('view/(:num)', 'PengajuanSurat::view/$1');
-    $routes->get('process/(:num)', 'PengajuanSurat::process/$1');
-    $routes->post('update-status/(:num)', 'PengajuanSurat::updateStatus/$1');
-    $routes->get('download/(:num)', 'PengajuanSurat::download/$1');
-    $routes->get('getDataTable', 'PengajuanSurat::getDataTable');
-});
-
-// Surat Pengantar Routes (User)
-$routes->group('surat-pengantar', function($routes) {
-    $routes->get('/', 'SuratPengantar::index');
-    $routes->get('new', 'SuratPengantar::new');
-    $routes->post('create', 'SuratPengantar::create');
-    $routes->get('view/(:num)', 'SuratPengantar::view/$1');
-    $routes->get('download/(:num)', 'SuratPengantar::download/$1');
-});
-
-// Pengaduan Routes (Admin)
-$routes->group('pengaduan', function($routes) {
-    $routes->get('/', 'Pengaduan::index');
-    $routes->get('view/(:num)', 'Pengaduan::view/$1');
-    $routes->get('process/(:num)', 'Pengaduan::process/$1');
-    $routes->post('update-status/(:num)', 'Pengaduan::updateStatus/$1');
-    $routes->post('respond/(:num)', 'Pengaduan::respond/$1');
-});
 
 // Pengaduan Masyarakat Routes (User)
 $routes->group('pengaduan-masyarakat', function($routes) {
@@ -221,25 +111,6 @@ $routes->group('pengaduan-masyarakat', function($routes) {
     $routes->post('create', 'PengaduanMasyarakat::create');
     $routes->get('view/(:num)', 'PengaduanMasyarakat::view/$1');
 });
-
-// Informasi Desa Routes (Public)
-$routes->get('informasi-desa', 'InformasiDesa::index');
-$routes->get('informasi-desa/detail/(:num)', 'InformasiDesa::detail/$1');
-
-// Arsip Data Routes
-$routes->group('arsip-data', function($routes) {
-    $routes->get('/', 'ArsipData::index');
-    $routes->get('new', 'ArsipData::new');
-    $routes->post('create', 'ArsipData::create');
-    $routes->get('edit/(:num)', 'ArsipData::edit/$1');
-    $routes->post('update/(:num)', 'ArsipData::update/$1');
-    $routes->get('delete/(:num)', 'ArsipData::delete/$1');
-    $routes->get('download/(:num)', 'ArsipData::download/$1');
-});
-
-// Arsip Dokumen (For Public)
-$routes->get('arsip-dokumen', 'ArsipDokumen::index');
-$routes->get('arsip-dokumen/download/(:num)', 'ArsipDokumen::download/$1');
 
 // Archive Routes
 $routes->group('archive', function($routes) {

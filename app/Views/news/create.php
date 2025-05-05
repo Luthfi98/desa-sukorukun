@@ -1,20 +1,19 @@
 <?= $this->extend('layouts/dashboard_layout') ?>
 
-<?= $this->section('title') ?>Create News<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Create News</h1>
+        <h1 class="h3 mb-0 text-gray-800">Form <?= $title ?></h1>
         <a href="<?= base_url('news') ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
-            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali
         </a>
     </div>
 
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
+        <!-- <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">News Information</h6>
-        </div>
+        </div> -->
         <div class="card-body">
             <?php if (session()->has('errors')): ?>
                 <div class="alert alert-danger">

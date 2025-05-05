@@ -4,9 +4,8 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use App\Models\ResidentModel;
-use App\Models\LetterRequestModel;
 use App\Models\NotificationModel;
-use App\Models\ComplaintModel;
+use App\Models\ComplaintsModel;
 use App\Models\DeathCertificateModel;
 use App\Models\DomicileRequestModel;
 use App\Models\GeneralRequestModel;
@@ -19,9 +18,8 @@ class Dashboard extends BaseController
 {
     protected $userModel;
     protected $residentModel;
-    protected $letterRequestModel;
     protected $notificationModel;
-    protected $complaintModel;
+    protected $complaintsModel;
     protected $deathCertificateModel;
     protected $domicileRequestModel;
     protected $generalRequestModel;
@@ -35,9 +33,8 @@ class Dashboard extends BaseController
     {
         $this->userModel = new UserModel();
         $this->residentModel = new ResidentModel();
-        $this->letterRequestModel = new LetterRequestModel();
         $this->notificationModel = new NotificationModel();
-        $this->complaintModel = new ComplaintModel();
+        $this->complaintsModel = new ComplaintsModel();
         $this->deathCertificateModel = new DeathCertificateModel();
         $this->domicileRequestModel = new DomicileRequestModel();
         $this->generalRequestModel = new GeneralRequestModel();
@@ -50,7 +47,7 @@ class Dashboard extends BaseController
 
     public function index()
     {
-        $userId = $this->session->get('id');
+        $userId = $this->session->get('user_id');
         $userRole = $this->session->get('role');
         // Common data for all dashboards
         $data = [
@@ -62,11 +59,7 @@ class Dashboard extends BaseController
         // Different dashboard based on role
         if ($userRole === 'admin' || $userRole === 'staff') {
             // Admin dashboard data
-            $data['pendingCount'] = $this->letterRequestModel->countByStatus('pending');
-            $data['processingCount'] = $this->letterRequestModel->countByStatus('processing');
-            $data['pendingSuratCount'] = $data['pendingCount']; // For notification badge in sidebar
-            $data['completedCount'] = $this->letterRequestModel->countByStatus('completed');
-            $data['pendingPengaduanCount'] = $this->complaintModel->countByStatus('pending');
+            $data['pendingPengaduanCount'] = $this->complaintsModel->countByStatus('pending');
             $data['residentCount'] = $this->residentModel->countAllResults();
             
             // Get counts for different types of requests
@@ -77,9 +70,7 @@ class Dashboard extends BaseController
             $data['newsCount'] = $this->newsModel->countAllResults();
             $data['relocationCount'] = $this->relocationRequestModel->countAllResults();
             
-            // Get recent requests and complaints
-            $data['recentRequests'] = $this->letterRequestModel->orderBy('created_at', 'DESC')->limit(5)->getWithRelations();
-            $data['recentComplaints'] = $this->complaintModel->orderBy('created_at', 'DESC')->limit(5)->getWithRelations();
+           $data['recentComplaints'] = $this->complaintsModel->orderBy('created_at', 'DESC')->limit(5)->getWithRelations();
             
             // Get recent requests by type
             $data['recentDeathCertificates'] = $this->deathCertificateModel->orderBy('created_at', 'DESC')->limit(5)->findAll();
@@ -98,21 +89,14 @@ class Dashboard extends BaseController
             $residentId = $resident ? $resident['id'] : 0;
             
             // Get counts for resident's requests
-            $data['mySuratCount'] = $this->letterRequestModel->where('resident_id', $residentId)->countAllResults();
-            $data['myComplaintCount'] = $this->complaintModel->where('user_id', $userId)->countAllResults();
+            $data['myComplaintCount'] = $this->complaintsModel->where('user_id', $userId)->countAllResults();
             $data['myDeathCertificateCount'] = $this->deathCertificateModel->where('created_by', session()->get('user_id'))->countAllResults();
             $data['myDomicileRequestCount'] = $this->domicileRequestModel->where('resident_id', $residentId)->countAllResults();
             $data['myGeneralRequestCount'] = $this->generalRequestModel->where('resident_id', $residentId)->countAllResults();
             $data['myHeirRequestCount'] = $this->heirRequestModel->where('resident_id', $residentId)->countAllResults();
             $data['myRelocationCount'] = $this->relocationRequestModel->where('resident_id', $residentId)->countAllResults();
-            
-            // Get recent submissions
-            $data['mySuratRecent'] = $this->letterRequestModel->where('resident_id', $residentId)
-                                                            ->orderBy('created_at', 'DESC')
-                                                            ->limit(5)
-                                                            ->getWithRelations();
-            
-            $data['myComplaintRecent'] = $this->complaintModel->where('user_id', $userId)
+         
+            $data['myComplaintRecent'] = $this->complaintsModel->where('user_id', $userId)
                                                             ->orderBy('created_at', 'DESC')
                                                             ->limit(5)
                                                             ->getWithRelations();
@@ -128,7 +112,9 @@ class Dashboard extends BaseController
                                                                         ->limit(5)
                                                                         ->findAll();
             
-            $data['myGeneralRequestRecent'] = $this->generalRequestModel->where('resident_id', $residentId)
+            $data['myGeneralRequestRecent'] = $this->generalRequestModel->select('certificate_letters.*, letter_types.name as request_type')
+                ->join('letter_types', 'letter_types.id = certificate_letters.letter_type_id')
+                                                                        ->where('resident_id', $residentId)
                                                                       ->orderBy('created_at', 'DESC')
                                                                       ->limit(5)
                                                                       ->findAll();

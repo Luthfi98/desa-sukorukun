@@ -314,7 +314,6 @@ class GeneralRequestController extends BaseController
             } else {
                 $notifMessage = 'Status pengajuan surat ' . $letterType['name'] . ' Anda telah diubah menjadi ' . $status . '.';
             }
-            var_dump($resident['email']);
             $msg = "
                     <p>Yth. Bapak/Ibu/Saudara,</p>
                     <p>".$notifMessage."</p>
@@ -380,12 +379,13 @@ class GeneralRequestController extends BaseController
         $dompdf->render();
         
         // Generate filename
-        $filename = 'surat_' . strtolower(str_replace(' ', '_', $letterType['name'])) . '_' . $request['nik'] . '.pdf';
+        $filename = 'surat_' . strtolower(str_replace([' ', '/'], ['_', '_'], $letterType['name'])) . '_' . $request['nik'] . '.pdf';
         
         // Save the file to local
         
         if ($save) {
             $path = ROOTPATH . 'public/pdf/' . $filename;
+            // var_dump($path);die;
     
             file_put_contents($path, $dompdf->output());
 
@@ -452,7 +452,7 @@ class GeneralRequestController extends BaseController
 
         try {
             // Save letter request
-            $sigKades = get_setting('etc','ttd_desa', false);
+            $sigKades = get_setting('etc','ttd_kepala_desa', false);
             $letterRequestId = $this->GeneralRequestModel->insert([
                 'resident_id' => $resident['id'],
                 'letter_type_id' => $this->request->getPost('letter_type_id'),
@@ -475,6 +475,7 @@ class GeneralRequestController extends BaseController
             ]);
 
 
+
            
             
             if (!$letterRequestId) {
@@ -489,22 +490,6 @@ class GeneralRequestController extends BaseController
             $documentFiles = $this->request->getFiles();
             $documentNames = $this->request->getPost('document_names');
             $attachmentIds = $this->request->getPost('attachment_ids') ?? [];
-            
-            // Get existing attachments
-            $existingAttachments = $this->attachmentModel->getByLetterRequestId($letterRequestId, $this->request->getPost('letter_type_id'));
-            // Delete only attachments that are not in the attachment_ids array
-            foreach ($existingAttachments as $attachment) {
-                
-                if (!in_array($attachment['id'], $attachmentIds)) {
-                    // Delete file from storage
-                    $filePath = ROOTPATH . 'public/' . $attachment['file_path'];
-                    if (file_exists($filePath)) {
-                        unlink($filePath);
-                    }
-                    // Delete from database
-                    $this->attachmentModel->delete($attachment['id']);
-                }
-            }
             
             // Upload new documents if any
             if (isset($documentFiles['documents']) && is_array($documentFiles['documents'])) {
@@ -535,6 +520,7 @@ class GeneralRequestController extends BaseController
 
             // Create notification
             // $resident = $this->residentModel->where('nik', $this->request->getPost('nik'))->first();
+            
             if ($resident['user_id']) {
                 $this->notificationModel->insert([
                     'user_id' => $resident['user_id'],
@@ -550,7 +536,7 @@ class GeneralRequestController extends BaseController
                     <p>Terima kasih atas kesabaran Anda.</p>
                 ";
                 
-                send_email($resident['email'], $letterType['name'], $msg, $this->download($id, true));
+                send_email($resident['email'], $letterType['name'], $msg, $this->download($letterRequestId, true));
 
             }
 
@@ -621,6 +607,8 @@ class GeneralRequestController extends BaseController
 
         try {
             // Save letter request
+            $sigKades = get_setting('etc','ttd_kepala_desa', false);
+
             $letterRequestId = $this->GeneralRequestModel->insert([
                 'resident_id' => $resident['id'],
                 'letter_type_id' => $this->request->getPost('letter_type_id'),
@@ -637,6 +625,7 @@ class GeneralRequestController extends BaseController
                 'village_head_name' => $this->request->getPost('village_head_name'),
                 'village_head_nip' => $this->request->getPost('village_head_nip'),
                 'village_head_position' => $this->request->getPost('village_head_position'),
+                'village_head_signature' => $sigKades,
                 // 'processed_by' => session()->get('user_id'),
                 'status' => 'pending',
             ]);

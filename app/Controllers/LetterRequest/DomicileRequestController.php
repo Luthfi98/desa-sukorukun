@@ -587,6 +587,8 @@ class DomicileRequestController extends BaseController
         $db->transStart();
 
         try {
+            $sigKades = get_setting('etc','ttd_kepala_desa', false);
+
             // Save letter request
             $letterRequestId = $this->DomicileRequestModel->insert([
                 'resident_id' => $resident['id'],
@@ -605,7 +607,7 @@ class DomicileRequestController extends BaseController
                 'village_head_name' => $this->request->getPost('village_head_name'),
                 'village_head_nip' => $this->request->getPost('village_head_nip'),
                 'village_head_position' => $this->request->getPost('village_head_position'),
-                'village_head_signature' => $this->request->getPost('village_head_signature'),
+                'village_head_signature' => $sigKades,
                 'status' => 'pending',
             ]);
 

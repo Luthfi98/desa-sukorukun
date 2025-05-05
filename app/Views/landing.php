@@ -210,22 +210,27 @@
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <h2 class="fw-bold mb-4">Hubungi Kami</h2>
                 <p class="mb-4">Silakan hubungi kami untuk informasi lebih lanjut atau kirimkan pertanyaan, saran, dan masukan Anda melalui formulir berikut:</p>
-                <form>
+                <form id="contactForm" action="<?= base_url('kontak/send') ?>" method="post">
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control" placeholder="Nama Lengkap" required>
+
+                        <div class=" col-md-6 mb-3">
+                            <label for="name" class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <input type="email" class="form-control" placeholder="Email" required>
+                        <div class=" col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <input type="text" class="form-control" placeholder="Subjek" required>
+                        <label for="subject" class="form-label">Subjek</label>
+                        <input type="text" class="form-control" id="subject" name="subject" required>
                     </div>
                     <div class="mb-3">
-                        <textarea class="form-control" rows="5" placeholder="Pesan" required></textarea>
+                        <label for="message" class="form-label">Pesan</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary px-4 py-2">Kirim Pesan</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Kirim Pesan</button>
                 </form>
             </div>
             <div class="col-lg-6">

@@ -27,14 +27,14 @@
         <div class="card-header py-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary">Data Penduduk</h6>
-                <div class="d-flex gap-2">
+                <!-- <div class="d-flex gap-2">
                     <a href="<?= base_url('residents/import') ?>" class="btn btn-success btn-sm">
                         <i class="fas fa-file-import"></i> Import
                     </a>
                     <a href="<?= base_url('residents/export-template') ?>" class="btn btn-info btn-sm">
                         <i class="fas fa-download"></i> Template
                     </a>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="card-body">

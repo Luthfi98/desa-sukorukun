@@ -1,3 +1,6 @@
+<?php 
+    $logo = get_setting('website', 'logo', false);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +58,7 @@
             <div class="col-md-6 col-lg-5">
                 <div class="forgot-container">
                     <div class="logo">
-                        <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo Desa" onerror="this.src='https://via.placeholder.com/100?text=LOGO DESA'">
+                        <img src="<?= base_url($logo) ?>" alt="Logo Desa" >
                     </div>
                     <h3 class="forgot-title">Lupa Password</h3>
                     

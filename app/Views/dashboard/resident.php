@@ -131,7 +131,7 @@
                     </div>
                     <h4>Pengajuan Surat Pengantar</h4>
                     <p>Ajukan surat pengantar untuk kebutuhan administrasi Anda</p>
-                    <a href="<?= base_url('surat-pengantar') ?>" class="btn btn-action">
+                    <a href="<?= base_url('general-request/my-request') ?>" class="btn btn-action">
                         <i class="fas fa-file-signature me-1"></i> Ajukan Surat
                     </a>
                 </div>
@@ -147,28 +147,13 @@
                     </div>
                     <h4>Pengaduan Keresahan</h4>
                     <p>Sampaikan keluhan dan saran untuk perbaikan layanan desa</p>
-                    <a href="<?= base_url('pengaduan-masyarakat') ?>" class="btn btn-action">
+                    <a href="<?= base_url('complaints') ?>" class="btn btn-action">
                         <i class="fas fa-comment-alt me-1"></i> Kirim Pengaduan
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Informasi APBD -->
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="dashboard-card h-100">
-                <div class="text-center">
-                    <div class="icon mb-3">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                    <h4>Informasi APBD</h4>
-                    <p>Lihat informasi transparansi anggaran desa</p>
-                    <a href="<?= base_url('informasi-apbd-publik') ?>" class="btn btn-action">
-                        <i class="fas fa-eye me-1"></i> Lihat Informasi
-                    </a>
-                </div>
-            </div>
-        </div>
 
         <!-- Informasi Pemerintah Desa -->
         <div class="col-md-4 col-sm-6 mb-4">
@@ -177,46 +162,15 @@
                     <div class="icon mb-3">
                         <i class="fas fa-info-circle"></i>
                     </div>
-                    <h4>Informasi Pemerintah Desa</h4>
-                    <p>Akses informasi tentang program dan kebijakan pemerintah desa</p>
-                    <a href="<?= base_url('informasi-desa') ?>" class="btn btn-action">
-                        <i class="fas fa-eye me-1"></i> Lihat Informasi
+                    <h4>Notifikasi</h4>
+                    <p>Akses terkait notifikasi</p>
+                    <a href="<?= base_url('notifications') ?>" class="btn btn-action">
+                        <i class="fas fa-eye me-1"></i> Lihat Notifikasi
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Arsip Data -->
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="dashboard-card h-100">
-                <div class="text-center">
-                    <div class="icon mb-3">
-                        <i class="fas fa-folder-open"></i>
-                    </div>
-                    <h4>Arsip Data</h4>
-                    <p>Simpan dan akses dokumen-dokumen penting Anda</p>
-                    <a href="<?= base_url('arsip-dokumen') ?>" class="btn btn-action">
-                        <i class="fas fa-cloud-upload-alt me-1"></i> Kelola Arsip
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tracking Pengajuan -->
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="dashboard-card h-100">
-                <div class="text-center">
-                    <div class="icon mb-3">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h4>Tracking Pengajuan</h4>
-                    <p>Lacak status pengajuan surat yang telah Anda kirim</p>
-                    <a href="<?= base_url('tracking-pengajuan') ?>" class="btn btn-action">
-                        <i class="fas fa-search-location me-1"></i> Lacak Status
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Recent Activity -->
@@ -478,7 +432,7 @@
                             <tbody>
                                 <?php foreach($myRelocationRecent as $relocation): ?>
                                     <tr>
-                                        <td><?= esc($relocation['new_address']) ?></td>
+                                        <td><?= esc($relocation['destination_detail']) ?></td>
                                         <td><?= date('d M Y', strtotime($relocation['created_at'])) ?></td>
                                         <td>
                                             <span class="badge bg-<?= $relocation['status'] == 'pending' ? 'warning' : ($relocation['status'] == 'processing' ? 'info' : 'success') ?>">

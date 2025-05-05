@@ -117,6 +117,7 @@ if (!function_exists('send_email')) {
     function send_email($to, $subject, $message, $attachments = null, $cc = null, $bcc = null)
     {
         $email = \Config\Services::email();
+        // var_dump($email);die;
         
         // Set email configuration
         // $email->setFrom('luthfi.ihdalhusnayain98@gmail.com', 'Desa Sukorukun');
@@ -141,10 +142,12 @@ if (!function_exists('send_email')) {
         }
         
         // Send email
+        
+        
         if ($email->send()) {
             return true;
         } else {
-            var_dump($email->printDebugger());die;
+            // var_dump($email->printDebugger());die;
             log_message('error', 'Email sending failed: ' . $email->printDebugger());
             return false;
         }

@@ -292,21 +292,33 @@ class DeathCertificateRequestController extends BaseController
         }
         
         // Send notification to resident
-        $resident = $this->residentModel->find($request['resident_id']);
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->find($request['resident_id']);
+
         // var_dump($resident);die;
         if ($resident && !empty($resident['user_id'])) {
             $letterType = $this->letterTypeModel->find($request['letter_type_id']);
             $notifTitle = 'Pengajuan Surat ' . $letterType['name'];
             
+            $fileDocument = null;
             if ($status === 'approved') {
+                
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda telah disetujui dan sedang dalam proses pembuatan.';
+                $fileDocument = $this->download($id, true);
             } elseif ($status === 'rejected') {
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda ditolak. Alasan: ' . $rejectionReason;
+               
             } elseif ($status === 'completed') {
+                $fileDocument = $this->download($id, true);
                 $notifMessage = 'Surat ' . $letterType['name'] . ' Anda telah selesai diproses dan siap untuk diambil.';
             } else {
                 $notifMessage = 'Status pengajuan surat ' . $letterType['name'] . ' Anda telah diubah menjadi ' . $status . '.';
             }
+            $msg = "
+                    <p>Yth. Bapak/Ibu/Saudara,</p>
+                    <p>".$notifMessage."</p>
+                    <p>Terima kasih atas kesabaran Anda.</p>
+                ";
+            send_email($resident['email'], $letterType['name'], $msg, $fileDocument);
             
             $this->notificationModel->insert([
                 'user_id' => $resident['user_id'],
@@ -319,7 +331,7 @@ class DeathCertificateRequestController extends BaseController
         return redirect()->to(base_url('death-cetificate-request'))->with('message', 'Status pengajuan surat berhasil diperbarui');
     }
 
-    public function download($id)
+    public function download($id, $save = false)
     {
         
         $request = $this->DeathCertificateModel->select('death_certificates.*')
@@ -369,9 +381,19 @@ class DeathCertificateRequestController extends BaseController
         
         // Generate filename
         $filename = 'surat_' . strtolower(str_replace(' ', '_', $letterType['name'])) . '_' . $request['nik'] . '.pdf';
+        if ($save) {
+            $path = ROOTPATH . 'public/pdf/' . $filename;
+    
+            file_put_contents($path, $dompdf->output());
+
+            // var_dump(is_file($path));die;
+
+            return $path;
+        }else{
         
         // Stream the file
-        return $dompdf->stream($filename, ['Attachment' => true]);
+            return $dompdf->stream($filename, ['Attachment' => true]);
+        }
     }
     public function create()
     {
@@ -528,6 +550,16 @@ class DeathCertificateRequestController extends BaseController
                     'type' => 'info',
                     'is_read' => 0
                 ]);
+                if ($status != 'pending') {
+                    $msg = "
+                            <p>Yth. Bapak/Ibu/Saudara,</p>
+                            <p>Surat keterangan kematian telah dibuat.</p>
+                            <p>Terima kasih atas kesabaran Anda.</p>
+                        ";
+                    send_email($resident['email'], $letterType['name'], $msg, $this->download($letterRequestId,true));
+                }
+
+                
             }
 
             // Commit transaction
