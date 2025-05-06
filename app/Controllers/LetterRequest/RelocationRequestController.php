@@ -290,20 +290,31 @@ class RelocationRequestController extends BaseController
         }
         
         // Send notification to resident
-        $resident = $this->residentModel->find($request['resident_id']);
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->find($request['resident_id']);
+
         if ($resident && !empty($resident['user_id'])) {
             $letterType = $this->letterTypeModel->find($request['letter_type_id']);
             $notifTitle = 'Pengajuan Surat ' . $letterType['name'];
-            
+            $fileDocument = null;
             if ($status === 'approved') {
+                
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda telah disetujui dan sedang dalam proses pembuatan.';
+                $fileDocument = $this->download($id, true);
             } elseif ($status === 'rejected') {
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda ditolak. Alasan: ' . $rejectionReason;
+               
             } elseif ($status === 'completed') {
+                $fileDocument = $this->download($id, true);
                 $notifMessage = 'Surat ' . $letterType['name'] . ' Anda telah selesai diproses dan siap untuk diambil.';
             } else {
                 $notifMessage = 'Status pengajuan surat ' . $letterType['name'] . ' Anda telah diubah menjadi ' . $status . '.';
             }
+            $msg = "
+                    <p>Yth. Bapak/Ibu/Saudara,</p>
+                    <p>".$notifMessage."</p>
+                    <p>Terima kasih atas kesabaran Anda.</p>
+                ";
+            send_email($resident['email'], $letterType['name'], $msg, $fileDocument);
             
             $this->notificationModel->insert([
                 'user_id' => $resident['user_id'],
@@ -374,10 +385,19 @@ class RelocationRequestController extends BaseController
         $dompdf->render();
         
         // Generate filename
-        $filename = 'surat_' . strtolower(str_replace(' ', '_', $letterType['name'])) . '_' . $request['nik'] . '.pdf';
+        $filename = 'surat_' . strtolower(str_replace([' ', '/'], ['_', '_'], $letterType['name'])) . '_' . $request['nik'] . '.pdf';
+        
+        // Save the file to local
+        
+        if ($save) {
+            $path = ROOTPATH . 'public/pdf/' . $filename;
+            file_put_contents($path, $dompdf->output());
+            return $path;
+        }else{
         
         // Stream the file
-        return $dompdf->stream($filename, ['Attachment' => true]);
+            return $dompdf->stream($filename, ['Attachment' => true]);
+        }
     }
 
     public function create()
@@ -438,7 +458,7 @@ class RelocationRequestController extends BaseController
         }
         
         // Get resident data
-        $resident = $this->residentModel->where('nik', $this->request->getPost('nik'))->first();
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->where('nik', $this->request->getPost('nik'))->first();
         if (!$resident) {
             return redirect()->back()->withInput()->with('error', 'Data penduduk tidak ditemukan');
         }
@@ -541,6 +561,25 @@ class RelocationRequestController extends BaseController
                         ]);
                     }
                 }
+            }
+
+            if ($resident['user_id']) {
+                $this->notificationModel->insert([
+                    'user_id' => $resident['user_id'],
+                    'title' => 'Pengajuan Surat Baru',
+                    'message' => 'Pengajuan surat baru telah dibuat',
+                    'type' => 'info',
+                    'is_read' => 0
+                ]);
+
+                $msg = "
+                    <p>Yth. Bapak/Ibu/Saudara,</p>
+                    <p>Berkas <strong>".$letterType['name']."</strong> telah dibuat, berikut filenya kami lampirkan.</p>
+                    <p>Terima kasih atas kesabaran Anda.</p>
+                ";
+                
+                send_email($resident['email'], $letterType['name'], $msg, $this->download($letterRequestId, true));
+
             }
 
             $db->transComplete();
@@ -1004,7 +1043,7 @@ class RelocationRequestController extends BaseController
         }
 
         // Get resident data
-        $resident = $this->residentModel->where('nik', $this->request->getPost('nik'))->first();
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->where('nik', $this->request->getPost('nik'))->first();
         if (!$resident) {
             return redirect()->back()->withInput()->with('error', 'Data penduduk tidak ditemukan');
         }

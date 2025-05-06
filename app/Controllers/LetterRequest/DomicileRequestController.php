@@ -300,26 +300,37 @@ class DomicileRequestController extends BaseController
         }
         
         // Send notification to resident
-        $resident = $this->residentModel->where('user_id', session()->get('user_id'))->first();
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->find($request['resident_id']);
+
         if ($resident && !empty($resident['user_id'])) {
             $letterType = $this->letterTypeModel->find($request['letter_type_id']);
             $notifTitle = 'Pengajuan Surat ' . $letterType['name'];
-            
+            $fileDocument = null;
             if ($status === 'approved') {
+                
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda telah disetujui dan sedang dalam proses pembuatan.';
+                $fileDocument = $this->download($id, true);
             } elseif ($status === 'rejected') {
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda ditolak. Alasan: ' . $rejectionReason;
+               
             } elseif ($status === 'completed') {
+                $fileDocument = $this->download($id, true);
                 $notifMessage = 'Surat ' . $letterType['name'] . ' Anda telah selesai diproses dan siap untuk diambil.';
             } else {
                 $notifMessage = 'Status pengajuan surat ' . $letterType['name'] . ' Anda telah diubah menjadi ' . $status . '.';
             }
+            $msg = "
+                    <p>Yth. Bapak/Ibu/Saudara,</p>
+                    <p>".$notifMessage."</p>
+                    <p>Terima kasih atas kesabaran Anda.</p>
+                ";
+            send_email($resident['email'], $letterType['name'], $msg, $fileDocument);
             
             $this->notificationModel->insert([
                 'user_id' => $resident['user_id'],
                 'title' => $notifTitle,
                 'message' => $notifMessage,
-                'link' => 'domicile-request/view/' . $id
+                'link' => 'general-request/view/' . $id
             ]);
         }
         
@@ -333,14 +344,19 @@ class DomicileRequestController extends BaseController
         
         $request = $this->DomicileRequestModel->select('domicile_certificates.*,  residents.nik, residents.gender, residents.occupation, residents.religion')->join('residents', 'domicile_certificates.resident_id = residents.id')->where('domicile_certificates.id', $id)->where('domicile_certificates.status', 'IN(approved, completed)');
 
+        $url = 'domicile-request';
         if (session()->get('role') === 'resident') {
             $request = $request->where('residents.user_id', session()->get('user_id'));
+            $url .= '/my-request';
         }
         $request = $request->first();
 
         
         if (!$request) {
-            return redirect()->to(base_url('domicile-request'))->with('error', 'Pengajuan surat tidak ditemukan');
+            return redirect()->to(base_url($url))->with('error', 'Pengajuan surat tidak ditemukan');
+        }
+        if ($request['status'] !== 'approved' && $request['status'] !== 'completed') {
+            return redirect()->to(base_url($url))->with('error', 'Surat belum selesai diproses');
         }
         
         $letterType = $this->letterTypeModel->find($request['letter_type_id']);
@@ -371,10 +387,19 @@ class DomicileRequestController extends BaseController
         $dompdf->render();
         
         // Generate filename
-        $filename = strtolower(str_replace(' ', '_', $letterType['name'])) . '_' . $request['nik'] . '.pdf';
+        $filename = strtolower(str_replace([' ', '/'], ['_','_'], $letterType['name'])) . '_' . $request['nik'] . '.pdf';
         
         // Stream the file
-        return $dompdf->stream($filename, ['Attachment' => true]);
+        if ($save) {
+            $path = ROOTPATH . 'public/pdf/' . $filename;
+            file_put_contents($path, $dompdf->output());
+
+            return $path;
+        }else{
+        
+        // Stream the file
+            return $dompdf->stream($filename, ['Attachment' => true]);
+        }
     }
     public function create()
     {
@@ -425,7 +450,8 @@ class DomicileRequestController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
         // Get resident data
-        $resident = $this->residentModel->where('nik', $this->request->getPost('nik'))->first();
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->where('nik', $this->request->getPost('nik'))->first();
+
         if (!$resident) {
             return redirect()->back()->withInput()->with('error', 'Data penduduk tidak ditemukan');
         }
@@ -436,6 +462,7 @@ class DomicileRequestController extends BaseController
 
         try {
             // Save letter request
+            $sigKades = get_setting('etc', 'ttd_kepala_desa', false);
             $letterRequestId = $this->DomicileRequestModel->insert([
                 'resident_id' => $resident['id'],
                 'letter_type_id' => $this->request->getPost('letter_type_id'),
@@ -453,6 +480,7 @@ class DomicileRequestController extends BaseController
                 'village_head_name' => $this->request->getPost('village_head_name'),
                 'village_head_nip' => $this->request->getPost('village_head_nip'),
                 'village_head_position' => $this->request->getPost('village_head_position'),
+                'village_head_signature' => $sigKades,
                 'processed_by' => session()->get('user_id'),
                 'status' => 'approved',
             ]);
@@ -502,7 +530,6 @@ class DomicileRequestController extends BaseController
             // die;
 
             // Create notification
-            $resident = $this->residentModel->where('nik', $this->request->getPost('nik'))->first();
             if ($resident['user_id']) {
                 $this->notificationModel->insert([
                     'user_id' => $resident['user_id'],
@@ -511,6 +538,15 @@ class DomicileRequestController extends BaseController
                     'type' => 'info',
                     'is_read' => 0
                 ]);
+
+                $msg = "
+                    <p>Yth. Bapak/Ibu/Saudara,</p>
+                    <p>Berkas <strong>".$letterType['name']."</strong> telah dibuat, berikut filenya kami lampirkan.</p>
+                    <p>Terima kasih atas kesabaran Anda.</p>
+                ";
+                
+                send_email($resident['email'], $letterType['name'], $msg, $this->download($letterRequestId, true));
+
             }
 
             // Commit transaction
@@ -577,7 +613,8 @@ class DomicileRequestController extends BaseController
         }
         
         // Get resident data
-        $resident = $this->residentModel->where('nik', $this->request->getPost('nik'))->first();
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->where('nik', $this->request->getPost('nik'))->first();
+
         if (!$resident) {
             return redirect()->back()->withInput()->with('error', 'Data penduduk tidak ditemukan');
         }

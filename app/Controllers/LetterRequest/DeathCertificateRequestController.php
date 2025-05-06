@@ -459,7 +459,7 @@ class DeathCertificateRequestController extends BaseController
         }
 
         // Get resident data
-        $resident = $this->residentModel->where('nik', $this->request->getPost('nik'))->first();
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->where('nik', $this->request->getPost('nik'))->first();
 
         // if (!$resident) {
         //     return redirect()->back()->withInput()->with('error', 'Data penduduk tidak ditemukan');
@@ -471,6 +471,7 @@ class DeathCertificateRequestController extends BaseController
 
         try {
             // Save letter request
+            $sigKades = get_setting('etc', 'ttd_kepala_desa', false);
             $data = [
                 'resident_id' => $resident['id']??null,
                 'letter_type_id' => $this->request->getPost('letter_type_id'),
@@ -494,6 +495,7 @@ class DeathCertificateRequestController extends BaseController
                 'village_head_name' => $this->request->getPost('village_head_name'),
                 'village_head_nip' => $this->request->getPost('village_head_nip'),
                 'village_head_position' => $this->request->getPost('village_head_position'),
+                'village_head_signature' => $sigKades,
                 'processed_by' => $processedBy,
                 'status' => $status,
                 'created_by' => session()->get('user_id')
@@ -550,7 +552,7 @@ class DeathCertificateRequestController extends BaseController
                     'type' => 'info',
                     'is_read' => 0
                 ]);
-                if ($status != 'pending') {
+                if ($status != 'pending' && $status != 'rejected') {
                     $msg = "
                             <p>Yth. Bapak/Ibu/Saudara,</p>
                             <p>Surat keterangan kematian telah dibuat.</p>
