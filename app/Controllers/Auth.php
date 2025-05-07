@@ -150,7 +150,8 @@ class Auth extends BaseController
                 ]);
             } else {
                 // Create new resident profile
-                $this->residentModel->insert([
+                $db = \Config\Database::connect();
+                $db->table('residents')->insert([
                     'nik' => $nik,
                     'kk' => $this->request->getPost('kk'),
                     'name' => $this->request->getPost('name'),

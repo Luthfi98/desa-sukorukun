@@ -27,7 +27,7 @@ class ResidentModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'nik'           => 'required|numeric|exact_length[16]|is_unique[residents.nik,id,{id}]',
+        'nik'           => 'required|numeric|exact_length[16]',
         'kk'            => 'required|numeric|exact_length[16]',
         'name'          => 'required|alpha_numeric_space|min_length[3]|max_length[100]',
         'birth_place'   => 'required|alpha_numeric_space|max_length[100]',

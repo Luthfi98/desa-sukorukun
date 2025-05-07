@@ -157,14 +157,17 @@ class Profile extends BaseController
             'mother_name' => $this->request->getPost('mother_name'),
             'user_id' => $userId
         ];
-        
         if ($resident) {
             // Update existing resident data
             $this->residentModel->update($resident['id'], $residentData);
+            // var_dump($this->residentModel->update($resident['id'], $residentData));die;
+
         } else {
             // Create new resident data
             $this->residentModel->insert($residentData);
         }
+        // var_dump($residentData);die;
+
         
         // Update user name in users table to match resident name
         $this->userModel->update($userId, [
