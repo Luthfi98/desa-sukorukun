@@ -266,7 +266,7 @@ class HeirRequestModel extends Model
     /**
      * Process heir certificate request
      */
-    public function processRequest(int $id, int $processedBy, string $status, string $rejectionReason)
+    public function processRequest(int $id, int $processedBy, string $status, string $rejectionReason = null)
     {
         $data = [
             'status' => $status,

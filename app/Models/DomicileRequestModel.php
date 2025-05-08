@@ -126,7 +126,7 @@ class DomicileRequestModel extends Model
      */
     public function getWithRelations()
     {
-        $certificates = $this->findAll();
+        $certificates = $this->orderBy('created_at', 'DESC')->limit(5)->findAll();
         $residentModel = new ResidentModel();
         $letterTypeModel = new LetterTypeModel();
         $userModel = new UserModel();

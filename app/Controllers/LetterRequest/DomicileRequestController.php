@@ -301,15 +301,16 @@ class DomicileRequestController extends BaseController
         
         // Send notification to resident
         $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->find($request['resident_id']);
-
         if ($resident && !empty($resident['user_id'])) {
             $letterType = $this->letterTypeModel->find($request['letter_type_id']);
             $notifTitle = 'Pengajuan Surat ' . $letterType['name'];
             $fileDocument = null;
+            
             if ($status === 'approved') {
                 
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda telah disetujui dan sedang dalam proses pembuatan.';
                 $fileDocument = $this->download($id, true);
+                // var_dump($fileDocument);die;
             } elseif ($status === 'rejected') {
                 $notifMessage = 'Pengajuan surat ' . $letterType['name'] . ' Anda ditolak. Alasan: ' . $rejectionReason;
                
@@ -337,12 +338,17 @@ class DomicileRequestController extends BaseController
         return redirect()->to(base_url('domicile-request'))->with('message', 'Status pengajuan surat berhasil diperbarui');
     }
 
-    public function download($id)
+    public function download($id, $save = false)
     {
+
         // Check if user is admin or staff
         
         
-        $request = $this->DomicileRequestModel->select('domicile_certificates.*,  residents.nik, residents.gender, residents.occupation, residents.religion')->join('residents', 'domicile_certificates.resident_id = residents.id')->where('domicile_certificates.id', $id)->where('domicile_certificates.status', 'IN(approved, completed)');
+        $request = $this->DomicileRequestModel->select('domicile_certificates.*,  residents.nik, residents.gender, residents.occupation, residents.religion')->join('residents', 'domicile_certificates.resident_id = residents.id')->where('domicile_certificates.id', $id);
+        
+        if (!$save) {
+            $request = $request->where('domicile_certificates.status', 'IN(approved, completed)');
+        }
 
         $url = 'domicile-request';
         if (session()->get('role') === 'resident') {
@@ -815,7 +821,7 @@ class DomicileRequestController extends BaseController
                     if ($file->isValid() && !$file->hasMoved()) {
                         $documentName = $documentNames[$index] ?? 'Document ' . ($index + 1);
 
-                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->first();
+                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->where('letter_type_id', $this->request->getPost('letter_type_id'))->first();
                         $newName = $file->getRandomName();
                         $file->move(ROOTPATH . 'public/uploads/documents', $newName);
 
@@ -962,7 +968,7 @@ class DomicileRequestController extends BaseController
                     if ($file->isValid() && !$file->hasMoved()) {
                         $documentName = $documentNames[$index] ?? 'Document ' . ($index + 1);
 
-                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->first();
+                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->where('letter_type_id', $this->request->getPost('letter_type_id'))->first();
                         $newName = $file->getRandomName();
                         $file->move(ROOTPATH . 'public/uploads/documents', $newName);
 

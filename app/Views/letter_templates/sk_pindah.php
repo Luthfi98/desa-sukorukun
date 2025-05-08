@@ -197,14 +197,21 @@
       </thead>
       <tbody>
         <?php
-        foreach($followers as $key => $follower): ?>
+        $maritalStatusTranslations = [
+          'single' => 'Belum Menikah',
+          'married' => 'Menikah',
+          'divorced' => 'Cerai',
+          'widowed' => 'Cerai Mati'
+      ];
+        foreach($followers as $key => $follower):
+         ?>
         <tr>
             <td><?= $key + 1 ?></td>
             <td><?= $follower->name ?></td>
             <td><?= $follower->gender == 'male' ? 'L':'' ?></td>
             <td><?= $follower->gender == 'male' ? '':'P' ?></td>
-            <td><?= $follower->marital_status ?></td>
-            <td><?= $follower->education ?></td>
+            <td><?= $maritalStatusTranslations[$follower->marital_status] ?? $follower->marital_status ?></td>
+            <td><?= strtoupper($follower->education) ?? $follower->education ?></td>
             <td><?= $follower->id_card ?></td>
         </tr>
         <?php endforeach;?>

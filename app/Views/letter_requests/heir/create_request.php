@@ -252,13 +252,11 @@ $(document).ready(function() {
         $('#resident_id').val('');
         $('#nik').val('');
         $('#name').val('');
-        $('#kk').val('');
         $('#pob').val('');
         $('#dob').val('');
+        $('#religion').val('');
+        $('#occupation').val('');
         $('#address').val('');
-        $('#nationality').val('');
-        $('#rt').val('');
-        $('#rw').val('');
     }
 
     // Function to create document upload fields
@@ -315,13 +313,11 @@ $(document).ready(function() {
                     $('#resident_id').val(data.resident.id);
                     $('#nik').val(data.resident.nik);
                     $('#name').val(data.resident.name);
-                    $('#kk').val(data.resident.kk);
                     $('#pob').val(data.resident.birth_place);
                     $('#dob').val(data.resident.birth_date);
+                    $('#religion').val(data.resident.religion);
+                    $('#occupation').val(data.resident.occupation);
                     $('#address').val(data.resident.address);
-                    $('#nationality').val(data.resident.nationality);
-                    $('#rt').val(data.resident.rt);
-                    $('#rw').val(data.resident.rw);
                 } else {
                     alert('NIK tidak ditemukan');
                     refreshValues();
@@ -352,6 +348,67 @@ $(document).ready(function() {
         const selectedType = letterTypes.find(type => type.id == initialLetterTypeId);
         createDocumentUploadFields(selectedType);
     }
+
+    // Add heir row
+    $('#add-heir-row').click(function() {
+        const newRow = `
+            <tr>
+                <td><input type="text" class="form-control" name="heir_names[]" required></td>
+                <td><input type="text" class="form-control" name="heir_birth_places[]" required></td>
+                <td><input type="date" class="form-control" name="heir_birth_dates[]" required></td>
+                <td><input type="text" class="form-control" name="heir_relationships[]" required></td>
+                <td><input type="text" class="form-control" name="heir_niks[]" required></td>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="heir_reporter[]" value="1">
+                        <label class="form-check-label">Ya</label>
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm remove-row">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+        $('#heir-table tbody').append(newRow);
+    });
+
+    // Remove heir row
+    $(document).on('click', '.remove-row', function() {
+        if ($('#heir-table tbody tr').length > 1) {
+            $(this).closest('tr').remove();
+        } else {
+            alert('Minimal harus ada satu ahli waris');
+        }
+    });
+
+    // Convert heir data to JSON before form submission
+    $('form').submit(function(e) {
+        const heirData = [];
+        $('#heir-table tbody tr').each(function() {
+            heirData.push({
+                name: $(this).find('input[name="heir_names[]"]').val(),
+                birth_place: $(this).find('input[name="heir_birth_places[]"]').val(),
+                birth_date: $(this).find('input[name="heir_birth_dates[]"]').val(),
+                relationship: $(this).find('input[name="heir_relationships[]"]').val(),
+                nik: $(this).find('input[name="heir_niks[]"]').val(),
+                is_reporter: $(this).find('input[name="heir_reporter[]"]').is(':checked') ? 1 : 0
+            });
+        });
+
+        // Add hidden input with JSON data
+        if ($('#heir_data_json').length === 0) {
+            $('<input>').attr({
+                type: 'hidden',
+                id: 'heir_data_json',
+                name: 'heir_data',
+                value: JSON.stringify(heirData)
+            }).appendTo('form');
+        } else {
+            $('#heir_data_json').val(JSON.stringify(heirData));
+        }
+    });
 });
 </script>
 <?= $this->endSection() ?> 

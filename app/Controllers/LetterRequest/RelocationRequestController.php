@@ -327,37 +327,40 @@ class RelocationRequestController extends BaseController
         return redirect()->to(base_url('relocation-request'))->with('message', 'Status pengajuan surat berhasil diperbarui');
     }
 
-    public function download($id)
+    public function download($id, $save = false)
     {
-        $request = $this->RelocationRequestModel->select('relocation_letters.*, residents.nik, residents.gender, residents.occupation, relocation_letters.origin_address, residents.religion, residents.marital_status')
+        $request = $this->RelocationRequestModel
+            ->select('relocation_letters.*, residents.nik, residents.gender, residents.occupation, relocation_letters.origin_address, residents.religion, residents.marital_status')
             ->join('residents', 'relocation_letters.resident_id = residents.id')
             ->where('relocation_letters.id', $id);
-        $url = 'relocation-request';
+
+        if (!$save) {
+            $request = $request->whereIn('relocation_letters.status', ['approved', 'completed']);
+        }
+
         if (session()->get('role') === 'resident') {
             $request = $request->where('residents.user_id', session()->get('user_id'));
-            $url .= '/my-request';
+            $url = 'relocation-request/my-request';
+        } else {
+            $url = 'relocation-request';
         }
+
         $request = $request->first();
-        switch ($request['marital_status']) {
-            case 'single':
-                $request['marital_status'] = 'Belum Menikah';
-                break;
-            case 'married':
-                $request['marital_status'] = 'Menikah';
-                break;
-            case 'divorced':
-                $request['marital_status'] = 'Cerai';
-                break;
-            case 'widow':
-                $request['marital_status'] = 'Cerai Mati';
-                break;
-        }
         if (!$request) {
             return redirect()->to(base_url($url))->with('error', 'Pengajuan surat tidak ditemukan');
         }
-        if ($request['status'] !== 'approved' && $request['status'] !== 'completed') {
-            return redirect()->to(base_url($url))->with('error', 'Surat belum selesai diproses');
-        }
+        $maritalStatusTranslations = [
+            'single' => 'Belum Menikah',
+            'married' => 'Menikah',
+            'divorced' => 'Cerai',
+            'widowed' => 'Cerai Mati'
+        ];
+
+        $request['marital_status'] = $maritalStatusTranslations[$request['marital_status']] ?? $request['marital_status'];
+        // var_dump($request);die;
+        // if ($request['status'] !== 'approved' && $request['status'] !== 'completed') {
+        //     return redirect()->to(base_url($url))->with('error', 'Surat belum selesai diproses');
+        // }
         
         $letterType = $this->letterTypeModel->find($request['letter_type_id']);
         
@@ -1119,6 +1122,7 @@ class RelocationRequestController extends BaseController
             $documentFiles = $this->request->getFiles();
             $documentNames = $this->request->getPost('document_names');
             $attachmentIds = $this->request->getPost('attachment_ids') ?? [];
+
             
             // Upload new documents if any
             if (isset($documentFiles['documents']) && is_array($documentFiles['documents'])) {
@@ -1126,7 +1130,7 @@ class RelocationRequestController extends BaseController
                     if ($file->isValid() && !$file->hasMoved()) {
                         $documentName = $documentNames[$index] ?? 'Document ' . ($index + 1);
 
-                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->first();
+                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->where('letter_type_id', $this->request->getPost('letter_type_id'))->first();
                         $newName = $file->getRandomName();
                         $file->move(ROOTPATH . 'public/uploads/documents', $newName);
 

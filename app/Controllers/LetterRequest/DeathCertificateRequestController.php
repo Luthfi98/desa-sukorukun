@@ -212,7 +212,7 @@ class DeathCertificateRequestController extends BaseController
         $request = $this->DeathCertificateModel->select('death_certificates.*, residents.occupation')->join('residents', 'death_certificates.resident_id = residents.id', 'left');
         $url = 'death-cetificate-request';
         if (session()->get('role') === 'resident') {
-            $request = $request->where('residents.user_id', session()->get('user_id'));
+            $request = $request->where('death_certificates.created_by', session()->get('user_id'));
             $url .= '/my-request';
         }
         $request = $request->find($id);
@@ -292,7 +292,14 @@ class DeathCertificateRequestController extends BaseController
         }
         
         // Send notification to resident
-        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left')->find($request['resident_id']);
+        $resident = $this->residentModel->select('residents.*, users.email')->join('users', 'residents.user_id = users.id', 'left');
+        if ($request['resident_id']) {
+            $resident = $resident->find($request['resident_id']);
+        }else{
+            $resident = $resident->where('users.id', $request['created_by'])->first();
+        }
+
+        // var_dump($resident);die;
 
         // var_dump($resident);die;
         if ($resident && !empty($resident['user_id'])) {
@@ -425,7 +432,7 @@ class DeathCertificateRequestController extends BaseController
         if (session()->get('role') !== 'admin' && session()->get('role') !== 'staff') {
             $status = 'pending';
             $processedBy = null;
-            $letterDate = null;
+            $letterDate = '0000-00-00';
             $url .= '/my-request';
             // return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
@@ -501,6 +508,8 @@ class DeathCertificateRequestController extends BaseController
                 'created_by' => session()->get('user_id')
             ];
             $letterRequestId = $this->DeathCertificateModel->insert($data);
+        // var_dump($this->validator->getErrors());die;
+
 
             if (!$letterRequestId) {
                 $errors = $this->DeathCertificateModel->errors();
@@ -837,7 +846,7 @@ class DeathCertificateRequestController extends BaseController
                     if ($file->isValid() && !$file->hasMoved()) {
                         $documentName = $documentNames[$index] ?? 'Document ' . ($index + 1);
 
-                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->first();
+                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->where('letter_type_id', $this->request->getPost('letter_type_id'))->first();
                         $newName = $file->getRandomName();
                         $file->move(ROOTPATH . 'public/uploads/documents', $newName);
 
@@ -989,7 +998,7 @@ class DeathCertificateRequestController extends BaseController
                     if ($file->isValid() && !$file->hasMoved()) {
                         $documentName = $documentNames[$index] ?? 'Document ' . ($index + 1);
 
-                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->first();
+                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->where('letter_type_id', $this->request->getPost('letter_type_id'))->first();
                         $newName = $file->getRandomName();
                         $file->move(ROOTPATH . 'public/uploads/documents', $newName);
 

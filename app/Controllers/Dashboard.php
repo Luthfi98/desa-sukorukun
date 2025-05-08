@@ -74,7 +74,7 @@ class Dashboard extends BaseController
             
             // Get recent requests by type
             $data['recentDeathCertificates'] = $this->deathCertificateModel->orderBy('created_at', 'DESC')->limit(5)->findAll();
-            $data['recentDomicileRequests'] = $this->domicileRequestModel->orderBy('created_at', 'DESC')->limit(5)->findAll();
+            $data['recentDomicileRequests'] = $this->domicileRequestModel->getWithRelations();
             $data['recentGeneralRequests'] = $this->generalRequestModel->select('certificate_letters.*, residents.name as resident_name, letter_types.name as request_type')
             ->join('letter_types', 'letter_types.id = certificate_letters.letter_type_id')
             ->join('residents', 'residents.id = certificate_letters.resident_id')->orderBy('created_at', 'DESC')->limit(5)->findAll();

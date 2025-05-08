@@ -313,6 +313,7 @@ class GeneralRequestController extends BaseController
             } else {
                 $notifMessage = 'Status pengajuan surat ' . $letterType['name'] . ' Anda telah diubah menjadi ' . $status . '.';
             }
+            var_dump($fileDocument);die;
             $msg = "
                     <p>Yth. Bapak/Ibu/Saudara,</p>
                     <p>".$notifMessage."</p>
@@ -792,7 +793,7 @@ class GeneralRequestController extends BaseController
                     if ($file->isValid() && !$file->hasMoved()) {
                         $documentName = $documentNames[$index] ?? 'Document ' . ($index + 1);
 
-                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->first();
+                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->where('letter_type_id', $this->request->getPost('letter_type_id'))->first();
                         $newName = $file->getRandomName();
                         $file->move(ROOTPATH . 'public/uploads/documents', $newName);
 
@@ -934,7 +935,7 @@ class GeneralRequestController extends BaseController
                     if ($file->isValid() && !$file->hasMoved()) {
                         $documentName = $documentNames[$index] ?? 'Document ' . ($index + 1);
 
-                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->first();
+                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->where('letter_type_id', $this->request->getPost('letter_type_id'))->first();
                         $newName = $file->getRandomName();
                         $file->move(ROOTPATH . 'public/uploads/documents', $newName);
 

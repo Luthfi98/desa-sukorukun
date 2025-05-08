@@ -32,7 +32,7 @@ class Complaints extends BaseController
             'active' => 'complaints'
         ];
 
-        if (session()->get('role') === 'admin') {
+        if (session()->get('role') === 'admin' || session()->get('role') === 'staff') {
             // Admin sees all complaints
             $status = $this->request->getGet('status') ?? 'pending';
             
@@ -71,7 +71,8 @@ class Complaints extends BaseController
     public function admin()
     {
         // Check if user is admin
-        if (session()->get('role') != 'admin') {
+        // var_dump(session()->get('role') != 'admin' && session()->get('role') != 'staff');die;
+        if (session()->get('role') != 'admin' && session()->get('role') != 'staff') {
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
         
@@ -190,7 +191,8 @@ class Complaints extends BaseController
         }
         
         // Check if user has permission to view
-        if (session()->get('role') !== 'admin' && $complaint['user_id'] != session()->get('user_id')) {
+        // var_dump((session()->get('role') !== 'admin' && session()->get('role') !== 'staff') && $complaint['user_id'] != session()->get('user_id'));die;
+        if ((session()->get('role') !== 'admin' && session()->get('role') !== 'staff') && $complaint['user_id'] != session()->get('user_id')) {
             return redirect()->to(base_url('complaints'))->with('error', 'Anda tidak memiliki akses untuk melihat pengaduan ini');
         }
         
@@ -213,7 +215,8 @@ class Complaints extends BaseController
     public function respond($id)
     {
         // Check if user is admin
-        if (session()->get('role') != 'admin') {
+        if (session()->get('role') != 'admin' && session()->get('role') != 'staff') {
+
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses untuk menanggapi pengaduan');
         }
         
@@ -225,7 +228,7 @@ class Complaints extends BaseController
         }
         
         // Check if complaint is still pending
-        if ($complaint['status'] != 'pending') {
+        if ($complaint['status'] == 'resolved' && $complaint['status'] == 'rejected') {
             return redirect()->to(base_url('complaints/admin'))->with('error', 'Pengaduan ini sudah ditanggapi');
         }
         
@@ -247,7 +250,7 @@ class Complaints extends BaseController
     public function process($id)
     {
         // Check if user is admin
-        if (session()->get('role') != 'admin') {
+        if (session()->get('role') != 'admin' && session()->get('role') != 'staff') {
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses untuk memproses pengaduan');
         }
         
@@ -281,7 +284,8 @@ class Complaints extends BaseController
     public function updateResponse($id)
     {
         // Check if user is admin
-        if (session()->get('role') != 'admin') {
+                if (session()->get('role') != 'admin' && session()->get('role') != 'staff') {
+
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses untuk menanggapi pengaduan');
         }
         
@@ -400,7 +404,8 @@ class Complaints extends BaseController
     public function processComplaint($id)
     {
         // Check if user is admin
-        if (session()->get('role') != 'admin') {
+                if (session()->get('role') != 'admin' && session()->get('role') != 'staff') {
+
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses untuk memproses pengaduan');
         }
         
@@ -447,7 +452,8 @@ class Complaints extends BaseController
     public function resolve($id)
     {
         // Check if user is admin
-        if (session()->get('role') != 'admin') {
+                if (session()->get('role') != 'admin' && session()->get('role') != 'staff') {
+
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses untuk menyelesaikan pengaduan');
         }
         
@@ -498,7 +504,7 @@ class Complaints extends BaseController
         $dateEnd = $this->request->getGet('date_end');
         
         // Check if user is admin
-        if (session()->get('role') === 'admin') {
+        if (session()->get('role') === 'admin' || session()->get('role') === 'staff') {
             if ($status && $status !== 'all') {
                 $complaints = $this->complaintsModel->getComplaintsByStatus($status);
             } else {

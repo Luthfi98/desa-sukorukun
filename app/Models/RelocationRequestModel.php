@@ -65,7 +65,7 @@ class RelocationRequestModel extends Model
         'reason' => 'required|max_length[255]',
         'move_followers' => 'required',
         // 'processed_by' => 'numeric',
-        'status' => 'required|in_list[pending,processed,approved,rejected]',
+        'status' => 'required|in_list[pending,processed,approved,rejected,completed]',
         'village_head_name' => 'required|max_length[100]',
         'village_head_nip' => 'required|max_length[20]',
         'village_head_position' => 'required|max_length[100]',
@@ -183,12 +183,13 @@ class RelocationRequestModel extends Model
     /**
      * Process relocation letter request
      */
-    public function processRequest(int $id, int $processedBy, string $status, string $rejectionReason)
+    public function processRequest(int $id, int $processedBy, string $status, string $rejectionReason = null)
     {
         $data = [
             'status' => $status,
             'processed_by' => $processedBy
         ];
+
 
         if($status == 'rejected' && $rejectionReason) {
             $data['rejected_reason'] = $rejectionReason;

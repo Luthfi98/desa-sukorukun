@@ -843,7 +843,7 @@ class HeirRequestController extends BaseController
                     if ($file->isValid() && !$file->hasMoved()) {
                         $documentName = $documentNames[$index] ?? 'Document ' . ($index + 1);
 
-                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->first();
+                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->where('letter_type_id', $this->request->getPost('letter_type_id'))->first();
                         $newName = $file->getRandomName();
                         $file->move(ROOTPATH . 'public/uploads/documents', $newName);
 
@@ -995,7 +995,7 @@ class HeirRequestController extends BaseController
                     if ($file->isValid() && !$file->hasMoved()) {
                         $documentName = $documentNames[$index] ?? 'Document ' . ($index + 1);
 
-                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->first();
+                        $existingAttachment = $this->attachmentModel->where('letter_request_id', $id)->where('name', $documentName)->where('letter_type_id', $this->request->getPost('letter_type_id'))->first();
                         $newName = $file->getRandomName();
                         $file->move(ROOTPATH . 'public/uploads/documents', $newName);
 

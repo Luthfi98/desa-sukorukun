@@ -179,11 +179,8 @@
                             </a>
                         `;
                         
-                        if (row[4] === 'pending') {
+                        if (row[4] !== 'resolved' && row[4] !== 'rejected') {
                             buttons += `
-                                <a href="<?= base_url('complaints/process/') ?>${data}" class="btn btn-sm btn-info">
-                                    <i class="fas fa-spinner"></i>
-                                </a>
                                 <a href="<?= base_url('complaints/respond/') ?>${data}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-reply"></i>
                                 </a>
