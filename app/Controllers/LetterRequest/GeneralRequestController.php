@@ -211,7 +211,8 @@ class GeneralRequestController extends BaseController
     {
         
         // Get request data
-        $request = $this->GeneralRequestModel->select('certificate_letters.*,  residents.nik, residents.gender, residents.occupation, residents.address')->join('residents', 'certificate_letters.resident_id = residents.id');
+        $request = $this->GeneralRequestModel->select('certificate_letters.*,  residents.nik, residents.gender, residents.occupation, residents.address')
+        ->join('residents', 'certificate_letters.resident_id = residents.id');
         $url = 'general-request';
         if (session()->get('role') === 'resident') {
             $request = $request->where('residents.user_id', session()->get('user_id'));
@@ -313,7 +314,7 @@ class GeneralRequestController extends BaseController
             } else {
                 $notifMessage = 'Status pengajuan surat ' . $letterType['name'] . ' Anda telah diubah menjadi ' . $status . '.';
             }
-            var_dump($fileDocument);die;
+            // var_dump($fileDocument);die;
             $msg = "
                     <p>Yth. Bapak/Ibu/Saudara,</p>
                     <p>".$notifMessage."</p>

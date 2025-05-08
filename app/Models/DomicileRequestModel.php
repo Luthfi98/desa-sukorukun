@@ -219,12 +219,13 @@ class DomicileRequestModel extends Model
      */
     public function processRequest(int $id, int $processedBy, string $status, string $rejectionReason = null)
     {
+        $current = $this->find($id);
         $data = [
             'status' => $status,
             'processed_by' => $processedBy,
         ];
 
-        if ($status == 'completed' || $status == 'approved') {
+        if (($status == 'completed' || $status == 'approved') && empty($current['number'])) {
             $data['valid_from'] = date('Y-m-d');
         }
         

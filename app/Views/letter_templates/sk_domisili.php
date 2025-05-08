@@ -1,5 +1,9 @@
 <?php 
     $kepalaDesa = get_setting('struktur_organisasi','kepala_desa', false);
+    $sigKades = $request['village_head_signature'];
+    if (file_exists($sigKades)) {
+        $sigKades = 'data:image/png;base64,' . base64_encode(file_get_contents($sigKades));
+    }
     $logo = get_setting('website','logo', false);
     $logoPath = FCPATH . $logo;
     $logoData = '';
@@ -157,21 +161,30 @@
       </td>
     </tr>
   </table>
-
-  <table class="signature-table">
-    <tr>
-      <td>
-        <br>
-        Pemohon,<br><br><br><br><br>
-        (<?= $request['name'] ?>)
-      </td>
-      <td>
-        Sukorukun, <?= formatDateIndo($request['valid_from']) ?><br>
-        <strong><?= $request['village_head_position'] ?> Sukorukun</strong><br><br><br><br><br>
-        <span class="bold">(<?= $request['village_head_name'] ?>)</span>
-      </td>
-    </tr>
-  </table>
+  <table class="center" style="width=100%; margin-top: 50px">
+        <tr>
+            <td width="50%"></td>
+            <td width="50%">Sukorukun, <?= formatDateIndo($request['valid_from']) ?></td>
+        </tr>
+        <tr>
+            <td width="50%">Pemohon,</td>
+            <td width="50%"><b><?= $request['village_head_position'] ?> Sukorukun</b></td>
+        </tr>
+        <tr>
+        <td width="50%" style="position: relative; height: 75px;">
+          
+            </td>
+            <td width="50%" style="position: relative; height: 75px;">
+            <?php if ($sigKades): ?>
+                <img src="<?= $sigKades ?>" alt="TTD Kades" class="logo" style="position: absolute; top: -50px; left: 50px; width: 200px; height: 200px; object-fit: cover;">
+            <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+          <td>(<?= $request['name'] ?>)</td>
+          <td width="50%"><b><?= $request['village_head_name'] ?></b></td>
+        </tr>
+</table>
 
 </body>
 </html>

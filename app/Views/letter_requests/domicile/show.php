@@ -33,7 +33,7 @@
                             </a>
                         <?php endif; ?>
                         
-                        <?php if(($request['status'] === 'approved' || $request['status'] === 'completed') && session()->get('role') !== 'resident'): ?>
+                        <?php if(($request['status'] === 'approved' || $request['status'] === 'completed')): ?>
                             <a href="<?= base_url($url.'/download/'.$request['id']) ?>" class="btn btn-primary btn-sm" target="_blank">
                                 <i class="fas fa-download"></i> Download PDF
                             </a>

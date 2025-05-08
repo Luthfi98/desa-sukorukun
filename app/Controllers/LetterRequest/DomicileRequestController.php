@@ -226,9 +226,9 @@ class DomicileRequestController extends BaseController
         }
         
         // Get letter type name
-        $processedBy = $this->userModel->find($request['processed_by']);
-        // var_dump($processedBy);die;
-        $request['processor_name'] = $processedBy['name'];
+        $processedBy = $this->userModel->where('id', $request['processed_by'])->first();
+        
+        $request['processor_name'] = $processedBy ? $processedBy['name'] : '';
 
         $letterType = $this->letterTypeModel->find($request['letter_type_id']);
         $request['letter_type_name'] = $letterType['name'];
@@ -347,7 +347,7 @@ class DomicileRequestController extends BaseController
         $request = $this->DomicileRequestModel->select('domicile_certificates.*,  residents.nik, residents.gender, residents.occupation, residents.religion')->join('residents', 'domicile_certificates.resident_id = residents.id')->where('domicile_certificates.id', $id);
         
         if (!$save) {
-            $request = $request->where('domicile_certificates.status', 'IN(approved, completed)');
+            $request = $request->whereIn('domicile_certificates.status', ['approved', 'completed']);
         }
 
         $url = 'domicile-request';
@@ -646,7 +646,7 @@ class DomicileRequestController extends BaseController
                 'rw' => $this->request->getPost('rw'),
                 'purpose' => $this->request->getPost('purpose'),
                 'description' => $this->request->getPost('description'),
-                'valid_from' => date('Y-m-d'),
+                // 'valid_from' => date('Y-m-d'),
                 'village_head_name' => $this->request->getPost('village_head_name'),
                 'village_head_nip' => $this->request->getPost('village_head_nip'),
                 'village_head_position' => $this->request->getPost('village_head_position'),

@@ -78,7 +78,8 @@ class Dashboard extends BaseController
             $data['recentGeneralRequests'] = $this->generalRequestModel->select('certificate_letters.*, residents.name as resident_name, letter_types.name as request_type')
             ->join('letter_types', 'letter_types.id = certificate_letters.letter_type_id')
             ->join('residents', 'residents.id = certificate_letters.resident_id')->orderBy('created_at', 'DESC')->limit(5)->findAll();
-            $data['recentHeirRequests'] = $this->heirRequestModel->orderBy('created_at', 'DESC')->limit(5)->findAll();
+            $data['recentHeirRequests'] = $this->heirRequestModel->select('heir_certificates.*, residents.name as resident_name')
+            ->join('residents', 'residents.id = heir_certificates.resident_id')->orderBy('created_at', 'DESC')->limit(5)->findAll();
             $data['recentNews'] = $this->newsModel->orderBy('created_at', 'DESC')->limit(5)->findAll();
             $data['recentRelocations'] = $this->relocationRequestModel->select('relocation_letters.*, residents.name as resident_name, letter_types.name as request_type')->join('letter_types', 'letter_types.id = relocation_letters.letter_type_id')->join('residents', 'residents.id = relocation_letters.resident_id')->orderBy('created_at', 'DESC')->limit(5)->findAll();
             

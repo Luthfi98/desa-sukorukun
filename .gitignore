@@ -68,6 +68,8 @@ public/uploads/documents/*
 !public/uploads/documents/index.html
 public/uploads/complaints/*
 !public/uploads/complaints/index.html
+public/pdf/*
+!public/pdf/index.html
 
 
 php_errors.log
