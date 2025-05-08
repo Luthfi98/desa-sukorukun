@@ -149,7 +149,7 @@
 
     <!-- Recent Activity -->
     <div class="row">
-        <div class="col-md-6 mb-4">
+        <!-- <div class="col-md-6 mb-4">
             <div class="dashboard-card h-100">
                 <h5 class="card-title mb-3">Pengajuan Terbaru</h5>
                 <?php if(isset($recentRequests) && count($recentRequests) > 0): ?>
@@ -186,7 +186,8 @@
                     </div>
                 <?php endif; ?>
             </div>
-        </div>
+        </div> -->
+        
 
         <div class="col-md-6 mb-4">
             <div class="dashboard-card h-100">
@@ -222,6 +223,44 @@
                     <div class="text-center py-4">
                         <i class="fas fa-comment-alt fa-3x text-muted mb-3"></i>
                         <p>Belum ada pengaduan</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Umum Terbaru</h5>
+                <?php if(isset($recentGeneralRequests) && count($recentGeneralRequests) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Pemohon</th>
+                                    <th>Jenis</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($recentGeneralRequests as $request): ?>
+                                    <tr>
+                                        <td><?= esc($request['resident_name']) ?></td>
+                                        <td><?= esc($request['request_type']) ?></td>
+                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($request['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat umum</p>
                     </div>
                 <?php endif; ?>
             </div>
@@ -306,44 +345,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="dashboard-card h-100">
-                <h5 class="card-title mb-3">Surat Umum Terbaru</h5>
-                <?php if(isset($recentGeneralRequests) && count($recentGeneralRequests) > 0): ?>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Pemohon</th>
-                                    <th>Jenis</th>
-                                    <th>Tanggal</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach($recentGeneralRequests as $request): ?>
-                                    <tr>
-                                        <td><?= esc($request['resident_name']) ?></td>
-                                        <td><?= esc($request['request_type']) ?></td>
-                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
-                                        <td>
-                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
-                                                <?= ucfirst($request['status']) ?>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php else: ?>
-                    <div class="text-center py-4">
-                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
-                        <p>Belum ada pengajuan surat umum</p>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
+       
 
         <div class="col-md-6 mb-4">
             <div class="dashboard-card h-100">
@@ -381,46 +383,6 @@
                 <?php endif; ?>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="dashboard-card h-100">
-                <h5 class="card-title mb-3">Penduduk Baru Terbaru</h5>
-                <?php if(isset($recentNewResidents) && count($recentNewResidents) > 0): ?>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Nama</th>
-                                    <th>Tanggal</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach($recentNewResidents as $resident): ?>
-                                    <tr>
-                                        <td><?= esc($resident['name']) ?></td>
-                                        <td><?= date('d M Y', strtotime($resident['created_at'])) ?></td>
-                                        <td>
-                                            <span class="badge bg-<?= $resident['status'] == 'pending' ? 'warning' : ($resident['status'] == 'processing' ? 'info' : 'success') ?>">
-                                                <?= ucfirst($resident['status']) ?>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php else: ?>
-                    <div class="text-center py-4">
-                        <i class="fas fa-user-plus fa-3x text-muted mb-3"></i>
-                        <p>Belum ada penduduk baru</p>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-
         <div class="col-md-6 mb-4">
             <div class="dashboard-card h-100">
                 <h5 class="card-title mb-3">Pindah Alamat Terbaru</h5>
@@ -459,6 +421,47 @@
                 <?php endif; ?>
             </div>
         </div>
+    </div>
+
+    <div class="row">
+        <!-- <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Penduduk Baru Terbaru</h5>
+                <?php if(isset($recentNewResidents) && count($recentNewResidents) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($recentNewResidents as $resident): ?>
+                                    <tr>
+                                        <td><?= esc($resident['name']) ?></td>
+                                        <td><?= date('d M Y', strtotime($resident['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $resident['status'] == 'pending' ? 'warning' : ($resident['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($resident['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-user-plus fa-3x text-muted mb-3"></i>
+                        <p>Belum ada penduduk baru</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div> -->
+
+        
     </div>
 </div>
 <?= $this->endSection() ?> 

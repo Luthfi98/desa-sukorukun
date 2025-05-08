@@ -175,48 +175,6 @@
 
     <!-- Recent Activity -->
     <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="dashboard-card h-100">
-                <h5 class="card-title mb-3">Pengajuan Surat Terbaru</h5>
-                <?php if(isset($mySuratRecent) && count($mySuratRecent) > 0): ?>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Jenis Surat</th>
-                                    <th>Tanggal</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach($mySuratRecent as $surat): ?>
-                                    <tr>
-                                        <td><?= esc($surat['letter_type']) ?></td>
-                                        <td><?= date('d M Y', strtotime($surat['created_at'])) ?></td>
-                                        <td>
-                                            <span class="badge bg-<?= $surat['status'] == 'pending' ? 'warning' : ($surat['status'] == 'processing' ? 'info' : 'success') ?>">
-                                                <?= ucfirst($surat['status']) ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a href="<?= base_url('surat-pengantar/view/' . $surat['id']) ?>" class="btn btn-sm btn-outline-primary">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php else: ?>
-                    <div class="text-center py-4">
-                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
-                        <p>Belum ada pengajuan surat</p>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
 
         <div class="col-md-6 mb-4">
             <div class="dashboard-card h-100">
@@ -256,6 +214,44 @@
                     <div class="text-center py-4">
                         <i class="fas fa-comment-alt fa-3x text-muted mb-3"></i>
                         <p>Belum ada pengaduan</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-card h-100">
+                <h5 class="card-title mb-3">Surat Umum Terbaru</h5>
+                <?php if(isset($myGeneralRequestRecent) && count($myGeneralRequestRecent) > 0): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Jenis</th>
+                                    <th>Nomor</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($myGeneralRequestRecent as $request): ?>
+                                    <tr>
+                                        <td><?= esc($request['request_type']) ?></td>
+                                        <td><?= esc($request['number']) ?></td>
+                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
+                                        <td>
+                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
+                                                <?= ucfirst($request['status']) ?>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <p>Belum ada pengajuan surat umum</p>
                     </div>
                 <?php endif; ?>
             </div>
@@ -340,42 +336,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="dashboard-card h-100">
-                <h5 class="card-title mb-3">Surat Umum Terbaru</h5>
-                <?php if(isset($myGeneralRequestRecent) && count($myGeneralRequestRecent) > 0): ?>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Jenis</th>
-                                    <th>Tanggal</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach($myGeneralRequestRecent as $request): ?>
-                                    <tr>
-                                        <td><?= esc($request['request_type']) ?></td>
-                                        <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
-                                        <td>
-                                            <span class="badge bg-<?= $request['status'] == 'pending' ? 'warning' : ($request['status'] == 'processing' ? 'info' : 'success') ?>">
-                                                <?= ucfirst($request['status']) ?>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php else: ?>
-                    <div class="text-center py-4">
-                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
-                        <p>Belum ada pengajuan surat umum</p>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
+        
 
         <div class="col-md-6 mb-4">
             <div class="dashboard-card h-100">
@@ -413,9 +374,6 @@
                 <?php endif; ?>
             </div>
         </div>
-    </div>
-
-    <div class="row">
         <div class="col-md-6 mb-4">
             <div class="dashboard-card h-100">
                 <h5 class="card-title mb-3">Pindah Alamat Terbaru</h5>
@@ -452,6 +410,10 @@
                 <?php endif; ?>
             </div>
         </div>
+    </div>
+
+    <div class="row">
+        
     </div>
 </div>
 <?= $this->endSection() ?> 
