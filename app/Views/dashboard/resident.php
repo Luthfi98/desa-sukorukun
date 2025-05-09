@@ -201,7 +201,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="<?= base_url('complaints/view/' . $complaint['id']) ?>" class="btn btn-sm btn-outline-primary">
+                                            <a href="<?= base_url('complaints/' . $complaint['id']) ?>" class="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
@@ -268,6 +268,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Nomor</th>
                                     <th>Nama Almarhum</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
@@ -276,6 +277,7 @@
                             <tbody>
                                 <?php foreach($myDeathCertificateRecent as $cert): ?>
                                     <tr>
+                                        <td><?= esc($cert['number']) ?></td>
                                         <td><?= esc($cert['name']) ?></td>
                                         <td><?= date('d M Y', strtotime($cert['created_at'])) ?></td>
                                         <td>
@@ -305,6 +307,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Nomor</th>
                                     <th>Alamat</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
@@ -313,6 +316,7 @@
                             <tbody>
                                 <?php foreach($myDomicileRequestRecent as $request): ?>
                                     <tr>
+                                        <td><?= esc($request['number']) ?></td>
                                         <td><?= esc($request['address']) ?></td>
                                         <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
                                         <td>
@@ -346,6 +350,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Nomor</th>
                                     <th>Nama Almarhum</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
@@ -354,6 +359,7 @@
                             <tbody>
                                 <?php foreach($myHeirRequestRecent as $request): ?>
                                     <tr>
+                                        <td><?= esc($request['number']) ?></td>
                                         <td><?= esc($request['name']) ?></td>
                                         <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
                                         <td>
@@ -382,6 +388,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Number</th>
                                     <th>Alamat Baru</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
@@ -390,6 +397,7 @@
                             <tbody>
                                 <?php foreach($myRelocationRecent as $relocation): ?>
                                     <tr>
+                                        <td><?= esc($relocation['number']) ?></td>
                                         <td><?= esc($relocation['destination_detail']) ?></td>
                                         <td><?= date('d M Y', strtotime($relocation['created_at'])) ?></td>
                                         <td>

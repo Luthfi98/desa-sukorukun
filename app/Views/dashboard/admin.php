@@ -235,6 +235,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Number</th>
                                     <th>Pemohon</th>
                                     <th>Jenis</th>
                                     <th>Tanggal</th>
@@ -244,6 +245,7 @@
                             <tbody>
                                 <?php foreach($recentGeneralRequests as $request): ?>
                                     <tr>
+                                        <td><?= esc($request['number']) ?></td>
                                         <td><?= esc($request['resident_name']) ?></td>
                                         <td><?= esc($request['request_type']) ?></td>
                                         <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
@@ -277,6 +279,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Nomor</th>
                                     <th>Nama Almarhum</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
@@ -285,6 +288,7 @@
                             <tbody>
                                 <?php foreach($recentDeathCertificates as $cert): ?>
                                     <tr>
+                                        <td><?= esc($cert['number']) ?></td>
                                         <td><?= esc($cert['name']) ?></td>
                                         <td><?= date('d M Y', strtotime($cert['created_at'])) ?></td>
                                         <td>
@@ -314,6 +318,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Nomor</th>
                                     <th>Pemohon</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
@@ -322,6 +327,7 @@
                             <tbody>
                                 <?php foreach($recentDomicileRequests as $request): ?>
                                     <tr>
+                                        <td><?= esc($request['number']) ?></td>
                                         <td><?= esc($request['resident_name']) ?></td>
                                         <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
                                         <td>
@@ -355,6 +361,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Nomor</th>
                                     <th>Pemohon</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
@@ -363,6 +370,7 @@
                             <tbody>
                                 <?php foreach($recentHeirRequests as $request): ?>
                                     <tr>
+                                        <td><?= esc($request['number']) ?></td>
                                         <td><?= esc($request['resident_name']) ?></td>
                                         <td><?= date('d M Y', strtotime($request['created_at'])) ?></td>
                                         <td>
@@ -391,6 +399,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Nomor</th>
                                     <th>Nama</th>
                                     <th>Alamat Baru</th>
                                     <th>Tanggal</th>
@@ -400,6 +409,7 @@
                             <tbody>
                                 <?php foreach($recentRelocations as $relocation): ?>
                                     <tr>
+                                        <td><?= esc($relocation['number']) ?></td>
                                         <td><?= esc($relocation['resident_name']) ?></td>
                                         <td><?= esc($relocation['destination_detail']) ?></td>
                                         <td><?= date('d M Y', strtotime($relocation['created_at'])) ?></td>
