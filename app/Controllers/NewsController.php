@@ -49,7 +49,7 @@ class NewsController extends BaseController
             return $this->response->setStatusCode(403)->setJSON(['error' => 'Akses langsung tidak diizinkan']);
         }
 
-        $builder = $this->newsModel;
+        $builder = $this->newsModel->select('news.*, users.name');
         $builder->join('users', 'users.id = news.user_id');
 
         // Get DataTables parameters
@@ -214,16 +214,25 @@ class NewsController extends BaseController
         $data = [
             'user_id' => session()->get('user_id'),
             'title' => $this->request->getPost('title'),
+            'slug' => url_title($this->request->getPost('title'), '-', true),
             'content' => $this->request->getPost('content'),
             'type' => $this->request->getPost('type'),
             'category' => $this->request->getPost('category'),
             'status' => $this->request->getPost('status'),
             'image' => $imageName ? 'uploads/news/' . $imageName : null
         ];
+
+        // var_dump($data);
+        // $data = $this->newsModel->generateSlug($data);
+        // var_dump($data);die;
         
         
-        $this->newsModel->insert($data);
-        
+        $theId = $this->newsModel->insert($data);
+        // if (!$theId) {
+        //     var_dump($this->newsModel->errors());die;
+            
+        // }
+        // die;
         return redirect()->to('news')->with('message', 'News created successfully');
     }
     

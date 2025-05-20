@@ -73,7 +73,7 @@ class Home extends BaseController
         ]);
     }
 
-    public function berita($id = null): string
+    public function berita($theid = null): string
     {
         $newsModel = new \App\Models\NewsModel();
         
@@ -83,18 +83,20 @@ class Home extends BaseController
                              ->distinct()
                              ->findAll();
 
-        if ($id) {
+        if ($theid) {
             // Handle detail page
-            $id = explode('-', $id);
+            $id = explode('-', $theid);
             $id = $id[0];
+            $slug = str_replace("$id-", ' ', $id);
             
             // Get the news detail
             $news = $newsModel->join('users', 'users.id = news.user_id')
                              ->where('news.id', $id)
+                             ->orWhere('news.slug', $slug)
                              ->first();
 
             // Get recent news for sidebar
-            $recent_news = $newsModel->join('users', 'users.id = news.user_id')
+            $recent_news = $newsModel->select('news.*, users.name')->join('users', 'users.id = news.user_id')
                                     ->where('news.status', 'published')
                                     ->where('news.id !=', $id)
                                     ->orderBy('news.created_at', 'DESC')
@@ -115,7 +117,7 @@ class Home extends BaseController
             $categoryFilter = $this->request->getGet('category');
             
             // Build query
-            $builder = $newsModel->join('users', 'users.id = news.user_id')
+            $builder = $newsModel->select('news.*, users.name')->join('users', 'users.id = news.user_id')
                                 ->where('news.status', 'published');
             
             // Apply search if exists
@@ -141,7 +143,7 @@ class Home extends BaseController
             
             // Get pager
             $pager = $newsModel->pager;
-            
+            // dd($news);
             return view('pages/berita', [
                 'title' => 'Berita & Informasi Desa',
                 'news' => $news,
