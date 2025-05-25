@@ -159,11 +159,14 @@ class UserController extends ResourceController
             return redirect()->to('/dashboard')->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
 
-        $user = $this->model->find($id);
+        $user = $this->model->select('users.*, residents.id as resident_id, residents.*, users.id as id')->where('users.id', $id)->join('residents', 'users.id = residents.user_id')->first();
+        // dd($user);
         if (!$user) {
             return redirect()->to('/users')->with('error', 'Pengguna tidak ditemukan');
         }
 
+        // $user['resident_id'] = $user['residents']['id'] ?? null;
+        // var_dump($user);die;
         // Get residents that don't have user accounts yet, plus the current resident if user is a resident
         $available_residents = $this->residentModel->where('user_id IS NULL')->findAll();
         
@@ -224,7 +227,7 @@ class UserController extends ResourceController
             'email' => $this->request->getPost('email'),
             'name' => $this->request->getPost('name'),
             'role' => $this->request->getPost('role'),
-            'status' => $this->request->getPost('status')
+            'status' => $this->request->getPost('status')?'active':'inactive'
         ];
 
         // Update password if provided
