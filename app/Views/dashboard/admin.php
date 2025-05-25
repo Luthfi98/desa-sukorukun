@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="dashboard-card">
                 <div class="d-flex align-items-center mb-3">
-                    <div class="icon-container me-3">
+                    <div class="icon-container mr-3">
                         <i class="fas fa-chart-line text-primary"></i>
                     </div>
                     <div>
@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-success">
+                            <div class="mr-3 text-success">
                                 <i class="fas fa-envelope-open-text fa-2x"></i>
                             </div>
                             <div>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-warning">
+                            <div class="mr-3 text-warning">
                                 <i class="fas fa-sync-alt fa-2x"></i>
                             </div>
                             <div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-danger">
+                            <div class="mr-3 text-danger">
                                 <i class="fas fa-bullhorn fa-2x"></i>
                             </div>
                             <div>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-md-3 col-sm-6 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-info">
+                            <div class="mr-3 text-info">
                                 <i class="fas fa-users fa-2x"></i>
                             </div>
                             <div>
@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-md-2 col-sm-4 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-primary">
+                            <div class="mr-3 text-primary">
                                 <i class="fas fa-file-medical fa-2x"></i>
                             </div>
                             <div>
@@ -89,7 +89,7 @@
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-success">
+                            <div class="mr-3 text-success">
                                 <i class="fas fa-home fa-2x"></i>
                             </div>
                             <div>
@@ -100,7 +100,7 @@
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-warning">
+                            <div class="mr-3 text-warning">
                                 <i class="fas fa-file-alt fa-2x"></i>
                             </div>
                             <div>
@@ -111,7 +111,7 @@
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-info">
+                            <div class="mr-3 text-info">
                                 <i class="fas fa-user-friends fa-2x"></i>
                             </div>
                             <div>
@@ -122,7 +122,7 @@
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-secondary">
+                            <div class="mr-3 text-secondary">
                                 <i class="fas fa-newspaper fa-2x"></i>
                             </div>
                             <div>
@@ -133,7 +133,7 @@
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="me-3 text-danger">
+                            <div class="mr-3 text-danger">
                                 <i class="fas fa-truck-moving fa-2x"></i>
                             </div>
                             <div>

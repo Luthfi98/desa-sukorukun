@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik') ?>" required>
+                                <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik') ?>" required>
                             </div>
                         </div>
 
@@ -138,13 +138,7 @@
                                 <input type="date" class="form-control" id="letter_date" name="letter_date" value="<?= old('letter_date', date('Y-m-d')) ?>" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                <select name="letter_type_id" id="letter_type_id" class="form-control" required>
-                                    <option value="">-- Pilih Jenis Surat --</option>
-                                    <?php foreach($letterTypes as $type): ?>
-                                    <option value="<?= $type['id'] ?>" <?= old('letter_type_id') == $type['id'] ? 'selected' : '' ?>><?= $type['name'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <input type="hidden" name="letter_type_id" id="letter_type_id" value="<?= $letterTypes[0]['id'] ?>">
                             </div>
                         </div>
 

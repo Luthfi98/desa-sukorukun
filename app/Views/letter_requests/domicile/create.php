@@ -29,17 +29,11 @@
                         
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                <select name="letter_type_id" id="letter_type_id" class="form-control" required>
-                                    <option value="">-- Pilih Jenis Surat --</option>
-                                    <?php foreach($letterTypes as $type): ?>
-                                    <option value="<?= $type['id'] ?>" <?= old('letter_type_id') == $type['id'] ? 'selected' : '' ?>><?= $type['name'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
+                                <input type="hidden" name="letter_type_id" id="letter_type_id" value="<?= $letterTypes[0]['id'] ?>">
                                 <label for="number" class="form-label">Nomor Surat</label>
                                 <input type="text" class="form-control" id="number" name="number" value="<?= old('number') ?>" placeholder="Nomor Surat Terbuat Ketika sudah disetujui" readonly>
+                            </div>
+                            <div class="col-md-6">
                             </div>
                         </div>
 
@@ -47,7 +41,7 @@
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK (Nomor Induk Kependudukan) <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik') ?>" required>
+                                    <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik') ?>" required>
                                     <button type="button" class="btn btn-primary" id="checkNik">
                                         <i class="fas fa-search"></i> Cek
                                     </button>

@@ -8,6 +8,8 @@ use App\Models\LetterTypeModel;
 use App\Models\ResidentModel;
 use App\Models\NotificationModel;
 use App\Models\SettingModel;
+use App\Models\UserModel;
+
 use App\Models\DocumentAttachmentModel;
 
 class DeathCertificateRequestController extends BaseController
@@ -18,6 +20,7 @@ class DeathCertificateRequestController extends BaseController
     protected $notificationModel;
     protected $settingModel;
     protected $attachmentModel;
+    protected $userModel;
     
     public function __construct()
     {
@@ -27,6 +30,7 @@ class DeathCertificateRequestController extends BaseController
         $this->notificationModel = new NotificationModel();
         $this->settingModel = new SettingModel();
         $this->attachmentModel = new DocumentAttachmentModel();
+        $this->userModel = new UserModel();
     }
     
     public function index()
@@ -36,13 +40,20 @@ class DeathCertificateRequestController extends BaseController
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
         
-        $status = $this->request->getGet('status') ?? 'pending';
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderDeathRequest = $this->DeathCertificateModel->builder();
         
         $data = [
             'title' => 'Pengajuan Surat Keterangan Kematian',
             'status' => $status,
             'requests' => $this->DeathCertificateModel->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_kematian')->getActive()
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_kematian')->getActive(),
+            'pendingCount' => $builderDeathRequest->where(['status' => 'pending'])->countAllResults(),
+            'processingCount' => $builderDeathRequest->where(['status' => 'processing'])->countAllResults(),
+            'approvedCount' => $builderDeathRequest->where(['status' => 'approved'])->countAllResults(),
+            'completedCount' => $builderDeathRequest->where(['status' => 'completed'])->countAllResults(),
+            'rejectedCount' => $builderDeathRequest->where(['status' => 'rejected'])->countAllResults()
+        
         ];
         
         return view('letter_requests/death/index', $data);
@@ -59,13 +70,20 @@ class DeathCertificateRequestController extends BaseController
         if (!$resident) {
             return redirect()->to(base_url('dashboard'))->with('error', 'Data penduduk tidak ditemukan. Silakan hubungi administrator.');
         }
-        $status = $this->request->getGet('status') ?? 'pending';
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderDeathRequest = $this->DeathCertificateModel->builder();
         
         $data = [
             'title' => 'Pengajuan Surat Keterangan Kematian',
             'status' => $status,
             'requests' => $this->DeathCertificateModel->where('resident_id', $resident['id'])->orderBy('created_at', 'desc')->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_kematian')->getActive()
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_kematian')->getActive(),
+            'pendingCount' => $builderDeathRequest->where(['status' => 'pending', 'resident_id' => $resident['id']])->countAllResults(),
+            'processingCount' => $builderDeathRequest->where(['status' => 'processing', 'resident_id' => $resident['id']])->countAllResults(),
+            'approvedCount' => $builderDeathRequest->where(['status' => 'approved', 'resident_id' => $resident['id']])->countAllResults(),
+            'completedCount' => $builderDeathRequest->where(['status' => 'completed', 'resident_id' => $resident['id']])->countAllResults(),
+            'rejectedCount' => $builderDeathRequest->where(['status' => 'rejected', 'resident_id' => $resident['id']])->countAllResults()
+        
         ];
         
         return view('letter_requests/death/my_request', $data);
@@ -91,7 +109,9 @@ class DeathCertificateRequestController extends BaseController
         $builder->select('death_certificates.*, letter_types.name as letter_type_name, letter_types.code as letter_type_code');
         $builder->join('letter_types', 'letter_types.id = death_certificates.letter_type_id');
         $builder->join('residents', 'residents.id = death_certificates.resident_id', 'left');
-        $builder->where('death_certificates.status', $status);
+        if ($status != 'all') {
+            $builder->where('death_certificates.status', $status);
+        }
         $builder->where('death_certificates.deleted_at', null);
         $url = 'death-cetificate-request';
         if (session()->get('role') === 'resident') {
@@ -162,17 +182,17 @@ class DeathCertificateRequestController extends BaseController
             $actions = '<div class="btn-group">';
             $actions .= '<a href="' . base_url($url.'/view/' . $row['id']) . '" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>';
 
-            if ($status === 'pending' && (session()->get('role') !== 'resident' || $row['created_by'] === session()->get('user_id'))) {
+            if ($row['status'] === 'pending' && (session()->get('role') !== 'resident' || $row['created_by'] === session()->get('user_id'))) {
                 $actions .= '<a href="' . base_url($url.'/edit/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
                 $actions .= '<a href="' . base_url($url.'/delete/' . $row['id']) . '" class="btn btn-sm btn-danger"
                                 onclick="return confirm(\'Are you sure you want to delete this request? This action cannot be undone.\')"><i class="fas fa-trash"></i></a>';
             }
             
-            if (($status === 'pending' || $status === 'processing') && session()->get('role') !== 'resident') {
+            if (($row['status'] === 'pending' || $row['status'] === 'processing') && session()->get('role') !== 'resident') {
                 $actions .= '<a href="' . base_url($url.'/process/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-cog"></i></a>';
             }
             
-            if ($status === 'approved' || $status === 'completed') {
+            if ($row['status'] === 'approved' || $row['status'] === 'completed') {
                 $actions .= '<a href="' . base_url($url.'/download/' . $row['id']) . '" class="btn btn-sm btn-success" target="_blank"><i class="fas fa-download"></i></a>';
             }
             
@@ -399,7 +419,7 @@ class DeathCertificateRequestController extends BaseController
         }else{
         
         // Stream the file
-            return $dompdf->stream($filename, ['Attachment' => true]);
+            return $dompdf->stream($filename, ['Attachment' => false]);
         }
     }
     public function create()
@@ -568,6 +588,22 @@ class DeathCertificateRequestController extends BaseController
                             <p>Terima kasih atas kesabaran Anda.</p>
                         ";
                     send_email($resident['email'], $letterType['name'], $msg, $this->download($letterRequestId,true));
+                }
+
+                if (session()->get('role') == 'resident') {
+                    $users = $this->userModel->whereIn('role', ['staff', 'admin'])->findAll();
+                    // dd($users);
+
+                    foreach ($users as $user) {
+                        $this->notificationModel->insert([
+                            'user_id' => $user['id'],
+                            'title' => 'Pengajuan Surat Baru',
+                            'message' => 'Pengajuan surat baru telah dibuat oleh ' . session()->get('name'),
+                            'type' => 'info',
+                            'is_read' => 0,
+                            'link' => 'death-cetificate-request/view/'.$letterRequestId
+                        ]);
+                    }
                 }
 
                 

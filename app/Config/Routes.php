@@ -300,3 +300,9 @@ $routes->group('news', function($routes) {
     $routes->get('getDataTable', 'NewsController::getDataTable');
 });
 
+// Contact Management
+$routes->group('admin/contact', function($routes) {
+    $routes->get('/', 'Admin\Contact::index');
+    $routes->get('view/(:num)', 'Admin\Contact::view/$1');
+});
+

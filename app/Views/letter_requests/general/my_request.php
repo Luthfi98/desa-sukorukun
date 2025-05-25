@@ -9,32 +9,41 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs">
                         <li class="nav-item">
+                            <a class="nav-link <?= $status === 'all' ? 'active' : '' ?>" href="<?= base_url('general-request/my-request?status=all') ?>">
+                                <i class="fas fa-list me-1"></i> Semua
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link <?= $status === 'pending' ? 'active' : '' ?>" href="<?= base_url('general-request/my-request?status=pending') ?>">
                                 <i class="fas fa-clock me-1"></i> Menunggu
-                                <?php $pendingCount = count(array_filter($requests, function($r) { return $r['status'] === 'pending'; })); ?>
-                                <?php if ($pendingCount > 0): ?>
-                                <span class="badge bg-danger"><?= $pendingCount ?></span>
-                                <?php endif; ?>
+                                <span class="badge bg-warning text-dark"><?= $pendingCount ?></span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?= $status === 'processing' ? 'active' : '' ?>" href="<?= base_url('general-request/my-request?status=processing') ?>">
                                 <i class="fas fa-spinner me-1"></i> Diproses
+                                <span class="badge bg-info text-dark"><?= $processingCount ?></span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?= $status === 'approved' ? 'active' : '' ?>" href="<?= base_url('general-request/my-request?status=approved') ?>">
                                 <i class="fas fa-check me-1"></i> Disetujui
+                                <span class="badge bg-primary text-dark"><?= $approvedCount ?></span>
+
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?= $status === 'completed' ? 'active' : '' ?>" href="<?= base_url('general-request/my-request?status=completed') ?>">
                                 <i class="fas fa-check-circle me-1"></i> Selesai
+                                <span class="badge bg-success text-dark"><?= $completedCount ?></span>
+
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?= $status === 'rejected' ? 'active' : '' ?>" href="<?= base_url('general-request/my-request?status=rejected') ?>">
                                 <i class="fas fa-times-circle me-1"></i> Ditolak
+                                <span class="badge bg-danger text-dark"><?= $rejectedCount ?></span>
+
                             </a>
                         </li>
                     </ul>
@@ -53,7 +62,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     <?php endif; ?>
-
+                            <a href="<?= base_url('general-request/my-request/create') ?>" class="btn btn-primary mb-3">
+                                <i class="fas fa-plus me-1"></i> Buat <?= $title ?>
+                            </a>
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -83,9 +94,7 @@
                             <button class="btn btn-primary" id="filter_button">
                                 <i class="fas fa-filter me-1"></i> Filter
                             </button>
-                            <a href="<?= base_url('general-request/my-request/create') ?>" class="btn btn-primary">
-                                <i class="fas fa-plus me-1"></i> Buat SK
-                            </a>
+
                         </div>
                         
                     </div>

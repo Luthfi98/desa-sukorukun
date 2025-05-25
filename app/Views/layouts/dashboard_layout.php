@@ -260,6 +260,10 @@
                 <a href="<?= base_url('news') ?>" class="<?= strpos(uri_string(), 'news') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-newspaper"></i> <span>Berita & Informasi Desa</span>
                 </a>
+
+                <a href="<?= base_url('admin/contact') ?>" class="<?= strpos(uri_string(), 'admin/contact') === 0 ? 'active' : '' ?>">
+                    <i class="fas fa-envelope"></i> <span>Pesan Masuk</span>
+                </a>
                 <?php endif;?>
                 <a href="<?= base_url('letter-types') ?>" class="<?= strpos(uri_string(), 'letter-types') === 0 ? 'active' : '' ?>">
                     <i class="fas fa-file-alt"></i> <span>Jenis Surat</span>

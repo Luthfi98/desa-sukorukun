@@ -31,7 +31,7 @@
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK (Nomor Induk Kependudukan) <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="nik" name="nik" value="<?= $request['nik'] ?>" readonly>
+                                    <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= $request['nik'] ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">

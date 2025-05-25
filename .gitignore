@@ -71,6 +71,8 @@ public/uploads/complaints/*
 public/pdf/*
 !public/pdf/index.html
 
+*.rar
+*.zip
 
 php_errors.log
 

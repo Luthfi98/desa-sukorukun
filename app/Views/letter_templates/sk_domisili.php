@@ -45,11 +45,9 @@
       vertical-align: top;
     }
     .logo {
-        max-width: 70px;
-        height: auto;
-        display: block;
-        margin: auto;
-        }
+      width: 70px;
+      height: auto;
+    }
 
   </style>
 </head>
@@ -171,12 +169,12 @@
             <td width="50%"><b><?= $request['village_head_position'] ?> Sukorukun</b></td>
         </tr>
         <tr>
-        <td width="50%" style="position: relative; height: 75px;">
+        <td width="50%" style="position: relative; height: 60px;">
           
             </td>
-            <td width="50%" style="position: relative; height: 75px;">
+            <td width="50%" style="position: relative; height: 60px;">
             <?php if ($sigKades): ?>
-                <img src="<?= $sigKades ?>" alt="TTD Kades" class="logo" style="position: absolute; top: -50px; left: 50px; width: 200px; height: 200px; object-fit: cover;">
+                <img src="<?= $sigKades ?>" alt="TTD Kades" class="logo" style="position: absolute; top: -60px; left: 40px; width: 250px; height: 250px; object-fit: cover;">
             <?php endif; ?>
             </td>
         </tr>

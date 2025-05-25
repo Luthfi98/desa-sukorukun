@@ -9,6 +9,7 @@ use App\Models\ResidentModel;
 use App\Models\NotificationModel;
 use App\Models\SettingModel;
 use App\Models\DocumentAttachmentModel;
+use App\Models\UserModel;
 
 class HeirRequestController extends BaseController
 {
@@ -18,6 +19,7 @@ class HeirRequestController extends BaseController
     protected $notificationModel;
     protected $settingModel;
     protected $attachmentModel;
+    protected $userModel;
     
     public function __construct()
     {
@@ -27,6 +29,7 @@ class HeirRequestController extends BaseController
         $this->notificationModel = new NotificationModel();
         $this->settingModel = new SettingModel();
         $this->attachmentModel = new DocumentAttachmentModel();
+        $this->userModel = new UserModel();
     }
     
     public function index()
@@ -36,13 +39,19 @@ class HeirRequestController extends BaseController
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
         
-        $status = $this->request->getGet('status') ?? 'pending';
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderHeirRequest = $this->HeirRequestModel->builder();
         
         $data = [
             'title' => 'Pengajuan SK Ahli Waris',
             'status' => $status,
             'requests' => $this->HeirRequestModel->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_ahli_waris')->getActive()
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_ahli_waris')->getActive(),
+            'pendingCount' => $builderHeirRequest->where('status', 'pending')->countAllResults(),
+            'processingCount' => $builderHeirRequest->where('status', 'processing')->countAllResults(),
+            'approvedCount' => $builderHeirRequest->where('status', 'approved')->countAllResults(),
+            'completedCount' => $builderHeirRequest->where('status', 'completed')->countAllResults(),
+            'rejectedCount' => $builderHeirRequest->where('status', 'rejected')->countAllResults()
         ];
         
         return view('letter_requests/heir/index', $data);
@@ -59,13 +68,19 @@ class HeirRequestController extends BaseController
         if (!$resident) {
             return redirect()->to(base_url('dashboard'))->with('error', 'Data penduduk tidak ditemukan. Silakan hubungi administrator.');
         }
-        $status = $this->request->getGet('status') ?? 'pending';
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderHeirRequest = $this->HeirRequestModel->builder();
         
         $data = [
             'title' => 'Pengajuan SK Ahli Waris',
             'status' => $status,
             'requests' => $this->HeirRequestModel->where('resident_id', $resident['id'])->orderBy('created_at', 'desc')->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_ahli_waris')->getActive()
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_ahli_waris')->getActive(),
+            'pendingCount' => $builderHeirRequest->where(['status' => 'pending', 'resident_id' => $resident['id']])->countAllResults(),
+            'processingCount' => $builderHeirRequest->where(['status' => 'processing', 'resident_id' => $resident['id']])->countAllResults(),
+            'approvedCount' => $builderHeirRequest->where(['status' => 'approved', 'resident_id' => $resident['id']])->countAllResults(),
+            'completedCount' => $builderHeirRequest->where(['status' => 'completed', 'resident_id' => $resident['id']])->countAllResults(),
+            'rejectedCount' => $builderHeirRequest->where(['status' => 'rejected', 'resident_id' => $resident['id']])->countAllResults()
         ];
         
         return view('letter_requests/heir/my_request', $data);
@@ -91,7 +106,9 @@ class HeirRequestController extends BaseController
         $builder->select('heir_certificates.*, letter_types.name as letter_type_name, letter_types.code as letter_type_code, residents.name as resident_name, residents.nik as resident_nik, residents.user_id');
         $builder->join('letter_types', 'letter_types.id = heir_certificates.letter_type_id');
         $builder->join('residents', 'residents.id = heir_certificates.resident_id');
-        $builder->where('heir_certificates.status', $status);
+        if ($status != 'all') {
+            $builder->where('heir_certificates.status', $status);
+        }
         $builder->where('heir_certificates.deleted_at', null);
         $url = 'heir-request';
         if (session()->get('role') === 'resident') {
@@ -160,17 +177,17 @@ class HeirRequestController extends BaseController
             $actions = '<div class="btn-group">';
             $actions .= '<a href="' . base_url($url.'/view/' . $row['id']) . '" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>';
 
-            if ($status === 'pending' && (session()->get('role') !== 'resident' || $row['user_id'] === session()->get('user_id'))) {
+            if ($row['status'] === 'pending' && (session()->get('role') !== 'resident' || $row['user_id'] === session()->get('user_id'))) {
                 $actions .= '<a href="' . base_url($url.'/edit/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
                 $actions .= '<a href="' . base_url($url.'/delete/' . $row['id']) . '" class="btn btn-sm btn-danger"
                                 onclick="return confirm(\'Are you sure you want to delete this request? This action cannot be undone.\')"><i class="fas fa-trash"></i></a>';
             }
             
-            if (($status === 'pending' || $status === 'processing') && session()->get('role') !== 'resident') {
+            if (($row['status'] === 'pending' || $row['status'] === 'processing') && session()->get('role') !== 'resident') {
                 $actions .= '<a href="' . base_url($url.'/process/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-cog"></i></a>';
             }
             
-            if ($status === 'approved' || $status === 'completed') {
+            if ($row['status'] === 'approved' || $row['status'] === 'completed') {
                 $actions .= '<a href="' . base_url($url.'/download/' . $row['id']) . '" class="btn btn-sm btn-success" target="_blank"><i class="fas fa-download"></i></a>';
             }
             
@@ -386,7 +403,7 @@ class HeirRequestController extends BaseController
         }else{
         
         // Stream the file
-            return $dompdf->stream($filename, ['Attachment' => true]);
+            return $dompdf->stream($filename, ['Attachment' => false]);
         }
     }
     public function create()
@@ -720,6 +737,20 @@ class HeirRequestController extends BaseController
                     'message' => 'Pengajuan surat baru telah dibuat',
                     'type' => 'info',
                     'is_read' => 0
+                ]);
+            }
+
+            $users = $this->userModel->whereIn('role', ['staff', 'admin'])->findAll();
+            // dd($users);
+
+            foreach ($users as $user) {
+                $this->notificationModel->insert([
+                    'user_id' => $user['id'],
+                    'title' => 'Pengajuan Surat Baru',
+                    'message' => 'Pengajuan surat baru telah dibuat oleh ' . session()->get('name'),
+                    'type' => 'info',
+                    'is_read' => 0,
+                    'link' => 'heir-request/view/'.$letterRequestId
                 ]);
             }
 

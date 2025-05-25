@@ -29,21 +29,19 @@
                         
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                <select name="letter_type_id" id="letter_type_id" class="form-control" required>
-                                    <option value="<?= $request['letter_type_id'] ?>"><?= $request['letter_type_name'] ?></option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
+                                <input type="hidden" name="letter_type_id" id="letter_type_id" value="<?= $request['letter_type_id'] ?>">
+                                <!-- <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label> -->
                                 <label for="number" class="form-label">Nomor Surat</label>
                                 <input type="text" class="form-control" id="number" name="number" value="<?= old('number', $request['number']) ?>" placeholder="Nomor Surat Terbuat Ketika sudah disetujui" readonly>
+                            </div>
+                            <div class="col-md-6">
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK (Nomor Induk Kependudukan) <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik', $request['nik']) ?>" readonly required>
+                                <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik', $request['nik']) ?>" readonly required>
                             </div>
                             <div class="col-md-6">
                                 <label for="name" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
@@ -125,20 +123,9 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="village_head_name" class="form-label">Nama Kepala Desa <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="village_head_name" name="village_head_name" value="<?= old('village_head_name', $kades['value']) ?>" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="village_head_nip" class="form-label">NIP Kepala Desa</label>
-                                <input type="text" class="form-control" id="village_head_nip" name="village_head_nip" value="<?= old('village_head_nip', $kades['description']) ?>" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="village_head_position" class="form-label">Jabatan Kepala Desa <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="village_head_position" name="village_head_position" value="<?= old('village_head_position', $kades['label']) ?>" readonly>
-                            </div>
-                        </div>
+                        <input type="hidden" class="form-control" id="village_head_name" name="village_head_name" value="<?= old('village_head_name', $kades['value']) ?>" readonly>
+                        <input type="hidden" class="form-control" id="village_head_nip" name="village_head_nip" value="<?= old('village_head_nip', $kades['description']) ?>" readonly>
+                        <input type="hidden" class="form-control" id="village_head_position" name="village_head_position" value="<?= old('village_head_position', $kades['label']) ?>" readonly>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="reset" class="btn btn-light">

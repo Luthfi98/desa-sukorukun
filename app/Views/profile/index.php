@@ -71,7 +71,7 @@
                         <div class="row">
                         <div class="col-md-6 mb-3">
                                 <label for="kk" class="form-label">KK</label>
-                                <input type="text" class="form-control <?= (session('errors.kk')) ? 'is-invalid' : '' ?>" id="kk" name="kk" value="<?= old('kk', $resident['kk'] ?? '') ?>">
+                                <input type="text" class="form-control <?= (session('errors.kk')) ? 'is-invalid' : '' ?>" id="kk" name="kk" value="<?= old('kk', $resident['kk'] ?? '') ?>" maxlength="16">
                                 <?php if (session('errors.kk')): ?>
                                     <div class="invalid-feedback">
                                         <?= session('errors.kk') ?>
@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="nik" class="form-label">NIK</label>
-                                <input type="text" class="form-control <?= (session('errors.nik')) ? 'is-invalid' : '' ?>" id="nik" name="nik" value="<?= old('nik', $resident['nik'] ?? '') ?>">
+                                <input type="text" class="form-control <?= (session('errors.nik')) ? 'is-invalid' : '' ?>" id="nik" name="nik" maxlength="16" value="<?= old('nik', $resident['nik'] ?? '') ?>" maxlength="16">
                                 <?php if (session('errors.nik')): ?>
                                     <div class="invalid-feedback">
                                         <?= session('errors.nik') ?>

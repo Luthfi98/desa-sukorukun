@@ -36,7 +36,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="nik" class="form-label">NIK <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik') ?>" required maxlength="16">
+                            <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik') ?>" required maxlength="16">
                             <div class="form-text">NIK harus 16 digit angka</div>
                         </div>
                     </div>

@@ -124,13 +124,13 @@
                             </div>
                         </div>
                         
-                        <h5 class="section-title">Data Pribadi</h5>
+                        <!-- <h5 class="section-title">Data Pribadi</h5>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                                    <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik') ?>" required>
+                                    <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik') ?>" required>
                                 </div>
                                 <small class="text-muted">16 digit</small>
                             </div>
@@ -216,7 +216,7 @@
                                 <input type="text" class="form-control" id="occupation" name="occupation" value="<?= old('occupation') ?>">
                             </div>
                         </div>
-                        
+                         -->
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="termsCheck" required>
                             <label class="form-check-label" for="termsCheck">Saya menyetujui syarat dan ketentuan yang berlaku</label>

@@ -9,6 +9,7 @@ use App\Models\LetterTypeModel;
 use App\Models\NotificationModel;
 use App\Controllers\BaseController;
 use App\Models\GeneralRequestModel;
+use App\Models\UserModel;
 use App\Models\DocumentAttachmentModel;
 
 class GeneralRequestController extends BaseController
@@ -19,6 +20,7 @@ class GeneralRequestController extends BaseController
     protected $notificationModel;
     protected $settingModel;
     protected $attachmentModel;
+    protected $userModel;
     
     public function __construct()
     {
@@ -28,22 +30,28 @@ class GeneralRequestController extends BaseController
         $this->notificationModel = new NotificationModel();
         $this->settingModel = new SettingModel();
         $this->attachmentModel = new DocumentAttachmentModel();
+        $this->userModel = new UserModel();
     }
     
     public function index()
     {
         // Check if user is admin or staff
-        if (session()->get('role') !== 'admin' && session()->get('role') !== 'staff') {
+        if (session()->get('role') !==   'admin' && session()->get('role') !== 'staff') {
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
         
-        $status = $this->request->getGet('status') ?? 'pending';
-        
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderGeneralRequest = $this->GeneralRequestModel->builder();
         $data = [
             'title' => 'Pengajuan Surat Keterangan',
             'status' => $status,
             'requests' => $this->GeneralRequestModel->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_general')->getActive()
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_general')->getActive(),
+            'pendingCount' => $builderGeneralRequest->where('status', 'pending')->countAllResults(),
+            'processingCount' => $builderGeneralRequest->where('status', 'processing')->countAllResults(),
+            'approvedCount' => $builderGeneralRequest->where('status', 'approved')->countAllResults(),
+            'completedCount' => $builderGeneralRequest->where('status', 'completed')->countAllResults(),
+            'rejectedCount' => $builderGeneralRequest->where('status', 'rejected')->countAllResults()
         ];
         
         return view('letter_requests/general/index', $data);
@@ -58,15 +66,21 @@ class GeneralRequestController extends BaseController
         $resident = $this->residentModel->where('user_id', session()->get('user_id'))->first();
         
         if (!$resident) {
-            return redirect()->to(base_url('dashboard'))->with('error', 'Data penduduk tidak ditemukan. Silakan hubungi administrator.');
+            $button = '<a href="' . base_url('profile') . '" class="btn btn-primary btn-sm mt-2">Lengkapi Data Profile</a>';
+            return redirect()->to(base_url('dashboard'))->with('error', 'Untuk melakukan Pengajuan Surat Keterangan,  Silahkan lengkapi profile terlebih dahulu dengan klik tombol <br>' . $button);
         }
-        $status = $this->request->getGet('status') ?? 'pending';
-        
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderGeneralRequest = $this->GeneralRequestModel->builder();
         $data = [
             'title' => 'Pengajuan Surat Keterangan',
             'status' => $status,
             'requests' => $this->GeneralRequestModel->where('resident_id', $resident['id'])->orderBy('created_at', 'desc')->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_general')->getActive()
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_general')->getActive(),
+            'pendingCount' => $builderGeneralRequest->where(['status' => 'pending', 'resident_id' => $resident['id']])->countAllResults(),
+            'processingCount' => $builderGeneralRequest->where(['status' => 'processing', 'resident_id' => $resident['id']])->countAllResults(),
+            'approvedCount' => $builderGeneralRequest->where(['status' => 'approved', 'resident_id' => $resident['id']])->countAllResults(),
+            'completedCount' => $builderGeneralRequest->where(['status' => 'completed', 'resident_id' => $resident['id']])->countAllResults(),
+            'rejectedCount' => $builderGeneralRequest->where(['status' => 'rejected', 'resident_id' => $resident['id']])->countAllResults()
         ];
         
         return view('letter_requests/general/my_request', $data);
@@ -92,7 +106,10 @@ class GeneralRequestController extends BaseController
         $builder->select('certificate_letters.*, letter_types.name as letter_type_name, letter_types.code as letter_type_code, residents.name as resident_name, residents.nik as resident_nik, residents.user_id');
         $builder->join('letter_types', 'letter_types.id = certificate_letters.letter_type_id');
         $builder->join('residents', 'residents.id = certificate_letters.resident_id');
-        $builder->where('certificate_letters.status', $status);
+        if ($status !== 'all') {
+            $builder->where('certificate_letters.status', $status);
+        }
+        
         $builder->where('certificate_letters.deleted_at', null);
         $url = 'general-request';
         if (session()->get('role') === 'resident') {
@@ -163,17 +180,17 @@ class GeneralRequestController extends BaseController
             $actions = '<div class="btn-group">';
             $actions .= '<a href="' . base_url($url.'/view/' . $row['id']) . '" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>';
 
-            if ($status === 'pending' && (session()->get('role') !== 'resident' || $row['user_id'] === session()->get('user_id'))) {
+            if ($row['status'] === 'pending' && (session()->get('role') !== 'resident' || $row['user_id'] === session()->get('user_id'))) {
                 $actions .= '<a href="' . base_url($url.'/edit/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
                 $actions .= '<a href="' . base_url($url.'/delete/' . $row['id']) . '" class="btn btn-sm btn-danger"
                                 onclick="return confirm(\'Are you sure you want to delete this request? This action cannot be undone.\')"><i class="fas fa-trash"></i></a>';
             }
             
-            if (($status === 'pending' || $status === 'processing') && session()->get('role') !== 'resident') {
+            if (($row['status'] === 'pending' || $row['status'] === 'processing') && session()->get('role') !== 'resident') {
                 $actions .= '<a href="' . base_url($url.'/process/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-cog"></i></a>';
             }
             
-            if ($status === 'approved' || $status === 'completed') {
+            if ($row['status'] === 'approved' || $row['status'] === 'completed') {
                 $actions .= '<a href="' . base_url($url.'/download/' . $row['id']) . '" class="btn btn-sm btn-success" target="_blank"><i class="fas fa-download"></i></a>';
             }
             
@@ -320,7 +337,7 @@ class GeneralRequestController extends BaseController
                     <p>".$notifMessage."</p>
                     <p>Terima kasih atas kesabaran Anda.</p>
                 ";
-            send_email($resident['email'], $letterType['name'], $msg, $fileDocument);
+            $send = send_email($resident['email'], $letterType['name'], $msg, $fileDocument);
             
             $this->notificationModel->insert([
                 'user_id' => $resident['user_id'],
@@ -396,7 +413,7 @@ class GeneralRequestController extends BaseController
         }else{
         
         // Stream the file
-            return $dompdf->stream($filename, ['Attachment' => true]);
+            return $dompdf->stream($filename, ['Attachment' => false]);
         }
     }
     public function create()
@@ -521,7 +538,7 @@ class GeneralRequestController extends BaseController
 
             // Create notification
             // $resident = $this->residentModel->where('nik', $this->request->getPost('nik'))->first();
-            
+            $msg = '';
             if ($resident['user_id']) {
                 $this->notificationModel->insert([
                     'user_id' => $resident['user_id'],
@@ -537,8 +554,8 @@ class GeneralRequestController extends BaseController
                     <p>Terima kasih atas kesabaran Anda.</p>
                 ";
                 
-                send_email($resident['email'], $letterType['name'], $msg, $this->download($letterRequestId, true));
-
+                $send = send_email($resident['email'], $letterType['name'], $msg, $this->download($letterRequestId, true));
+                
             }
 
             // Commit transaction
@@ -559,6 +576,11 @@ class GeneralRequestController extends BaseController
         // Check if user is resident
         if (session()->get('role') !== 'resident') {
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
+        }
+
+        if (!session()->get('resident_id')) {
+            $button = '<a href="' . base_url('profile') . '" class="btn btn-primary btn-sm mt-2">Lengkapi Data Profile</a>';
+            return redirect()->to(base_url('dashboard'))->with('error', 'Untuk melakukan Pengajuan Surat Keterangan,  Silahkan lengkapi profile terlebih dahulu dengan klik tombol <br>' . $button);    
         }
         
         // Get active letter types
@@ -582,6 +604,12 @@ class GeneralRequestController extends BaseController
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
 
+        if (!session()->get('resident_id')) {
+            $button = '<a href="' . base_url('profile') . '" class="btn btn-primary btn-sm mt-2">Lengkapi Data Profile</a>';
+            return redirect()->to(base_url('dashboard'))->with('error', 'Untuk melakukan Pengajuan Surat Keterangan,  Silahkan lengkapi profile terlebih dahulu dengan klik tombol <br>' . $button);    
+        }
+        
+
         // Validate input
         $rules = [
             'nik' => 'required|exact_length[16]',
@@ -591,6 +619,7 @@ class GeneralRequestController extends BaseController
             // 'village_head_position' => 'required',
         ];
 
+        
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -661,7 +690,7 @@ class GeneralRequestController extends BaseController
                             'file_size' => $file->getSize(),
                             'description' => 'Dokumen ' . $documentName . ' untuk pengajuan surat'
                         ]);   
-                        echo $this->attachmentModel->getLastQuery()->getQuery();
+                        // echo $this->attachmentModel->getLastQuery()->getQuery();
                     }
                 }
             }
@@ -678,6 +707,19 @@ class GeneralRequestController extends BaseController
                 ]);
             }
 
+            $users = $this->userModel->whereIn('role', ['staff', 'admin'])->findAll();
+            // dd($users);
+
+            foreach ($users as $user) {
+                $this->notificationModel->insert([
+                    'user_id' => $user['id'],
+                    'title' => 'Pengajuan Surat Baru',
+                    'message' => 'Pengajuan surat baru telah dibuat oleh ' . session()->get('name'),
+                    'type' => 'info',
+                    'is_read' => 0,
+                    'link' => 'general-request/view/'.$letterRequestId
+                ]);
+            }
             // Commit transaction
             // var_dump($this->GeneralRequestModel->find($letterRequestId));
             $db->transComplete();
@@ -696,6 +738,12 @@ class GeneralRequestController extends BaseController
         if (session()->get('role') !== 'admin' && session()->get('role') !== 'staff') {
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
+
+        if (!session()->get('resident_id')) {
+            $button = '<a href="' . base_url('profile') . '" class="btn btn-primary btn-sm mt-2">Lengkapi Data Profile</a>';
+            return redirect()->to(base_url('dashboard'))->with('error', 'Untuk melakukan Pengajuan Surat Keterangan,  Silahkan lengkapi profile terlebih dahulu dengan klik tombol <br>' . $button);    
+        }
+        
 
         // Get the request data
         $request = $this->GeneralRequestModel->select('certificate_letters.*, residents.nik, letter_types.name as letter_type_name, letter_types.code as letter_type_code, letter_types.id as letter_type_id, letter_types.required_documents')
@@ -730,6 +778,12 @@ class GeneralRequestController extends BaseController
         if (session()->get('role') !== 'admin' && session()->get('role') !== 'staff') {
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
+
+        if (!session()->get('resident_id')) {
+            $button = '<a href="' . base_url('profile') . '" class="btn btn-primary btn-sm mt-2">Lengkapi Data Profile</a>';
+            return redirect()->to(base_url('dashboard'))->with('error', 'Untuk melakukan Pengajuan Surat Keterangan,  Silahkan lengkapi profile terlebih dahulu dengan klik tombol <br>' . $button);    
+        }
+        
 
         // Validate input
         $rules = [

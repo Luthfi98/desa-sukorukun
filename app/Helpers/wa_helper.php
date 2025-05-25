@@ -138,17 +138,18 @@ if (!function_exists('send_email')) {
         // Add attachments if provided
         if ($attachments && is_file($attachments)) {
             $file = new \CodeIgniter\Files\File($attachments);
-            $email->attach($file->getPathname(), $file->getFilename());
+            $email->attach($attachments);
         }
         
         // Send email
         
         
         if ($email->send()) {
+            // var_dump($email->printDebugger());die;
             return true;
         } else {
             // var_dump($email->printDebugger());die;
-            log_message('error', 'Email sending failed: ' . $email->printDebugger());
+            // log_message('error', 'Email sending failed: ' . $email->printDebugger());
             return false;
         }
     }

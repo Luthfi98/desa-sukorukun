@@ -3,6 +3,22 @@
 <?= $this->section('content') ?>
 <div class="container-fluid">
     <!-- Resident Dashboard Overview -->
+     <?php if(session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger">
+            <?= session()->getFlashdata('error') ?>
+        </div>
+        <script>
+            alert('<?= explode('<br>', session()->getFlashdata('error'))[0] ?>');
+            window.location.href = '<?= base_url('profile') ?>';
+        </script>
+    
+    <?php elseif(!session()->get('resident_id')): 
+         $button = '<a href="' . base_url('profile') . '" class="btn btn-primary btn-sm mt-2">Lengkapi Data Profile</a>';
+        ?>
+        <div class="alert alert-danger">
+            Untuk melakukan Pengajuan Surat Keterangan,  Silahkan lengkapi profile terlebih dahulu dengan klik tombol <br> <?= $button ?>
+        </div>
+    <?php endif; ?>
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="dashboard-card">
@@ -10,7 +26,7 @@
                     <div class="icon-container me-3">
                         <i class="fas fa-user text-primary"></i>
                     </div>
-                    <div>
+                    <div class="ml-3">
                         <h5 class="card-title mb-0">Selamat Datang, <?= session()->get('name') ?>!</h5>
                         <p class="text-muted mb-0">Dashboard Masyarakat Sistem Layanan Surat Menyurat Desa</p>
                     </div>
@@ -22,7 +38,7 @@
                             <div class="me-3 text-success">
                                 <i class="fas fa-file-alt fa-2x"></i>
                             </div>
-                            <div>
+                            <div class="ml-3">
                                 <h6 class="mb-0">Surat Pengajuan</h6>
                                 <h4 class="mb-0"><?= $mySuratCount ?? 0 ?></h4>
                                 <small class="text-muted">Total pengajuan surat Anda</small>
@@ -34,7 +50,7 @@
                             <div class="me-3 text-warning">
                                 <i class="fas fa-exclamation-circle fa-2x"></i>
                             </div>
-                            <div>
+                            <div class="ml-3">
                                 <h6 class="mb-0">Pengaduan</h6>
                                 <h4 class="mb-0"><?= $myComplaintCount ?? 0 ?></h4>
                                 <small class="text-muted">Total pengaduan Anda</small>
@@ -46,7 +62,7 @@
                             <div class="me-3 text-danger">
                                 <i class="fas fa-bell fa-2x"></i>
                             </div>
-                            <div>
+                            <div class="ml-3">
                                 <h6 class="mb-0">Notifikasi</h6>
                                 <h4 class="mb-0"><?= $unreadCount ?? 0 ?></h4>
                                 <small class="text-muted">Notifikasi belum dibaca</small>
@@ -58,7 +74,7 @@
                             <div class="me-3 text-info">
                                 <i class="fas fa-file-medical fa-2x"></i>
                             </div>
-                            <div>
+                            <div class="ml-3">
                                 <h6 class="mb-0">Surat Kematian</h6>
                                 <h4 class="mb-0"><?= $myDeathCertificateCount ?? 0 ?></h4>
                                 <small class="text-muted">Total pengajuan Anda</small>
@@ -72,7 +88,7 @@
                             <div class="me-3 text-primary">
                                 <i class="fas fa-home fa-2x"></i>
                             </div>
-                            <div>
+                            <div class="ml-3">
                                 <h6 class="mb-0">Surat Domisili</h6>
                                 <h4 class="mb-0"><?= $myDomicileRequestCount ?? 0 ?></h4>
                                 <small class="text-muted">Total pengajuan Anda</small>
@@ -84,7 +100,7 @@
                             <div class="me-3 text-success">
                                 <i class="fas fa-file-alt fa-2x"></i>
                             </div>
-                            <div>
+                            <div class="ml-3">
                                 <h6 class="mb-0">Surat Umum</h6>
                                 <h4 class="mb-0"><?= $myGeneralRequestCount ?? 0 ?></h4>
                                 <small class="text-muted">Total pengajuan Anda</small>
@@ -96,7 +112,7 @@
                             <div class="me-3 text-warning">
                                 <i class="fas fa-user-friends fa-2x"></i>
                             </div>
-                            <div>
+                            <div class="ml-3">
                                 <h6 class="mb-0">Surat Ahli Waris</h6>
                                 <h4 class="mb-0"><?= $myHeirRequestCount ?? 0 ?></h4>
                                 <small class="text-muted">Total pengajuan Anda</small>
@@ -108,7 +124,7 @@
                             <div class="me-3 text-danger">
                                 <i class="fas fa-truck-moving fa-2x"></i>
                             </div>
-                            <div>
+                            <div class="ml-3">
                                 <h6 class="mb-0">Pindah Alamat</h6>
                                 <h4 class="mb-0"><?= $myRelocationCount ?? 0 ?></h4>
                                 <small class="text-muted">Total pengajuan Anda</small>

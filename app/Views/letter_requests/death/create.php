@@ -75,7 +75,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik') ?>" required>
+                                <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik') ?>" required>
                             </div>
                         </div>
 
@@ -139,43 +139,20 @@
                                     <input type="date" class="form-control" id="letter_date" name="letter_date" value="<?= old('letter_date', date('Y-m-d')) ?>" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                    <select name="letter_type_id" id="letter_type_id" class="form-control" required>
-                                        <option value="">-- Pilih Jenis Surat --</option>
-                                        <?php foreach($letterTypes as $type): ?>
-                                        <option value="<?= $type['id'] ?>" <?= old('letter_type_id') == $type['id'] ? 'selected' : '' ?>><?= $type['name'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                <input type="hidden" name="letter_type_id" id="letter_type_id" value="<?= $letterTypes[0]['id'] ?>">
+
                                 </div>
                             </div>
                         <?php else: ?>
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label for="letter_type_id" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                    <select name="letter_type_id" id="letter_type_id" class="form-control" required>
-                                        <option value="">-- Pilih Jenis Surat --</option>
-                                        <?php foreach($letterTypes as $type): ?>
-                                        <option value="<?= $type['id'] ?>" <?= old('letter_type_id') == $type['id'] ? 'selected' : '' ?>><?= $type['name'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                <input type="hidden" name="letter_type_id" id="letter_type_id" value="<?= $letterTypes[0]['id'] ?>">
                                 </div>
                             </div>
                         <?php endif; ?>
-
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="village_head_name" class="form-label">Nama Kepala Desa <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="village_head_name" name="village_head_name" value="<?= old('village_head_name', $kades['value']) ?>" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="village_head_nip" class="form-label">NIP Kepala Desa <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="village_head_nip" name="village_head_nip" value="<?= old('village_head_nip', $kades['description']) ?>" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="village_head_position" class="form-label">Jabatan Kepala Desa <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="village_head_position" name="village_head_position" value="<?= old('village_head_position', $kades['label']) ?>" readonly>
-                            </div>
-                        </div>
+                                                <input type="hidden" class="form-control" id="village_head_name" name="village_head_name" value="<?= old('village_head_name', $kades['value']) ?>" readonly>
+                            <input type="hidden" class="form-control" id="village_head_nip" name="village_head_nip" value="<?= old('village_head_nip', $kades['description']) ?>" readonly>
+                            <input type="hidden" class="form-control" id="village_head_position" name="village_head_position" value="<?= old('village_head_position', $kades['label']) ?>" readonly>
                         
                         <div id="documents-container" style="display: none;">
                             <div class="mb-3">
@@ -221,6 +198,7 @@
 <script>
 $(document).ready(function() {
     const letterTypeSelect = $('#letter_type_id');
+    console.log(letterTypeSelect);
     const documentUploadSection = $('#document-upload-section');
     const requiredDocumentsList = $('#required-documents-list');
     const checkNikButton = $('#checkNik');

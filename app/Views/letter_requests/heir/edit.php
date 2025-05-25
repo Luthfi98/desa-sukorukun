@@ -43,7 +43,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK (Nomor Induk Kependudukan) <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik', $request['nik']) ?>" required>
+                                <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik', $request['nik']) ?>" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="name" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>

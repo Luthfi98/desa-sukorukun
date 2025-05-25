@@ -30,7 +30,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK (Nomor Induk Kependudukan) <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik', $resident['nik']) ?>" readonly required>
+                                <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik', $resident['nik']) ?>" readonly required>
                             </div>
                             <div class="col-md-6">
                                 <label for="name" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
@@ -123,20 +123,20 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
+                        <!-- <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="village_head_name" class="form-label">Nama Kepala Desa <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="village_head_name" name="village_head_name" value="<?= old('village_head_name', $kades['value']) ?>" readonly >
                             </div>
                             <div class="col-md-4">
                                 <label for="village_head_nip" class="form-label">NIP Kepala Desa</label>
-                                <input type="text" class="form-control" id="village_head_nip" name="village_head_nip" value="<?= old('village_head_nip', $kades['description']) ?>" readonly> 
                             </div>
                             <div class="col-md-4">
                                 <label for="village_head_position" class="form-label">Jabatan Kepala Desa <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="village_head_position" name="village_head_position" value="<?= old('village_head_position', $kades['label']) ?>" readonly >
                             </div>
-                        </div>
+                        </div> -->
+                        <input type="hidden" class="form-control" id="village_head_name" name="village_head_name" value="<?= old('village_head_name', $kades['value']) ?>" readonly >
+                        <input type="hidden" class="form-control" id="village_head_nip" name="village_head_nip" value="<?= old('village_head_nip', $kades['description']) ?>" readonly> 
+                        <input type="hidden" class="form-control" id="village_head_position" name="village_head_position" value="<?= old('village_head_position', $kades['label']) ?>" readonly >
 
                         <div class="row mb-3">
                             <!-- <div class="col-md-6">

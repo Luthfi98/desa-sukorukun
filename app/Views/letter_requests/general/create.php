@@ -31,7 +31,7 @@
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK (Nomor Induk Kependudukan) <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik') ?>" required>
+                                    <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik') ?>" required>
                                     <button type="button" class="btn btn-primary" id="checkNik">
                                         <i class="fas fa-search"></i> Cek
                                     </button>

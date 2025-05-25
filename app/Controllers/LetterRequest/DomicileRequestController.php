@@ -39,13 +39,18 @@ class DomicileRequestController extends BaseController
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
         
-        $status = $this->request->getGet('status') ?? 'pending';
-        
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderDomicileRequest = $this->DomicileRequestModel->builder();
         $data = [
             'title' => 'Pengajuan SK Domisili',
             'status' => $status,
             'requests' => $this->DomicileRequestModel->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_domisili')->getActive()
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_domisili')->getActive(),
+            'pendingCount' => $builderDomicileRequest->where('status', 'pending')->countAllResults(),
+            'processingCount' => $builderDomicileRequest->where('status', 'processing')->countAllResults(),
+            'approvedCount' => $builderDomicileRequest->where('status', 'approved')->countAllResults(),
+            'completedCount' => $builderDomicileRequest->where('status', 'completed')->countAllResults(),
+            'rejectedCount' => $builderDomicileRequest->where('status', 'rejected')->countAllResults()
         ];
         
         return view('letter_requests/domicile/index', $data);
@@ -62,13 +67,19 @@ class DomicileRequestController extends BaseController
         if (!$resident) {
             return redirect()->to(base_url('dashboard'))->with('error', 'Data penduduk tidak ditemukan. Silakan hubungi administrator.');
         }
-        $status = $this->request->getGet('status') ?? 'pending';
-        
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderDomicileRequest = $this->DomicileRequestModel->builder();
         $data = [
             'title' => 'Pengajuan SK Domisili',
             'status' => $status,
             'requests' => $this->DomicileRequestModel->where('resident_id', $resident['id'])->orderBy('created_at', 'desc')->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_domisili')->getActive()
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_domisili')->getActive(),
+            'pendingCount' => $builderDomicileRequest->where(['status' => 'pending', 'resident_id' => $resident['id']])->countAllResults(),
+            'processingCount' => $builderDomicileRequest->where(['status' => 'processing', 'resident_id' => $resident['id']])->countAllResults(),
+            'approvedCount' => $builderDomicileRequest->where(['status' => 'approved', 'resident_id' => $resident['id']])->countAllResults(),
+            'completedCount' => $builderDomicileRequest->where(['status' => 'completed', 'resident_id' => $resident['id']])->countAllResults(),
+            'rejectedCount' => $builderDomicileRequest->where(['status' => 'rejected', 'resident_id' => $resident['id']])->countAllResults()
+        
         ];
         
         return view('letter_requests/domicile/my_request', $data);
@@ -94,7 +105,9 @@ class DomicileRequestController extends BaseController
         $builder->select('domicile_certificates.*, letter_types.name as letter_type_name, letter_types.code as letter_type_code, residents.name as resident_name, residents.nik as resident_nik');
         $builder->join('letter_types', 'letter_types.id = domicile_certificates.letter_type_id');
         $builder->join('residents', 'residents.id = domicile_certificates.resident_id');
-        $builder->where('domicile_certificates.status', $status);
+        if ($status != 'all') {
+            $builder->where('domicile_certificates.status', $status);
+        }
         $builder->where('domicile_certificates.deleted_at', null);
         $url = 'domicile-request';
         if (session()->get('role') === 'resident') {
@@ -165,17 +178,17 @@ class DomicileRequestController extends BaseController
             $actions = '<div class="btn-group">';
             $actions .= '<a href="' . base_url($url.'/view/' . $row['id']) . '" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>';
 
-            if ($status === 'pending') {
+            if ($row['status'] === 'pending') {
                 $actions .= '<a href="' . base_url($url.'/edit/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
                 $actions .= '<a href="' . base_url($url.'/delete/' . $row['id']) . '" class="btn btn-sm btn-danger"
                                 onclick="return confirm(\'Are you sure you want to delete this request? This action cannot be undone.\')"><i class="fas fa-trash"></i></a>';
             }
             
-            if (($status === 'pending' || $status === 'processing') && session()->get('role') !== 'resident') {
+            if (($row['status'] === 'pending' || $row['status'] === 'processing') && session()->get('role') !== 'resident') {
                 $actions .= '<a href="' . base_url($url.'/process/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-cog"></i></a>';
             }
             
-            if ($status === 'approved' || $status === 'completed') {
+            if ($row['status'] === 'approved' || $row['status'] === 'completed') {
                 $actions .= '<a href="' . base_url($url.'/download/' . $row['id']) . '" class="btn btn-sm btn-success" target="_blank"><i class="fas fa-download"></i></a>';
             }
             
@@ -404,7 +417,7 @@ class DomicileRequestController extends BaseController
         }else{
         
         // Stream the file
-            return $dompdf->stream($filename, ['Attachment' => true]);
+            return $dompdf->stream($filename, ['Attachment' => false]);
         }
     }
     public function create()
@@ -698,6 +711,20 @@ class DomicileRequestController extends BaseController
                     'message' => 'Pengajuan surat baru telah dibuat',
                     'type' => 'info',
                     'is_read' => 0
+                ]);
+            }
+
+            $users = $this->userModel->whereIn('role', ['staff', 'admin'])->findAll();
+            // dd($users);
+
+            foreach ($users as $user) {
+                $this->notificationModel->insert([
+                    'user_id' => $user['id'],
+                    'title' => 'Pengajuan Surat Baru',
+                    'message' => 'Pengajuan surat baru telah dibuat oleh ' . session()->get('name'),
+                    'type' => 'info',
+                    'is_read' => 0,
+                    'link' => 'domicile-request/view/'.$letterRequestId
                 ]);
             }
 

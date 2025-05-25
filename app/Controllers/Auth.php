@@ -107,9 +107,9 @@ class Auth extends BaseController
             'email' => 'required|valid_email|is_unique[users.email]',
             'password' => 'required|min_length[8]',
             'password_confirm' => 'required|matches[password]',
-            'name' => 'required|alpha_numeric_space|min_length[3]|max_length[100]',
-            'nik' => 'required|numeric|exact_length[16]',
-            'kk' => 'required|numeric|exact_length[16]',
+            // 'name' => 'required|alpha_numeric_space|min_length[3]|max_length[100]',
+            // 'nik' => 'required|numeric|exact_length[16]',
+            // 'kk' => 'required|numeric|exact_length[16]',
         ];
         
         if (!$this->validate($rules)) {
@@ -121,56 +121,58 @@ class Auth extends BaseController
         $db->transBegin();
         
         try {
-            $nik = $this->request->getPost('nik');
+            // $nik = $this->request->getPost('nik');
             
-            // Check if resident exists
-            $resident = $this->residentModel->where('nik', $nik)->first();
+            // // Check if resident exists
+            // $resident = $this->residentModel->where('nik', $nik)->first();
             
-            if ($resident) {
-                // If resident exists, check if it already has a user_id
-                if ($resident['user_id'] !== null) {
-                    return redirect()->back()->withInput()->with('error', 'NIK ini sudah terdaftar dengan akun lain.');
-                }
-            }
+            // if ($resident) {
+            //     // If resident exists, check if it already has a user_id
+            //     if ($resident['user_id'] !== null) {
+            //         return redirect()->back()->withInput()->with('error', 'NIK ini sudah terdaftar dengan akun lain.');
+            //     }
+            // }
             
             // Create user account
             $userId = $this->userModel->insert([
                 'username' => $this->request->getPost('username'),
                 'email' => $this->request->getPost('email'),
                 'password' => $this->request->getPost('password'),
-                'name' => $this->request->getPost('name'),
+                'name' => $this->request->getPost('username'),
                 'role' => 'resident',
                 'status' => 'active',
             ]);
+            // $lastQuery = $this->userModel->getErrors();
+            // dd($userId);
             
-            if ($resident) {
-                // Update existing resident with user_id
-                $this->residentModel->update($resident['id'], [
-                    'user_id' => $userId,
-                ]);
-            } else {
-                // Create new resident profile
-                $db = \Config\Database::connect();
-                $db->table('residents')->insert([
-                    'nik' => $nik,
-                    'kk' => $this->request->getPost('kk'),
-                    'name' => $this->request->getPost('name'),
-                    'user_id' => $userId,
-                    'birth_place' => $this->request->getPost('birth_place') ?? '',
-                    'birth_date' => $this->request->getPost('birth_date') ?? date('Y-m-d'),
-                    'gender' => $this->request->getPost('gender') ?? 'male',
-                    'address' => $this->request->getPost('address') ?? '',
-                    'rt' => $this->request->getPost('rt') ?? '000',
-                    'rw' => $this->request->getPost('rw') ?? '000',
-                    'village' => $this->request->getPost('village') ?? '',
-                    'district' => $this->request->getPost('district') ?? '',
-                    'religion' => $this->request->getPost('religion') ?? '',
-                    'marital_status' => $this->request->getPost('marital_status') ?? 'single',
-                    'occupation' => $this->request->getPost('occupation') ?? '',
-                    'nationality' => $this->request->getPost('nationality') ?? 'WNI',
-                    'education' => $this->request->getPost('education') ?? '',
-                ]);
-            }
+            // if ($resident) {
+            //     // Update existing resident with user_id
+            //     $this->residentModel->update($resident['id'], [
+            //         'user_id' => $userId,
+            //     ]);
+            // } else {
+            //     // Create new resident profile
+            //     $db = \Config\Database::connect();
+            //     $db->table('residents')->insert([
+            //         'nik' => $nik,
+            //         'kk' => $this->request->getPost('kk'),
+            //         'name' => $this->request->getPost('name'),
+            //         'user_id' => $userId,
+            //         'birth_place' => $this->request->getPost('birth_place') ?? '',
+            //         'birth_date' => $this->request->getPost('birth_date') ?? date('Y-m-d'),
+            //         'gender' => $this->request->getPost('gender') ?? 'male',
+            //         'address' => $this->request->getPost('address') ?? '',
+            //         'rt' => $this->request->getPost('rt') ?? '000',
+            //         'rw' => $this->request->getPost('rw') ?? '000',
+            //         'village' => $this->request->getPost('village') ?? '',
+            //         'district' => $this->request->getPost('district') ?? '',
+            //         'religion' => $this->request->getPost('religion') ?? '',
+            //         'marital_status' => $this->request->getPost('marital_status') ?? 'single',
+            //         'occupation' => $this->request->getPost('occupation') ?? '',
+            //         'nationality' => $this->request->getPost('nationality') ?? 'WNI',
+            //         'education' => $this->request->getPost('education') ?? '',
+            //     ]);
+            // }
             
             $db->transCommit();
             

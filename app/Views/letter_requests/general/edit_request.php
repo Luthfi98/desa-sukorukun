@@ -31,7 +31,7 @@
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK (Nomor Induk Kependudukan) <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="nik" name="nik" value="<?= $request['nik'] ?>" readonly>
+                                    <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= $request['nik'] ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -119,20 +119,21 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
+                        <!-- <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="village_head_name" class="form-label">Nama Kepala Desa <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="village_head_name" name="village_head_name" value="<?= $request['village_head_name'] ?>" readonly>
                             </div>
                             <div class="col-md-4">
                                 <label for="village_head_nip" class="form-label">NIP Kepala Desa</label>
-                                <input type="text" class="form-control" id="village_head_nip" name="village_head_nip" value="<?= $request['village_head_nip'] ?>" readonly>
                             </div>
                             <div class="col-md-4">
                                 <label for="village_head_position" class="form-label">Jabatan Kepala Desa <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="village_head_position" name="village_head_position" value="<?= $request['village_head_position'] ?>" readonly>
                             </div>
-                        </div>
+                        </div> -->
+                        <input type="hidden" class="form-control" id="village_head_name" name="village_head_name" value="<?= $request['village_head_name'] ?>" readonly>
+                        <input type="hidden" class="form-control" id="village_head_nip" name="village_head_nip" value="<?= $request['village_head_nip'] ?>" readonly>
+                        <input type="hidden" class="form-control" id="village_head_position" name="village_head_position" value="<?= $request['village_head_position'] ?>" readonly>
+                        
                         
                         <div id="documents-container" style="display: none;">
                             <div class="mb-3">

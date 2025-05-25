@@ -9,6 +9,7 @@ use App\Models\ResidentModel;
 use App\Models\NotificationModel;
 use App\Models\SettingModel;
 use App\Models\DocumentAttachmentModel;
+use App\Models\UserModel;
 
 class RelocationRequestController extends BaseController
 {
@@ -18,6 +19,7 @@ class RelocationRequestController extends BaseController
     protected $notificationModel;
     protected $settingModel;
     protected $attachmentModel;
+    protected $userModel;
     
     public function __construct()
     {
@@ -27,6 +29,7 @@ class RelocationRequestController extends BaseController
         $this->notificationModel = new NotificationModel();
         $this->settingModel = new SettingModel();
         $this->attachmentModel = new DocumentAttachmentModel();
+        $this->userModel = new UserModel();
     }
     
     public function index()
@@ -36,17 +39,20 @@ class RelocationRequestController extends BaseController
             return redirect()->to(base_url('dashboard'))->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
 
-        
-        $status = $this->request->getGet('status') ?? 'pending';
-       
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderRelocationRequest = $this->RelocationRequestModel->builder();
         $data = [
             'title' => 'Pengajuan Surat Pindah',
             'status' => $status,
             'requests' => $this->RelocationRequestModel->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_pindah')->getActive()
-        ];
-        // var_dump($data);die;
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_pindah')->getActive(),
+             'pendingCount' => $builderRelocationRequest->where(['status' => 'pending'])->countAllResults(),
+            'processingCount' => $builderRelocationRequest->where(['status' => 'processing'])->countAllResults(),
+            'approvedCount' => $builderRelocationRequest->where(['status' => 'approved'])->countAllResults(),
+            'completedCount' => $builderRelocationRequest->where(['status' => 'completed'])->countAllResults(),
+            'rejectedCount' => $builderRelocationRequest->where(['status' => 'rejected'])->countAllResults()
         
+        ];
         return view('letter_requests/relocation/index', $data);
     }
 
@@ -61,13 +67,19 @@ class RelocationRequestController extends BaseController
         if (!$resident) {
             return redirect()->to(base_url('dashboard'))->with('error', 'Data penduduk tidak ditemukan. Silakan hubungi administrator.');
         }
-        $status = $this->request->getGet('status') ?? 'pending';
-        
+        $status = $this->request->getGet('status') ?? 'all';
+        $builderRelocationRequest = $this->RelocationRequestModel->builder();
         $data = [
             'title' => 'Pengajuan Surat Pindah',
             'status' => $status,
             'requests' => $this->RelocationRequestModel->where('resident_id', $resident['id'])->orderBy('created_at', 'desc')->getByStatus($status),
-            'letterTypes' => $this->letterTypeModel->where('template', 'sk_pindah')->getActive()
+            'letterTypes' => $this->letterTypeModel->where('template', 'sk_pindah')->getActive(),
+             'pendingCount' => $builderRelocationRequest->where(['status' => 'pending', 'resident_id' => $resident['id']])->countAllResults(),
+            'processingCount' => $builderRelocationRequest->where(['status' => 'processing', 'resident_id' => $resident['id']])->countAllResults(),
+            'approvedCount' => $builderRelocationRequest->where(['status' => 'approved', 'resident_id' => $resident['id']])->countAllResults(),
+            'completedCount' => $builderRelocationRequest->where(['status' => 'completed', 'resident_id' => $resident['id']])->countAllResults(),
+            'rejectedCount' => $builderRelocationRequest->where(['status' => 'rejected', 'resident_id' => $resident['id']])->countAllResults()
+        
         ];
         
         return view('letter_requests/relocation/my_request', $data);
@@ -93,7 +105,9 @@ class RelocationRequestController extends BaseController
         $builder->select('relocation_letters.*, letter_types.name as letter_type_name, letter_types.code as letter_type_code, residents.name as resident_name, residents.nik as resident_nik, residents.user_id');
         $builder->join('letter_types', 'letter_types.id = relocation_letters.letter_type_id');
         $builder->join('residents', 'residents.id = relocation_letters.resident_id');
-        $builder->where('relocation_letters.status', $status);
+        if ($status != 'all') {
+            $builder->where('relocation_letters.status', $status);
+        }
         $builder->where('relocation_letters.deleted_at', null);
         $url = 'relocation-request';
         if (session()->get('role') === 'resident') {
@@ -164,17 +178,17 @@ class RelocationRequestController extends BaseController
             $actions = '<div class="btn-group">';
             $actions .= '<a href="' . base_url($url.'/view/' . $row['id']) . '" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>';
 
-            if ($status === 'pending' && (session()->get('role') !== 'resident' || $row['user_id'] === session()->get('user_id'))) {
+            if ($row['status'] === 'pending' && (session()->get('role') !== 'resident' || $row['user_id'] === session()->get('user_id'))) {
                 $actions .= '<a href="' . base_url($url.'/edit/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
                 $actions .= '<a href="' . base_url($url.'/delete/' . $row['id']) . '" class="btn btn-sm btn-danger"
                                 onclick="return confirm(\'Are you sure you want to delete this request? This action cannot be undone.\')"><i class="fas fa-trash"></i></a>';
             }
             
-            if (($status === 'pending' || $status === 'processing') && session()->get('role') !== 'resident') {
+            if (($row['status'] === 'pending' || $row['status'] === 'processing') && session()->get('role') !== 'resident') {
                 $actions .= '<a href="' . base_url($url.'/process/' . $row['id']) . '" class="btn btn-sm btn-warning"><i class="fas fa-cog"></i></a>';
             }
             
-            if ($status === 'approved' || $status === 'completed') {
+            if ($row['status'] === 'approved' || $row['status'] === 'completed') {
                 $actions .= '<a href="' . base_url($url.'/download/' . $row['id']) . '" class="btn btn-sm btn-success" target="_blank"><i class="fas fa-download"></i></a>';
             }
             
@@ -399,7 +413,7 @@ class RelocationRequestController extends BaseController
         }else{
         
         // Stream the file
-            return $dompdf->stream($filename, ['Attachment' => true]);
+            return $dompdf->stream($filename, ['Attachment' => false]);
         }
     }
 
@@ -760,6 +774,20 @@ class RelocationRequestController extends BaseController
                     'message' => 'Pengajuan surat baru telah dibuat',
                     'type' => 'info',
                     'is_read' => 0
+                ]);
+            }
+
+            $users = $this->userModel->whereIn('role', ['staff', 'admin'])->findAll();
+            // dd($users);
+
+            foreach ($users as $user) {
+                $this->notificationModel->insert([
+                    'user_id' => $user['id'],
+                    'title' => 'Pengajuan Surat Baru',
+                    'message' => 'Pengajuan surat baru telah dibuat oleh ' . session()->get('name'),
+                    'type' => 'info',
+                    'is_read' => 0,
+                    'link' => 'general-request/view/'.$letterRequestId
                 ]);
             }
 

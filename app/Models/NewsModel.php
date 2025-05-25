@@ -33,7 +33,7 @@ class NewsModel extends Model
     protected $validationRules = [
         'user_id' => 'required|numeric',
         'title' => 'required|min_length[3]|max_length[255]',
-        'slug' => 'required|min_length[3]|max_length[255]|is_unique[news.slug,id,{id}]',
+        'slug' => 'required|min_length[3]|max_length[255]',
         'content' => 'required',
         'type' => 'required|in_list[news,information]',
         'status' => 'required|in_list[draft,published,active,inactive]'

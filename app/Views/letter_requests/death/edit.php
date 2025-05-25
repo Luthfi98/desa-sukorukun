@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="nik" class="form-label">NIK </label>
-                                <input type="text" class="form-control" id="nik" name="nik" value="<?= old('nik', $request['nik']) ?>">
+                                <input type="text" class="form-control" id="nik" name="nik" maxlength="16" value="<?= old('nik', $request['nik']) ?>">
                             </div>
                         </div>
 

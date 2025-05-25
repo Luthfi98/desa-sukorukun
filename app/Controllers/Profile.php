@@ -160,11 +160,12 @@ class Profile extends BaseController
         if ($resident) {
             // Update existing resident data
             $this->residentModel->update($resident['id'], $residentData);
+            $resident = $resident['id'];
             // var_dump($this->residentModel->update($resident['id'], $residentData));die;
 
         } else {
             // Create new resident data
-            $this->residentModel->insert($residentData);
+            $resident = $this->residentModel->insert($residentData);
         }
         // var_dump($residentData);die;
 
@@ -176,7 +177,8 @@ class Profile extends BaseController
         
         // Update session data
         session()->set([
-            'name' => $this->request->getPost('name')
+            'name' => $this->request->getPost('name'),
+            'resident_id' => $resident ?? null
         ]);
         
         return redirect()->to(base_url('profile'))->with('message', 'Data diri berhasil diperbarui');
