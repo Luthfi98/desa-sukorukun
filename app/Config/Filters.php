@@ -34,6 +34,8 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'auth'          => \App\Filters\AuthFilter::class,
+        'noauth'        => \App\Filters\NoAuthFilter::class,
     ];
 
     /**
@@ -103,5 +105,45 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        'auth' => [
+            'before' => [
+                'dashboard',
+                'dashboard/*',
+                'users/*',
+                'residents/*',
+                'letter-types/*',
+                'letter-requests/*',
+                'profile/*',
+                'complaints',
+                'complaints/*',
+                'admin/settings/*',
+                'village-programs/*',
+                'budget-info/*',
+                'village-info/*',
+                'archives/*',
+                'program-desa/*',
+                'informasi-apbd/*',
+                'pengajuan-surat/*',
+                'surat-pengantar/*',
+                'pengaduan/*',
+                'pengaduan-masyarakat/*',
+                'arsip-data/*',
+                'archive/*',
+                'general-request/*',
+                'domicile-request/*',
+                'heir-request/*',
+                'relocation-request/*'
+            ],
+            'except' => [
+                'auth/logout'
+            ]
+        ],
+        'noauth' => [
+            'before' => [
+                'auth',
+                'auth/*',
+            ],
+        ],
+    ];
 }
