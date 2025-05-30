@@ -159,7 +159,7 @@ class UserController extends ResourceController
             return redirect()->to('/dashboard')->with('error', 'Anda tidak memiliki akses ke halaman ini');
         }
 
-        $user = $this->model->select('users.*, residents.id as resident_id, residents.*, users.id as id')->where('users.id', $id)->join('residents', 'users.id = residents.user_id')->first();
+        $user = $this->model->select('users.*, residents.id as resident_id, residents.*, users.id as id')->where('users.id', $id)->join('residents', 'users.id = residents.user_id','left')->first();
         // dd($user);
         if (!$user) {
             return redirect()->to('/users')->with('error', 'Pengguna tidak ditemukan');
