@@ -29,7 +29,7 @@
                 <div class="col-md-6">
                         <div class="mb-3">
                             <label for="kk" class="form-label">KK <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="kk" name="kk" value="<?= old('kk') ?>" required maxlength="16">
+                            <input type="text" class="form-control" id="kk" name="kk" value="<?= old('kk', $resident['kk']) ?>" required maxlength="16">
                             <div class="form-text">KK harus 16 digit angka</div>
                         </div>
                     </div>
